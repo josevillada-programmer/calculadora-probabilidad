@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Estadística & Probabilística</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --bg-dark: #0d0e12;
+            --card-bg: #161920;
+            --input-bg: #1f232e;
+            --neon-blue: #00f0ff;
+            --tech-blue: #0072ff;
+            --neon-green: #39ff14;
+            --neon-red: #ff3b30;
+            --text-main: #e2e8f0;
+            --text-muted: #708096;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', Courier, monospace, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .main-calculator-card {
+            background-color: var(--card-bg);
+            width: 100%;
+            max-width: 700px;
+            border-radius: 16px;
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            box-shadow: 0 0 30px rgba(0, 114, 255, 0.15);
+            overflow: hidden;
+        }
+
+        .calc-tabs {
+            display: flex;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(0, 240, 255, 0.1);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 15px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn:hover {
+            color: var(--neon-blue);
+            background-color: rgba(0, 240, 255, 0.05);
+        }
+
+        .tab-btn.active {
+            color: var(--neon-blue);
+            border-bottom: 2px solid var(--neon-blue);
+            background-color: rgba(0, 240, 255, 0.02);
+        }
+
+        .tab-content-container {
+            padding: 25px;
+        }
+
+        .tab-panel {
+            display: none;
+        }
+
+        .tab-panel.active-panel {
+            display: block;
+        }
+
+        h3 {
+            font-size: 1.1rem;
+            color: var(--neon-blue);
+            margin-top: 10px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        textarea, input[type="number"], select {
+            width: 100%;
+            background-color: var(--input-bg);
+            border: 1px solid rgba(112, 128, 150, 0.4);
+            border-radius: 8px;
+            padding: 12px;
+            color: #fff;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+
+        textarea:focus, input:focus, select:focus {
+            outline: none;
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+        }
+
+        textarea {
+            height: 80px;
+            resize: none;
+        }
+
+        .btn-action {
+            width: 100%;
+            background: linear-gradient(135deg, var(--tech-blue), #00c6ff);
+            color: white;
+            border: none;
+            padding: 14px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(0, 114, 255, 0.3);
+            transition: transform 0.1s, opacity 0.2s;
+            margin-bottom: 15px;
+        }
+
+        .btn-action:active { transform: scale(0.98); }
+
+        .flex-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .btn-small {
+            background-color: var(--input-bg);
+            border: 1px solid var(--neon-blue);
+            color: var(--neon-blue);
+            padding: 0 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .result-card {
+            background-color: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(112, 128, 150, 0.2);
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .result-card h4 {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+        }
+
+        .result-card p {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            margin-top: 15px;
+            border: 1px solid rgba(112, 128, 150, 0.2);
+            border-radius: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+            font-size: 0.85rem;
+            background-color: rgba(0,0,0,0.1);
+        }
+
+        th {
+            background-color: rgba(0, 114, 255, 0.2);
+            color: var(--neon-blue);
+            padding: 10px;
+            font-weight: bold;
+        }
+
+        td {
+            padding: 10px;
+            border-bottom: 1px solid rgba(112, 128, 150, 0.1);
+            color: #fff;
+        }
+
+        .prob-section {
+            background-color: rgba(0, 0, 0, 0.15);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 3px solid var(--tech-blue);
+        }
+
+        .buttons-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .binom-output {
+            background-color: #090b0e;
+            padding: 14px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            color: #a0aec0;
+            min-height: 45px;
+            word-break: break-all;
+            border: 1px solid rgba(0, 240, 255, 0.1);
+        }
+
+        .flex-grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .dependency-card {
+            margin-top: 15px;
+            background-color: var(--input-bg);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .custom-file-upload {
+            display: block;
+            text-align: center;
+            background: #112233;
+            border: 1px dashed var(--neon-blue);
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            color: var(--neon-blue);
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        #csv-file { display: none; }
+        .or-text { text-align: center; color: var(--text-muted); font-size: 0.8rem; margin-bottom: 10px; }
+
+        .chart-container {
+            margin-top: 25px;
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.02);
+        }
+
+        .mini-display {
+            background-color: #0a0a0c;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: right;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-calculator-card">
+        
+        <nav class="calc-tabs">
+            <button class="tab-btn active" id="btn-descriptiva" onclick="switchTab('descriptiva')">📊 Descriptiva</button>
+            <button class="tab-btn" id="btn-probabilidad" onclick="switchTab('probabilidad')">🎲 Probabilidad</button>
+            <button class="tab-btn" id="btn-basica" onclick="switchTab('basica')">🧮 Básica</button>
+        </nav>
+
+        <div class="tab-content-container">
+            
+            <section id="descriptiva" class="tab-panel active-panel">
+                <div class="input-group">
+                    <h3>Ingreso de Datos Prueba</h3>
+                    <label for="csv-file" class="custom-file-upload">📁 Cargar archivo de datos (CSV)</label>
+                    <input type="file" id="csv-file" accept=".csv" onchange="cargarCSV(event)">
+                    <p class="or-text">o ingresa datos separados por comas:</p>
+                    <textarea id="manual-data" placeholder="Ej: 85, 90, 78, 92, 100, 64, 75, 88..."></textarea>
+                    <button class="btn-action" onclick="procesarEstadistica()">Calcular Muestra Completa</button>
+                </div>
+
+                <h3>Medidas Base e Intervalos</h3>
+                <div class="results-grid">
+                    <div class="result-card"><h4>Tamaño (n)</h4><p id="stat-n">-</p></div>
+                    <div class="result-card"><h4>Media (x̄)</h4><p id="stat-media">-</p></div>
+                    <div class="result-card"><h4>Mediana (Me)</h4><p id="stat-mediana">-</p></div>
+                    <div class="result-card"><h4>Moda (Mo)</h4><p id="stat-moda">-</p></div>
+                    <div class="result-card"><h4>Varianza (s²)</h4><p id="stat-varianza">-</p></div>
+                    <div class="result-card"><h4>Desv. Estándar (s)</h4><p id="stat-desviacion">-</p></div>
+                </div>
+
+                <div class="position-measures">
+                    <h3>Medidas de Posición</h3>
+                    <div class="flex-row">
+                        <select id="position-type">
+                            <option value="cuartil">Cuartil (1-4)</option>
+                            <option value="decil">Decil (1-10)</option>
+                            <option value="percentil">Percentil (1-100)</option>
+                        </select>
+                        <input type="number" id="position-value" min="1" max="100" placeholder="Valor">
+                        <button class="btn-small" onclick="calcularPosicion()">Calcular</button>
+                    </div>
+                    <p style="font-size: 1rem; color: var(--text-main); margin-bottom: 15px;">Resultado Posición: <span id="pos-result" style="color: var(--neon-blue); font-weight: bold;">-</span></p>
+                </div>
+
+                <h3>Tabla de Distribución de Frecuencias</h3>
+                <div class="table-container">
+                    <table id="frecuencias-table">
+                        <thead>
+                            <tr>
+                                <th>Clase</th>
+                                <th>Lím. Inferior</th>
+                                <th>Lím. Superior</th>
+                                <th>Frontera Inf.</th>
+                                <th>Frontera Sup.</th>
+                                <th>Marca (Xi)</th>
+                                <th>Frec. Abs (Fi)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td colspan="7" style="color: var(--text-muted);">Ningún dato procesado aún</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="chart-container">
+                    <h3>Histograma de Frecuencias</h3>
+                    <canvas id="histogramChart"></canvas>
+                </div>
+
+                <div class="chart-container">
+                    <h3>Diagrama de Caja (Box Plot Representativo)</h3>
+                    <canvas id="boxplotChart"></canvas>
+                </div>
+            </section>
+
+            <section id="probabilidad" class="tab-panel">
+                <div class="prob-section">
+                    <h3>Combinatoria y Conteo</h3>
+                    <div class="flex-row">
+                        <input type="number" id="count-n" placeholder="Valor n" min="0">
+                        <input type="number" id="count-r" placeholder="Valor r" min="0">
+                    </div>
+                    <div class="buttons-row">
+                        <button class="btn-action" onclick="ejecutarConteo('factorial')">n!</button>
+                        <button class="btn-action" onclick="ejecutarConteo('permutacion')">nPr</button>
+                        <button class="btn-action" onclick="ejecutarConteo('combinacion')">nCr</button>
+                    </div>
+                    <div class="binom-output">Resultado Conteo: <span id="conteo-result" style="color: var(--neon-blue); font-weight: bold;">-</span></div>
+                </div>
+
+                <div class="prob-section">
+                    <h3>Teorema del Binomio (A + B)ⁿ</h3>
+                    <div class="flex-row">
+                        <input type="number" id="binom-n" placeholder="Potencia n" min="0">
+                        <button class="btn-action" style="margin-bottom: 0;" onclick="desarrollarBinomio()">Desarrollar Coeficientes</button>
+                    </div>
+                    <div class="binom-output" id="binom-result">Los coeficientes aparecerán aquí...</div>
+                </div>
+
+                <div class="prob-section">
+                    <h3>Probabilidad de Eventos y Dependencia</h3>
+                    <div class="flex-grid-3">
+                        <input type="number" id="prob-a" step="0.01" placeholder="P(A)" min="0" max="1">
+                        <input type="number" id="prob-b" step="0.01" placeholder="P(B)" min="0" max="1">
+                        <input type="number" id="prob-inter" step="0.01" placeholder="P(A ∩ B)" min="0" max="1">
+                    </div>
+                    <button class="btn-action" style="margin-top: 10px;" onclick="analizarEventos()">Analizar Eventos</button>
+                    
+                    <div class="dependency-card">
+                        <p style="margin-bottom: 8px;">Probabilidad Condicional P(A|B): <span id="prob-condicional" style="color: var(--neon-blue); font-weight: bold;">-</span></p>
+                        <p>Estado de Dependencia: <span id="prob-dependencia" style="font-weight: bold;">-</span></p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="basica" class="tab-panel">
+                <div class="mini-display" id="basic-display">0</div>
+                <p style="color: var(--text-muted); text-align: center; margin-top: 30px; font-size: 0.9rem;">
+                    [ Módulo estándar en desarrollo secundario ]
+                </p>
+            </section>
+
+        </div>
+    </div>
+
+    <script>
+        let histogramInstance = null;
+        let boxplotInstance = null;
+
+        // --- Navegación de Pestañas ---
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active-panel'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active-panel');
+            document.getElementById('btn-' + tabId).classList.add('active');
+        }
+
+        // --- Lector Automático de Archivos CSV ---
+        function cargarCSV(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const text = e.target.result;
+                // Extraer todos los números ignorando texto o cabeceras
+                let valores = text.replace(/\n/g, ',').split(',')
+                                  .map(v => parseFloat(v.trim()))
+                                  .filter(v => !isNaN(v));
+                document.getElementById('manual-data').value = valores.join(', ');
+            };
+            reader.readAsText(file);
+        }
+
+        // --- Módulo 1: Motor Estadístico Completo ---
+        function procesarEstadistica() {
+            let inputString = document.getElementById('manual-data').value;
+            if (!inputString.trim()) {
+                alert("Ingresa datos o carga un archivo CSV.");
+                return;
+            }
+            
+            let datos = inputString.split(',').map(n => parseFloat(n.trim())).filter(n => !isNaN(n));
+            if(datos.length === 0) {
+                alert("No se encontraron números válidos.");
+                return;
+            }
+
+            datos.sort((a, b) => a - b);
+            window.currentDataset = datos;
+
+            const n = datos.length;
+            document.getElementById('stat-n').innerText = n;
+
+            // Media
+            const suma = datos.reduce((acc, curr) => acc + curr, 0);
+            const media = suma / n;
+            document.getElementById('stat-media').innerText = media.toFixed(2);
+
+            // Mediana
+            let mediana;
+            if (n % 2 === 0) {
+                mediana = (datos[n / 2 - 1] + datos[n / 2]) / 2;
+            } else {
+                mediana = datos[Math.floor(n / 2)];
+            }
+            document.getElementById('stat-mediana').innerText = mediana.toFixed(2);
+
+            // Moda
+            let frecuencias = {};
+            let maxFrec = 0;
+            let modas = [];
+            datos.forEach(v => {
+                frecuencias[v] = (frecuencias[v] || 0) + 1;
+                if (frecuencias[v] > maxFrec) maxFrec = frecuencias[v];
+            });
+            for (let k in frecuencias) {
+                if (frecuencias[k] === maxFrec) modas.push(k);
+            }
+            document.getElementById('stat-moda').innerText = (modas.length === Object.keys(frecuencias).length || maxFrec === 1) ? "No hay" : modas.join(', ');
+
+            // Varianza y Desviación Estándar Muestral (n-1)
+            const varianzaMuestral = datos.reduce((acc, v) => acc + Math.pow(v - media, 2), 0) / (n - 1);
+            const desvEstandar = Math.sqrt(varianzaMuestral);
+            document.getElementById('stat-varianza').innerText = varianzaMuestral.toFixed(4);
+            document.getElementById('stat-desviacion').innerText = desvEstandar.toFixed(4);
+
+            // Generar Tabla de Frecuencias Agrupada (Sturges)
+            const numClases = Math.ceil(1 + 3.322 * Math.log10(n));
+            const valorMin = datos[0];
+            const valorMax = datos[n - 1];
+            const rango = valorMax - valorMin;
+            const anchoClase = rango / numClases;
+
+            let tbody = document.querySelector('#frecuencias-table tbody');
+            tbody.innerHTML = "";
+
+            let labelsClases = [];
+            let conteosClases = [];
+
+            let limInferior = valorMin;
+            for (let i = 0; i < numClases; i++) {
+                let limSuperior = limInferior + anchoClase;
+                let fronInf = limInferior - 0.5;
+                let fronSup = limSuperior + 0.5;
+                let marcaClase = (limInferior + limSuperior) / 2;
+
+                // Contar elementos en este rango
+                let frecAbs = datos.filter(v => {
+                    if (i === numClases - 1) return v >= limInferior && v <= limSuperior; // Incluye último tope
+                    return v >= limInferior && v < limSuperior;
+                }).length;
+
+                labelsClases.push(`[${limInferior.toFixed(1)} - ${limSuperior.toFixed(1)}]`);
+                conteosClases.push(frecAbs);
+
+                let row = `<tr>
+                    <td>${i + 1}</td>
+                    <td>${limInferior.toFixed(2)}</td>
+                    <td>${limSuperior.toFixed(2)}</td>
+                    <td>${fronInf.toFixed(2)}</td>
+                    <td>${fronSup.toFixed(2)}</td>
+                    <td>${marcaClase.toFixed(2)}</td>
+                    <td>${frecAbs}</td>
+                </tr>`;
+                tbody.innerHTML += row;
+
+                limInferior = limSuperior;
+            }
+
+            // Construir Gráficos mediante Chart.js
+            renderizarHistograma(labelsClases, conteosClases);
+            renderizarBoxplot(valorMin, mediana, valorMax, media);
+        }
+
+        // Lógica de Medidas de Posición Alternas
+        function calcularPosicion() {
+            if (!window.currentDataset) { alert("Carga datos primero."); return; }
+            const tipo = document.getElementById('position-type').value;
+            const valor = parseInt(document.getElementById('position-value').value);
+            const datos = window.currentDataset;
+            
+            let p = (tipo === 'cuartil') ? valor * 25 : (tipo === 'decil') ? valor * 10 : valor;
+            if (isNaN(p) || p <= 0 || p > 100) { alert("Valor fuera de límites."); return; }
+
+            let index = (p / 100) * (datos.length - 1);
+            let result = Number.isInteger(index) ? datos[index] : datos[Math.floor(index)] + (index % 1) * (datos[Math.ceil(index)] - datos[Math.floor(index)]);
+            document.getElementById('pos-result').innerText = result.toFixed(2);
+        }
+
+        // Renderizadores de Gráficos
+        function renderizarHistograma(labels, datos) {
+            if (histogramInstance) histogramInstance.destroy();
+            const ctx = document.getElementById('histogramChart').getContext('2d');
+            histogramInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Frecuencia Absoluta',
+                        data: datos,
+                        backgroundColor: 'rgba(0, 240, 255, 0.4)',
+                        borderColor: '#00f0ff',
+                        borderWidth: 2,
+                        barPercentage: 1.0,
+                        categoryPercentage: 1.0
+                    }]
+                },
+                options: { scales: { y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' } }, x: { grid: { display: false } } } }
+            });
+        }
+
+        function renderizarBoxplot(min, med, max, avg) {
+            if (boxplotInstance) boxplotInstance.destroy();
+            const ctx = document.getElementById('boxplotChart').getContext('2d');
+            boxplotInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Distribución'],
+                    datasets: [
+                        { label: 'Mínimo', data: [min], backgroundColor: '#708096' },
+                        { label: 'Media Muestra', data: [avg], backgroundColor: '#0072ff' },
+                        { label: 'Mediana', data: [med], backgroundColor: '#39ff14' },
+                        { label: 'Máximo', data: [max], backgroundColor: '#ff3b30' }
+                    ]
+                },
+                options: { responsive: true, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' } } } }
+            });
+        }
+
+        // --- Módulo 2: Probabilidad Avanzada ---
+        function factorial(num) {
+            if (num < 0) return 0;
+            if (num === 0 || num === 1) return 1;
+            let res = 1; for (let i = num; i > 1; i--) res *= i;
+            return res;
+        }
+
+        function ejecutarConteo(tipo) {
+            const n = parseInt(document.getElementById('count-n').value);
+            const r = parseInt(document.getElementById('count-r').value);
+            const output = document.getElementById('conteo-result');
+
+            if (isNaN(n) || n < 0) { alert("n inválido."); return; }
+            if (tipo === 'factorial') { output.innerText = factorial(n); return; }
+            if (isNaN(r) || r < 0 || r > n) { alert("r inválido."); return; }
+
+            if (tipo === 'permutacion') output.innerText = factorial(n) / factorial(n - r);
+            if (tipo === 'combinacion') output.innerText = factorial(n) / (factorial(r) * factorial(n - r));
+        }
+
+        function desarrollarBinomio() {
+            const n = parseInt(document.getElementById('binom-n').value);
+            const output = document.getElementById('binom-result');
+            if (isNaN(n) || n < 0) { alert("n debe ser positivo."); return; }
+
+            let coefs = [];
+            for (let r = 0; r <= n; r++) {
+                coefs.push(factorial(n) / (factorial(r) * factorial(n - r)));
+            }
+            output.innerText = `Coeficientes (n=${n}): [ ${coefs.join(', ')} ]`;
+        }
+
+        function analizarEventos() {
+            const pA = parseFloat(document.getElementById('prob-a').value);
+            const pB = parseFloat(document.getElementById('prob-b').value);
+            const pInter = parseFloat(document.getElementById('prob-inter').value);
+
+            if (isNaN(pA) || isNaN(pB) || isNaN(pInter)) { alert("Faltan probabilidades."); return; }
+            if (pB === 0) { document.getElementById('prob-condicional').innerText = "Indefinido"; return; }
+
+            const pCond = pInter / pB;
+            document.getElementById('prob-condicional').innerText = pCond.toFixed(4);
+
+            const esIndep = Math.abs(pInter - (pA * pB)) < 0.0001;
+            const badge = document.getElementById('prob-dependencia');
+            
+            if (esIndep) {
+                badge.innerText = "Independientes";
+                badge.style.color = "#39ff14";
+            } else {
+                badge.innerText = "Dependientes";
+                badge.style.color = "#ff3b30";
+            }
+        }
+    </script>
+</body>
+</html>
