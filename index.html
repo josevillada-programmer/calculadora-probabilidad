@@ -8,6 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
+        /* TEMA OSCURO (Por Defecto) */
         :root {
             --bg-dark: #0d0e12;
             --card-bg: #161920;
@@ -18,6 +19,28 @@
             --neon-red: #ff3b30;
             --text-main: #e2e8f0;
             --text-muted: #708096;
+            
+            /* Nuevas variables para fondos translúcidos */
+            --glass-bg: rgba(0, 0, 0, 0.3);
+            --glass-card: rgba(0, 0, 0, 0.2);
+            --border-glow: rgba(0, 240, 255, 0.2);
+        }
+
+        /* TEMA CLARO (Inverso) */
+        body.light-theme {
+            --bg-dark: #f0f2f5;
+            --card-bg: #ffffff;
+            --input-bg: #e2e8f0;
+            --neon-blue: #0056b3; /* Azul más oscuro para contraste en fondo blanco */
+            --tech-blue: #0072ff;
+            --neon-green: #059669; /* Verde oscuro */
+            --neon-red: #dc2626; /* Rojo oscuro */
+            --text-main: #0f172a; /* Texto casi negro */
+            --text-muted: #64748b;
+            
+            --glass-bg: rgba(0, 0, 0, 0.05);
+            --glass-card: rgba(0, 0, 0, 0.02);
+            --border-glow: rgba(0, 86, 179, 0.2);
         }
 
         * {
@@ -35,6 +58,26 @@
             align-items: center;
             min-height: 100vh;
             padding: 20px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Botón para cambiar de tema */
+        .theme-toggle-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--card-bg);
+            color: var(--text-main);
+            border: 1px solid var(--neon-blue);
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px var(--border-glow);
+        }
+        .theme-toggle-btn:hover {
+            background: var(--glass-bg);
         }
 
         .main-calculator-card {
@@ -42,15 +85,16 @@
             width: 100%;
             max-width: 700px;
             border-radius: 16px;
-            border: 1px solid rgba(0, 240, 255, 0.2);
-            box-shadow: 0 0 30px rgba(0, 114, 255, 0.15);
+            border: 1px solid var(--border-glow);
+            box-shadow: 0 0 30px var(--border-glow);
             overflow: hidden;
+            transition: all 0.3s ease;
         }
 
         .calc-tabs {
             display: flex;
-            background-color: rgba(0, 0, 0, 0.3);
-            border-bottom: 1px solid rgba(0, 240, 255, 0.1);
+            background-color: var(--glass-bg);
+            border-bottom: 1px solid var(--border-glow);
         }
 
         .tab-btn {
@@ -67,26 +111,21 @@
 
         .tab-btn:hover {
             color: var(--neon-blue);
-            background-color: rgba(0, 240, 255, 0.05);
+            background-color: var(--glass-bg);
         }
 
         .tab-btn.active {
             color: var(--neon-blue);
             border-bottom: 2px solid var(--neon-blue);
-            background-color: rgba(0, 240, 255, 0.02);
+            background-color: var(--glass-bg);
         }
 
         .tab-content-container {
             padding: 25px;
         }
 
-        .tab-panel {
-            display: none;
-        }
-
-        .tab-panel.active-panel {
-            display: block;
-        }
+        .tab-panel { display: none; }
+        .tab-panel.active-panel { display: block; }
 
         h3 {
             font-size: 1.1rem;
@@ -100,10 +139,10 @@
         textarea, input[type="number"], select {
             width: 100%;
             background-color: var(--input-bg);
-            border: 1px solid rgba(112, 128, 150, 0.4);
+            border: 1px solid var(--text-muted);
             border-radius: 8px;
             padding: 12px;
-            color: #fff;
+            color: var(--text-main);
             font-size: 1rem;
             margin-bottom: 15px;
             transition: all 0.3s;
@@ -112,7 +151,7 @@
         textarea:focus, input:focus, select:focus {
             outline: none;
             border-color: var(--neon-blue);
-            box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+            box-shadow: 0 0 10px var(--border-glow);
         }
 
         textarea {
@@ -131,7 +170,7 @@
             border-radius: 8px;
             cursor: pointer;
             text-transform: uppercase;
-            box-shadow: 0 4px 15px rgba(0, 114, 255, 0.3);
+            box-shadow: 0 4px 15px var(--border-glow);
             transition: transform 0.1s, opacity 0.2s;
             margin-bottom: 15px;
         }
@@ -162,8 +201,8 @@
         }
 
         .result-card {
-            background-color: rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(112, 128, 150, 0.2);
+            background-color: var(--glass-card);
+            border: 1px solid var(--border-glow);
             padding: 12px;
             border-radius: 8px;
             text-align: center;
@@ -179,14 +218,14 @@
         .result-card p {
             font-size: 1.1rem;
             font-weight: bold;
-            color: #fff;
+            color: var(--text-main);
         }
 
         .table-container {
             width: 100%;
             overflow-x: auto;
             margin-top: 15px;
-            border: 1px solid rgba(112, 128, 150, 0.2);
+            border: 1px solid var(--border-glow);
             border-radius: 8px;
         }
 
@@ -195,11 +234,11 @@
             border-collapse: collapse;
             text-align: center;
             font-size: 0.85rem;
-            background-color: rgba(0,0,0,0.1);
+            background-color: var(--glass-bg);
         }
 
         th {
-            background-color: rgba(0, 114, 255, 0.2);
+            background-color: var(--border-glow);
             color: var(--neon-blue);
             padding: 10px;
             font-weight: bold;
@@ -207,12 +246,12 @@
 
         td {
             padding: 10px;
-            border-bottom: 1px solid rgba(112, 128, 150, 0.1);
-            color: #fff;
+            border-bottom: 1px solid var(--border-glow);
+            color: var(--text-main);
         }
 
         .prob-section {
-            background-color: rgba(0, 0, 0, 0.15);
+            background-color: var(--glass-bg);
             padding: 15px;
             border-radius: 10px;
             margin-bottom: 20px;
@@ -227,14 +266,14 @@
         }
 
         .binom-output {
-            background-color: #090b0e;
+            background-color: var(--input-bg);
             padding: 14px;
             border-radius: 6px;
             font-size: 0.95rem;
-            color: #a0aec0;
+            color: var(--text-muted);
             min-height: 45px;
             word-break: break-all;
-            border: 1px solid rgba(0, 240, 255, 0.1);
+            border: 1px solid var(--border-glow);
         }
 
         .flex-grid-3 {
@@ -248,13 +287,13 @@
             background-color: var(--input-bg);
             padding: 15px;
             border-radius: 8px;
-            border: 1px solid rgba(255,255,255,0.05);
+            border: 1px solid var(--border-glow);
         }
 
         .custom-file-upload {
             display: block;
             text-align: center;
-            background: #112233;
+            background: var(--glass-bg);
             border: 1px dashed var(--neon-blue);
             padding: 15px;
             border-radius: 8px;
@@ -268,25 +307,27 @@
 
         .chart-container {
             margin-top: 25px;
-            background: rgba(0,0,0,0.3);
+            background: var(--glass-bg);
             padding: 15px;
             border-radius: 8px;
-            border: 1px solid rgba(255,255,255,0.02);
+            border: 1px solid var(--border-glow);
         }
 
         .mini-display {
-            background-color: #0a0a0c;
+            background-color: var(--glass-bg);
             padding: 25px;
             border-radius: 12px;
             text-align: right;
             font-size: 2.5rem;
             font-weight: bold;
-            color: #fff;
-            border: 1px solid rgba(255,255,255,0.05);
+            color: var(--text-main);
+            border: 1px solid var(--border-glow);
         }
     </style>
 </head>
 <body>
+
+    <button id="theme-toggle" class="theme-toggle-btn">☀️ Tema Claro</button>
 
     <div class="main-calculator-card">
         
@@ -417,6 +458,19 @@
         let histogramInstance = null;
         let boxplotInstance = null;
 
+        // --- Lógica del Switch de Tema ---
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        themeToggleBtn.addEventListener('click', () => {
+            document.body.classList.toggle('light-theme');
+            const isLight = document.body.classList.contains('light-theme');
+            themeToggleBtn.innerText = isLight ? '🌙 Tema Oscuro' : '☀️ Tema Claro';
+            
+            // Si ya hay datos cargados, redibujamos las gráficas para que cambien sus colores
+            if (window.currentDataset) {
+                procesarEstadistica();
+            }
+        });
+
         // --- Navegación de Pestañas ---
         function switchTab(tabId) {
             document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active-panel'));
@@ -428,7 +482,6 @@
         // --- Restricción del Textarea para Datos Manuales ---
         const textareaManual = document.getElementById('manual-data');
         textareaManual.addEventListener('input', function() {
-            // Agregamos \n para que acepte la tecla Enter (saltos de línea) sin amontonar el texto
             this.value = this.value.replace(/[^0-9, .\n]/g, ''); 
         });
 
@@ -439,7 +492,6 @@
             const reader = new FileReader();
             reader.onload = function(e) {
                 const text = e.target.result;
-                // Escudo anti-testers también para el CSV
                 let coincidencias = text.match(/\d+(\.\d+)?/g);
                 let valores = coincidencias ? coincidencias.map(Number) : [];
                 document.getElementById('manual-data').value = valores.join(', ');
@@ -455,9 +507,6 @@
                 return;
             }
             
-            // --- EL ESCUDO ANTI-TESTERS ---
-            // match(/\d+(\.\d+)?/g) busca directamente todo lo que parezca un número (entero o decimal).
-            // Ignora por completo espacios extra, comas seguidas o puntos huérfanos (ej. "78.").
             let coincidencias = inputString.match(/\d+(\.\d+)?/g);
             
             if (!coincidencias || coincidencias.length === 0) {
@@ -465,7 +514,6 @@
                 return;
             }
 
-            // Convertimos las coincidencias a números reales
             let datos = coincidencias.map(n => parseFloat(n));
 
             datos.sort((a, b) => a - b);
@@ -576,10 +624,15 @@
             document.getElementById('pos-result').innerText = result.toFixed(2);
         }
 
-        // Renderizadores de Gráficos
+        // Renderizadores de Gráficos (Actualizados para leer el tema)
         function renderizarHistograma(labels, datos) {
             if (histogramInstance) histogramInstance.destroy();
             const ctx = document.getElementById('histogramChart').getContext('2d');
+            const isLight = document.body.classList.contains('light-theme');
+            const gridColor = isLight ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.05)';
+            const barColor = isLight ? 'rgba(0, 86, 179, 0.4)' : 'rgba(0, 240, 255, 0.4)';
+            const borderColor = isLight ? '#0056b3' : '#00f0ff';
+
             histogramInstance = new Chart(ctx, {
                 type: 'bar',
                 data: {
@@ -587,20 +640,23 @@
                     datasets: [{
                         label: 'Frecuencia Absoluta',
                         data: datos,
-                        backgroundColor: 'rgba(0, 240, 255, 0.4)',
-                        borderColor: '#00f0ff',
+                        backgroundColor: barColor,
+                        borderColor: borderColor,
                         borderWidth: 2,
                         barPercentage: 1.0,
                         categoryPercentage: 1.0
                     }]
                 },
-                options: { scales: { y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' } }, x: { grid: { display: false } } } }
+                options: { scales: { y: { beginAtZero: true, grid: { color: gridColor } }, x: { grid: { display: false } } } }
             });
         }
 
         function renderizarBoxplot(min, med, max, avg) {
             if (boxplotInstance) boxplotInstance.destroy();
             const ctx = document.getElementById('boxplotChart').getContext('2d');
+            const isLight = document.body.classList.contains('light-theme');
+            const gridColor = isLight ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.05)';
+
             boxplotInstance = new Chart(ctx, {
                 type: 'bar',
                 data: {
@@ -608,11 +664,11 @@
                     datasets: [
                         { label: 'Mínimo', data: [min], backgroundColor: '#708096' },
                         { label: 'Media Muestra', data: [avg], backgroundColor: '#0072ff' },
-                        { label: 'Mediana', data: [med], backgroundColor: '#39ff14' },
-                        { label: 'Máximo', data: [max], backgroundColor: '#ff3b30' }
+                        { label: 'Mediana', data: [med], backgroundColor: isLight ? '#059669' : '#39ff14' },
+                        { label: 'Máximo', data: [max], backgroundColor: isLight ? '#dc2626' : '#ff3b30' }
                     ]
                 },
-                options: { responsive: true, scales: { y: { grid: { color: 'rgba(255,255,255,0.05)' } } } }
+                options: { responsive: true, scales: { y: { grid: { color: gridColor } } } }
             });
         }
 
@@ -662,13 +718,14 @@
 
             const esIndep = Math.abs(pInter - (pA * pB)) < 0.0001;
             const badge = document.getElementById('prob-dependencia');
+            const isLight = document.body.classList.contains('light-theme');
             
             if (esIndep) {
                 badge.innerText = "Independientes";
-                badge.style.color = "#39ff14";
+                badge.style.color = isLight ? "#059669" : "#39ff14";
             } else {
                 badge.innerText = "Dependientes";
-                badge.style.color = "#ff3b30";
+                badge.style.color = isLight ? "#dc2626" : "#ff3b30";
             }
         }
     </script>
