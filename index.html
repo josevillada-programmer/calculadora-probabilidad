@@ -303,7 +303,7 @@
                     <label for="csv-file" class="custom-file-upload">📁 Cargar archivo de datos (CSV)</label>
                     <input type="file" id="csv-file" accept=".csv" onchange="cargarCSV(event)">
                     <p class="or-text">o ingresa datos separados por comas:</p>
-                    <textarea id="manual-data" placeholder="Ej: 85, 90, 78, 92, 100, 64, 75, 88..."></textarea>
+                    <textarea id="manual-data" placeholder="Datos"></textarea>
                     <button class="btn-action" onclick="procesarEstadistica()">Calcular Muestra Completa</button>
                 </div>
 
@@ -423,6 +423,14 @@
             document.getElementById(tabId).classList.add('active-panel');
             document.getElementById('btn-' + tabId).classList.add('active');
         }
+
+        // --- Restricción del Textarea para Datos Manuales ---
+        // ESTA ES LA ÚNICA PARTE NUEVA QUE SE AGREGÓ
+        const textareaManual = document.getElementById('manual-data');
+        textareaManual.addEventListener('input', function() {
+            this.value = this.value.replace(/[^0-9, \-.]/g, ''); // Permite números, comas, espacios, signos negativos y puntos decimales
+        });
+        // ----------------------------------------------------
 
         // --- Lector Automático de Archivos CSV ---
         function cargarCSV(event) {
