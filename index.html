@@ -84,7 +84,7 @@
         .main-calculator-card {
             background-color: var(--card-bg);
             width: 100%;
-            max-width: 950px; 
+            max-width: 1100px; 
             border-radius: 16px;
             border: 1px solid var(--border-glow);
             box-shadow: 0 0 30px var(--border-glow);
@@ -105,6 +105,7 @@
             display: flex;
             flex: 1;
             min-width: 300px; 
+            flex-wrap: wrap; /* Añadido para soportar más botones sin romper diseño */
         }
 
         .tab-btn {
@@ -117,6 +118,7 @@
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
+            white-space: nowrap; /* Evita que el texto de las pestañas se parta */
         }
 
         .tab-btn:hover {
@@ -159,6 +161,7 @@
                 border-top: 1px solid var(--border-glow);
                 justify-content: center; 
             }
+            .tab-btn { font-size: 0.85rem; padding: 10px 5px; } /* Ajuste celular */
         }
 
         .tab-content-container {
@@ -177,7 +180,7 @@
             letter-spacing: 1px;
         }
 
-        textarea, input[type="number"], select {
+        textarea, input[type="number"], input[type="text"], select {
             width: 100%;
             background-color: var(--input-bg);
             border: 1px solid var(--text-muted);
@@ -222,6 +225,7 @@
             display: flex;
             gap: 10px;
             margin-bottom: 15px;
+            flex-wrap: wrap; /* Asegura que el conversor no se rompa */
         }
 
         .btn-small {
@@ -294,7 +298,7 @@
             word-break: break-all;
         }
 
-        .prob-section {
+        .prob-section, .converter-section {
             background-color: var(--glass-bg);
             padding: 15px;
             border-radius: 10px;
@@ -334,9 +338,7 @@
         }
 
         @media (max-width: 768px) {
-            .charts-grid {
-                grid-template-columns: 1fr; 
-            }
+            .charts-grid { grid-template-columns: 1fr; }
         }
 
         .dependency-card {
@@ -362,23 +364,18 @@
         #csv-file { display: none; }
         .or-text { text-align: center; color: var(--text-muted); font-size: 0.8rem; margin-bottom: 10px; }
 
-        .chart-container {
+        .chart-container, .chart-container-full {
             background: var(--glass-bg);
             padding: 15px;
             border-radius: 8px;
             border: 1px solid var(--border-glow);
+        }
+        .chart-container {
             display: flex;
             flex-direction: column;
             align-items: center;
         }
-        
-        .chart-container-full {
-            margin-top: 15px;
-            background: var(--glass-bg);
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid var(--border-glow);
-        }
+        .chart-container-full { margin-top: 15px; }
 
         .pie-wrapper {
             width: 100%;
@@ -386,22 +383,64 @@
             margin: 0 auto;
         }
 
-        /* --- ESTILOS DE LA CALCULADORA CIENTÍFICA --- */
+        /* --- NUEVO: ESTILOS DEL HISTORIAL DE LA CALCULADORA --- */
+        .history-panel {
+            background-color: var(--input-bg);
+            border: 1px solid var(--border-glow);
+            border-radius: 8px;
+            padding: 10px;
+            height: 100px; /* Tamaño fijo */
+            overflow-y: auto; /* Scroll si hay muchas operaciones */
+            margin-bottom: 15px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .history-entry {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px;
+            border-bottom: 1px solid var(--glass-card);
+        }
+        .history-expr { color: var(--text-main); }
+        .history-res { color: var(--neon-green); font-weight: bold; }
+
+        /* --- NUEVO: ESTILOS DEL PLOTTER (Canvas Graficadora) --- */
+        .plot-canvas-wrapper {
+            width: 100%;
+            overflow: hidden;
+            background: var(--bg-dark);
+            border: 1px solid var(--border-glow);
+            border-radius: 8px;
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+        }
+        #plotCanvas {
+            width: 100%;
+            max-width: 800px;
+            height: 400px;
+        }
+
+        /* --- ESTILOS: MODO CIBERPSICOSIS (Calculadora Titan) --- */
         .calc-screen {
             background-color: var(--bg-dark);
             padding: 20px;
             border-radius: 12px;
-            text-align: right;
-            font-size: 2.2rem;
+            text-align: left;
+            font-size: 2rem;
             font-family: 'Courier New', Courier, monospace;
             font-weight: bold;
             color: var(--neon-blue);
             border: 1px solid var(--border-glow);
             margin-bottom: 15px;
-            min-height: 80px;
+            min-height: 90px;
             word-break: break-all;
-            box-shadow: inset 0 0 15px rgba(0,0,0,0.5);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
             transition: all 0.3s;
+            position: relative;
         }
         .light-theme .calc-screen {
             background-color: var(--input-bg);
@@ -409,56 +448,82 @@
             box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
         }
         
-        .calc-grid {
+        .calc-cursor {
+            display: inline-block;
+            width: 10px;
+            height: 1.5rem;
+            background-color: var(--neon-red);
+            animation: blink 1s step-end infinite;
+            vertical-align: middle;
+            margin-left: 2px;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+        
+        /* El Grid Titán de 8 columnas */
+        .calc-grid-titan {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 10px;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 6px;
         }
         
         .calc-btn {
-            padding: 15px 5px;
-            font-size: 1.1rem;
+            padding: 12px 2px;
+            font-size: 0.9rem;
             font-weight: bold;
             border: 1px solid var(--border-glow);
-            border-radius: 8px;
+            border-radius: 6px;
             background-color: var(--glass-card);
             color: var(--text-main);
             cursor: pointer;
             transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
         }
         .calc-btn:hover {
             background-color: var(--border-glow);
             transform: scale(0.95);
         }
         .calc-btn:active {
-            transform: scale(0.90);
+            transform: scale(0.85);
+            box-shadow: 0 0 15px var(--neon-red);
         }
         
-        .calc-btn.op {
-            color: var(--gradient-end);
-            background-color: rgba(0, 198, 255, 0.1);
-        }
-        .light-theme .calc-btn.op { background-color: rgba(189, 44, 13, 0.1); }
+        /* Colores Específicos por Bloque de Funciones */
+        .c-trig { color: #a855f7; background-color: rgba(168, 85, 247, 0.05); }
+        .c-math { color: var(--neon-blue); background-color: rgba(66, 211, 242, 0.05); }
+        .c-stat { color: #f59e0b; background-color: rgba(245, 158, 11, 0.05); }
+        .c-sym { color: var(--neon-green); background-color: rgba(57, 255, 20, 0.05); font-size: 1.1rem; }
+        .c-op { color: var(--gradient-end); background-color: rgba(0, 198, 255, 0.1); font-size: 1.2rem; }
+        .c-num { font-size: 1.2rem; background-color: rgba(255,255,255,0.02); }
+        .c-act { color: var(--neon-red); background-color: rgba(255, 59, 48, 0.1); font-size: 1.1rem; }
         
-        .calc-btn.fn {
-            color: var(--neon-blue);
-            font-size: 0.95rem;
-        }
-        .calc-btn.action {
-            color: var(--neon-red);
-            background-color: rgba(255, 59, 48, 0.1);
-        }
-        .calc-btn.equal {
-            background: linear-gradient(135deg, var(--tech-blue), var(--gradient-end));
+        .light-theme .c-trig { color: #7e22ce; }
+        .light-theme .c-stat { color: #d97706; }
+        .light-theme .c-sym { color: #059669; }
+        .light-theme .c-op { color: var(--neon-blue); background-color: rgba(189, 44, 13, 0.1); }
+        .light-theme .c-num { background-color: #ffffff; }
+
+        .btn-equal-titan {
+            background: linear-gradient(135deg, var(--neon-red), #991b1b);
             color: white;
             border: none;
-            box-shadow: 0 4px 10px var(--border-glow);
+            box-shadow: 0 4px 15px rgba(255, 59, 48, 0.4);
             font-size: 1.5rem;
-            grid-column: span 5; /* ¡El golpe final! */
+            grid-column: span 2; 
+        }
+
+        /* Adaptabilidad extrema para celulares */
+        @media (max-width: 800px) {
+            .calc-grid-titan { grid-template-columns: repeat(6, 1fr); gap: 5px; }
+            .calc-screen { font-size: 1.5rem; }
+            .calc-btn { font-size: 0.75rem; padding: 10px 1px; }
+            .c-num, .c-op, .c-act { font-size: 1rem; }
         }
         @media (max-width: 500px) {
-            .calc-btn { padding: 12px 2px; font-size: 0.9rem; }
-            .calc-btn.fn { font-size: 0.75rem; }
+            .calc-grid-titan { grid-template-columns: repeat(4, 1fr); }
+            .btn-equal-titan { grid-column: span 4; padding: 15px; }
         }
     </style>
 </head>
@@ -470,7 +535,9 @@
             <nav class="calc-tabs">
                 <button class="tab-btn active" id="btn-descriptiva" onclick="switchTab('descriptiva')">📊 Descriptiva</button>
                 <button class="tab-btn" id="btn-probabilidad" onclick="switchTab('probabilidad')">🎲 Probabilidad</button>
-                <button class="tab-btn" id="btn-basica" onclick="switchTab('basica')">📐 Científica</button>
+                <button class="tab-btn" id="btn-basica" onclick="switchTab('basica')">🧠 TITAN Sci-Calc</button>
+                <button class="tab-btn" id="btn-graficadora" onclick="switchTab('graficadora')">📈 Graficadora</button>
+                <button class="tab-btn" id="btn-conversor" onclick="switchTab('conversor')">⚖️ Conversor</button>
             </nav>
             <div class="theme-toggle-container">
                 <button id="theme-toggle" class="theme-toggle-btn">☀️ Tema Claro</button>
@@ -603,52 +670,140 @@
             </section>
 
             <section id="basica" class="tab-panel">
-                <div class="calc-screen" id="calc-display">0</div>
                 
-                <div class="calc-grid">
-                    <button class="calc-btn fn" onclick="appendCalc('sin(')">sin</button>
-                    <button class="calc-btn fn" onclick="appendCalc('cos(')">cos</button>
-                    <button class="calc-btn fn" onclick="appendCalc('tan(')">tan</button>
-                    <button class="calc-btn op" onclick="appendCalc('(')">(</button>
-                    <button class="calc-btn op" onclick="appendCalc(')')">)</button>
+                <div class="history-panel" id="history-panel">
+                    </div>
 
-                    <button class="calc-btn fn" onclick="appendCalc('asin(')">asin</button>
-                    <button class="calc-btn fn" onclick="appendCalc('acos(')">acos</button>
-                    <button class="calc-btn fn" onclick="appendCalc('atan(')">atan</button>
-                    <button class="calc-btn fn" onclick="appendCalc('sqrt(')">√</button>
-                    <button class="calc-btn fn" onclick="appendCalc('cbrt(')">∛</button>
+                <div class="calc-screen">
+                    <span id="calc-display-text"></span><span class="calc-cursor"></span>
+                </div>
+                
+                <div class="calc-grid-titan">
+                    <button class="calc-btn c-trig" onclick="ac('sin(')">sin</button>
+                    <button class="calc-btn c-trig" onclick="ac('cos(')">cos</button>
+                    <button class="calc-btn c-trig" onclick="ac('tan(')">tan</button>
+                    <button class="calc-btn c-trig" onclick="ac('sec(')">sec</button>
+                    <button class="calc-btn c-trig" onclick="ac('csc(')">csc</button>
+                    <button class="calc-btn c-trig" onclick="ac('cot(')">cot</button>
+                    <button class="calc-btn c-math" onclick="ac('sqrt(')">√x</button>
+                    <button class="calc-btn c-math" onclick="ac('cbrt(')">∛x</button>
 
-                    <button class="calc-btn fn" onclick="appendCalc('log10(')">log</button>
-                    <button class="calc-btn fn" onclick="appendCalc('log(')">ln</button>
-                    <button class="calc-btn fn" onclick="appendCalc('!')">x!</button>
-                    <button class="calc-btn fn" onclick="appendCalc('abs(')">|x|</button>
-                    <button class="calc-btn fn" onclick="appendCalc('%')">mod</button>
+                    <button class="calc-btn c-trig" onclick="ac('asin(')">asin</button>
+                    <button class="calc-btn c-trig" onclick="ac('acos(')">acos</button>
+                    <button class="calc-btn c-trig" onclick="ac('atan(')">atan</button>
+                    <button class="calc-btn c-trig" onclick="ac('asec(')">asec</button>
+                    <button class="calc-btn c-trig" onclick="ac('acsc(')">acsc</button>
+                    <button class="calc-btn c-trig" onclick="ac('acot(')">acot</button>
+                    <button class="calc-btn c-math" onclick="ac('log10(')">log₁₀</button>
+                    <button class="calc-btn c-math" onclick="ac('log(')">ln</button>
 
-                    <button class="calc-btn fn" onclick="appendCalc('pi')">π</button>
-                    <button class="calc-btn fn" onclick="appendCalc('e')">e</button>
-                    <button class="calc-btn op" onclick="appendCalc('^')">^</button>
-                    <button class="calc-btn action" onclick="clearCalc()">AC</button>
-                    <button class="calc-btn action" onclick="delCalc()">DEL</button>
+                    <button class="calc-btn c-trig" onclick="ac('sinh(')">sinh</button>
+                    <button class="calc-btn c-trig" onclick="ac('cosh(')">cosh</button>
+                    <button class="calc-btn c-trig" onclick="ac('tanh(')">tanh</button>
+                    <button class="calc-btn c-math" onclick="ac('abs(')">|x|</button>
+                    <button class="calc-btn c-math" onclick="ac('ceil(')">ceil</button>
+                    <button class="calc-btn c-math" onclick="ac('floor(')">floor</button>
+                    <button class="calc-btn c-math" onclick="ac('round(')">round</button>
+                    <button class="calc-btn c-math" onclick="ac('mod(')">mod</button>
 
-                    <button class="calc-btn num" onclick="appendCalc('7')">7</button>
-                    <button class="calc-btn num" onclick="appendCalc('8')">8</button>
-                    <button class="calc-btn num" onclick="appendCalc('9')">9</button>
-                    <button class="calc-btn op" onclick="appendCalc('/')">÷</button>
-                    <button class="calc-btn op" onclick="appendCalc('*')">×</button>
+                    <button class="calc-btn c-stat" onclick="ac('permutations(')">nPr</button>
+                    <button class="calc-btn c-stat" onclick="ac('combinations(')">nCr</button>
+                    <button class="calc-btn c-stat" onclick="ac('random()')">rand</button>
+                    <button class="calc-btn c-math" onclick="ac('det(')">det</button>
+                    <button class="calc-btn c-math" onclick="ac('inv(')">inv</button>
+                    <button class="calc-btn c-math" onclick="ac('cross(')">cross</button>
+                    <button class="calc-btn c-sym" onclick="ac('[')">[</button>
+                    <button class="calc-btn c-sym" onclick="ac(']')">]</button>
 
-                    <button class="calc-btn num" onclick="appendCalc('4')">4</button>
-                    <button class="calc-btn num" onclick="appendCalc('5')">5</button>
-                    <button class="calc-btn num" onclick="appendCalc('6')">6</button>
-                    <button class="calc-btn op" onclick="appendCalc('+')">+</button>
-                    <button class="calc-btn op" onclick="appendCalc('-')">−</button>
+                    <button class="calc-btn c-stat" onclick="ac('mean(')">mean</button>
+                    <button class="calc-btn c-stat" onclick="ac('median(')">med</button>
+                    <button class="calc-btn c-stat" onclick="ac('var(')">var</button>
+                    <button class="calc-btn c-stat" onclick="ac('std(')">std</button>
+                    <button class="calc-btn c-math" onclick="ac('derivative(')">d/dx</button>
+                    <button class="calc-btn c-math" onclick="ac('simplify(')">simp</button>
+                    <button class="calc-btn c-sym" onclick="ac('(')">(</button>
+                    <button class="calc-btn c-sym" onclick="ac(')')">)</button>
 
-                    <button class="calc-btn num" onclick="appendCalc('1')">1</button>
-                    <button class="calc-btn num" onclick="appendCalc('2')">2</button>
-                    <button class="calc-btn num" onclick="appendCalc('3')">3</button>
-                    <button class="calc-btn num" onclick="appendCalc('0')">0</button>
-                    <button class="calc-btn num" onclick="appendCalc('.')">.</button>
+                    <button class="calc-btn c-sym" onclick="ac('pi')">π</button>
+                    <button class="calc-btn c-sym" onclick="ac('e')">e</button>
+                    <button class="calc-btn c-sym" onclick="ac('phi')">φ</button>
+                    <button class="calc-btn c-sym" onclick="ac('i')">i</button>
+                    <button class="calc-btn c-sym" onclick="ac('Infinity')">∞</button>
+                    <button class="calc-btn c-math" onclick="ac('!')">x!</button>
+                    <button class="calc-btn c-op" onclick="ac('^')">^</button>
+                    <button class="calc-btn c-sym" onclick="ac(',')">,</button> 
 
-                    <button class="calc-btn equal" onclick="calcResult()">=</button>
+                    <button class="calc-btn c-num" onclick="ac('7')">7</button>
+                    <button class="calc-btn c-num" onclick="ac('8')">8</button>
+                    <button class="calc-btn c-num" onclick="ac('9')">9</button>
+                    <button class="calc-btn c-act" onclick="delCalc()">DEL</button>
+                    <button class="calc-btn c-act" onclick="clearCalc()">AC</button>
+                    <button class="calc-btn c-math" onclick="ac('ANS')">ANS</button>
+                    <button class="calc-btn c-op" onclick="ac('==')">==</button>
+                    <button class="calc-btn c-op" onclick="ac('!=')">!=</button>
+
+                    <button class="calc-btn c-num" onclick="ac('4')">4</button>
+                    <button class="calc-btn c-num" onclick="ac('5')">5</button>
+                    <button class="calc-btn c-num" onclick="ac('6')">6</button>
+                    <button class="calc-btn c-op" onclick="ac('*')">×</button>
+                    <button class="calc-btn c-op" onclick="ac('/')">÷</button>
+                    <button class="calc-btn c-sym" onclick="ac('x')">x</button>
+                    <button class="calc-btn c-sym" onclick="ac('y')">y</button>
+                    <button class="calc-btn c-sym" onclick="ac('z')">z</button>
+
+                    <button class="calc-btn c-num" onclick="ac('1')">1</button>
+                    <button class="calc-btn c-num" onclick="ac('2')">2</button>
+                    <button class="calc-btn c-num" onclick="ac('3')">3</button>
+                    <button class="calc-btn c-op" onclick="ac('+')">+</button>
+                    <button class="calc-btn c-op" onclick="ac('-')">−</button>
+                    <button class="calc-btn c-num" onclick="ac('0')">0</button>
+                    <button class="calc-btn c-num" onclick="ac('.')">.</button>
+                    <button class="calc-btn btn-equal-titan" onclick="calcResult()">ENTER</button>
+                </div>
+            </section>
+
+            <section id="graficadora" class="tab-panel">
+                <div class="prob-section">
+                    <h3>Plotter de Funciones 2D</h3>
+                    <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 10px;">Ingresa una función matemática usando la variable 'x'. Ejemplo: sin(x) * x^2</p>
+                    <div class="flex-row">
+                        <input type="text" id="plot-eq" placeholder="f(x) = ...">
+                        <button class="btn-action" style="margin-bottom: 0;" onclick="drawPlot()">Graficar</button>
+                    </div>
+                    <div class="plot-canvas-wrapper">
+                        <canvas id="plotCanvas"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <section id="conversor" class="tab-panel">
+                <div class="converter-section">
+                    <h3>Conversor de Sistemas Computacionales</h3>
+                    <div class="flex-row">
+                        <input type="number" id="conv-input" placeholder="Cantidad" value="1">
+                        <select id="conv-from">
+                            <option value="b">Bits (b)</option>
+                            <option value="B">Bytes (B)</option>
+                            <option value="KB">Kilobytes (KB)</option>
+                            <option value="MB">Megabytes (MB)</option>
+                            <option value="GB">Gigabytes (GB)</option>
+                            <option value="TB">Terabytes (TB)</option>
+                        </select>
+                        <span style="color: var(--neon-blue); align-self: center; font-weight:bold;">A</span>
+                        <select id="conv-to">
+                            <option value="b">Bits (b)</option>
+                            <option value="B">Bytes (B)</option>
+                            <option value="KB">Kilobytes (KB)</option>
+                            <option value="MB" selected>Megabytes (MB)</option>
+                            <option value="GB">Gigabytes (GB)</option>
+                            <option value="TB">Terabytes (TB)</option>
+                        </select>
+                    </div>
+                    <button class="btn-action" onclick="convertirDatos()">Ejecutar Conversión</button>
+                    <div class="binom-output" style="text-align: center;">
+                        <span style="font-size: 0.9rem; color: var(--text-muted);">Resultado de Conversión:</span><br>
+                        <span id="conv-result" style="color: var(--neon-green); font-size: 1.5rem; font-weight: bold;">-</span>
+                    </div>
                 </div>
             </section>
 
@@ -670,6 +825,8 @@
             if (window.currentDataset && document.getElementById('stat-n').innerText !== "-") {
                 procesarEstadistica();
             }
+            // Repintar gráfica si está activa para que agarre los nuevos colores
+            if (document.getElementById('plot-eq').value.trim() !== "") drawPlot();
         });
 
         // --- Navegación de Pestañas ---
@@ -678,6 +835,9 @@
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById(tabId).classList.add('active-panel');
             document.getElementById('btn-' + tabId).classList.add('active');
+            
+            // Si el usuario entra al plotter, dibuja el grid base
+            if(tabId === 'graficadora') drawPlot(true);
         }
 
         // --- Restricción del Textarea para Datos Manuales ---
@@ -686,7 +846,6 @@
             this.value = this.value.replace(/[^0-9, .\n]/g, ''); 
         });
 
-        // --- Lector Automático de Archivos CSV ---
         function cargarCSV(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -708,16 +867,10 @@
         // --- Módulo 1: Motor Estadístico Completo ---
         function procesarEstadistica() {
             let inputString = document.getElementById('manual-data').value;
-            if (!inputString.trim()) {
-                alert("Ingresa datos o carga un archivo CSV.");
-                return;
-            }
+            if (!inputString.trim()) { alert("Ingresa datos o carga un archivo CSV."); return; }
             
             let coincidencias = inputString.match(/\d*\.?\d+/g);
-            if (!coincidencias || coincidencias.length === 0) {
-                alert("No se encontraron números válidos.");
-                return;
-            }
+            if (!coincidencias || coincidencias.length === 0) { alert("No se encontraron números válidos."); return; }
 
             let datos = coincidencias.map(n => parseFloat(n));
             datos.sort((a, b) => a - b);
@@ -829,7 +982,6 @@
             renderizarBoxplot(valorMin, mediana, valorMax, media);
         }
 
-        // Lógica de Medidas de Posición Alternas
         function calcularPosicion() {
             if (!window.currentDataset) { alert("Carga datos primero."); return; }
             const tipo = document.getElementById('position-type').value;
@@ -845,7 +997,6 @@
             document.getElementById('pos-result').innerText = result > 1e10 ? result.toExponential(4) : result.toFixed(2);
         }
 
-        // Renderizadores de Gráficos 
         function renderizarHistograma(labels, datos) {
             if (histogramInstance) histogramInstance.destroy();
             const ctx = document.getElementById('histogramChart').getContext('2d');
@@ -987,13 +1138,39 @@
             }
         }
 
-        // --- MÓDULO 3: LÓGICA DE LA CALCULADORA CIENTÍFICA ---
-        let calcDisplay = document.getElementById('calc-display');
+        // --- MÓDULO 3: CALCULADORA TITAN CIBERPSICOSIS ---
+        let calcDisplay = document.getElementById('calc-display-text');
         let isCalcDone = false; 
+        let lastAns = "0";
 
-        function appendCalc(val) {
-            if (calcDisplay.innerText === "0" || calcDisplay.innerText === "Error" || isCalcDone) {
-                if (!['+', '−', '×', '÷', '^', '!', '%'].includes(val)) {
+        // Inicializar Historial desde LocalStorage
+        let calcHistory = JSON.parse(localStorage.getItem('titanHistory')) || [];
+
+        function renderHistory() {
+            const panel = document.getElementById('history-panel');
+            if (calcHistory.length === 0) {
+                panel.innerHTML = '<span style="opacity: 0.5;">No hay cálculos recientes en memoria...</span>';
+                return;
+            }
+            panel.innerHTML = calcHistory.map(item => 
+                `<div class="history-entry">
+                    <span class="history-expr">${item.expr}</span> 
+                    <span class="history-res">= ${item.res}</span>
+                </div>`
+            ).join('');
+            panel.scrollTop = panel.scrollHeight; // Auto-scroll al fondo
+        }
+        
+        // Ejecutar al cargar la página
+        renderHistory();
+
+        function ac(val) {
+            if (val === 'ANS') val = lastAns;
+            
+            if (calcDisplay.innerText === "" && isCalcDone === false) {
+                // Estado inicial vacío
+            } else if (calcDisplay.innerText === "Error" || isCalcDone) {
+                if (!['+', '−', '×', '÷', '^', '!', '%', '==', '!=', '[', ']', ',', ';'].includes(val)) {
                     calcDisplay.innerText = "";
                 }
                 isCalcDone = false;
@@ -1002,45 +1179,155 @@
         }
 
         function clearCalc() {
-            calcDisplay.innerText = "0";
+            calcDisplay.innerText = "";
             isCalcDone = false;
         }
 
         function delCalc() {
             if (calcDisplay.innerText === "Error") {
                 clearCalc();
-            } else if (calcDisplay.innerText.length > 1) {
+            } else if (calcDisplay.innerText.length > 0) {
                 calcDisplay.innerText = calcDisplay.innerText.slice(0, -1);
-            } else {
-                calcDisplay.innerText = "0";
             }
             isCalcDone = false;
         }
 
         function calcResult() {
+            if (calcDisplay.innerText.trim() === "") return;
+            let originalExpr = calcDisplay.innerText;
+            
             try {
-                let expr = calcDisplay.innerText;
-                
-                // Limpiamos los símbolos bonitos para que la librería math.js los entienda
-                expr = expr.replace(/×/g, '*')
+                let expr = originalExpr
+                           .replace(/×/g, '*')
                            .replace(/÷/g, '/')
                            .replace(/−/g, '-');
                 
-                // La ciberpsicosis: math.evaluate() resuelve todo el string de una
                 let result = math.evaluate(expr);
                 
-                if (typeof result === 'number' && !Number.isInteger(result)) {
-                    // Evita floats gigantescos
+                if (typeof result === 'object' && result !== null) {
+                    result = math.format(result, { precision: 10 });
+                } else if (typeof result === 'number' && !Number.isInteger(result)) {
                     result = parseFloat(result.toPrecision(10));
                 }
                 
                 calcDisplay.innerText = result;
+                lastAns = result.toString();
                 isCalcDone = true;
+
+                // Guardar en Historial Persistente
+                calcHistory.push({ expr: originalExpr, res: lastAns });
+                if (calcHistory.length > 15) calcHistory.shift(); // Mantiene solo los últimos 15 cálculos
+                localStorage.setItem('titanHistory', JSON.stringify(calcHistory));
+                renderHistory();
+
             } catch (e) {
                 calcDisplay.innerText = "Error";
                 isCalcDone = true;
             }
         }
+
+        // --- MÓDULO 4: GRAFICADORA MATEMÁTICA 2D ---
+        function drawPlot(initOnly = false) {
+            const canvas = document.getElementById('plotCanvas');
+            // Aseguramos tamaño correcto en HD
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = 400; 
+            
+            const ctx = canvas.getContext('2d');
+            const exprStr = document.getElementById('plot-eq').value;
+            const width = canvas.width;
+            const height = canvas.height;
+            
+            const isLight = document.body.classList.contains('light-theme');
+            const gridColor = isLight ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.1)';
+            const axisColor = isLight ? '#64748b' : '#708096';
+            const lineColor = isLight ? '#bd2c0d' : '#42D3F2';
+
+            ctx.clearRect(0, 0, width, height);
+
+            // Dibujar Grid de Fondo
+            ctx.beginPath();
+            ctx.strokeStyle = gridColor;
+            ctx.lineWidth = 1;
+            for(let i=0; i<width; i+=40) { ctx.moveTo(i, 0); ctx.lineTo(i, height); }
+            for(let i=0; i<height; i+=40) { ctx.moveTo(0, i); ctx.lineTo(width, i); }
+            ctx.stroke();
+
+            // Dibujar Ejes X e Y
+            ctx.beginPath();
+            ctx.strokeStyle = axisColor;
+            ctx.lineWidth = 2;
+            ctx.moveTo(0, height / 2); ctx.lineTo(width, height / 2);
+            ctx.moveTo(width / 2, 0); ctx.lineTo(width / 2, height);
+            ctx.stroke();
+
+            // Si es solo inicialización, salimos antes de procesar matemáticas
+            if(initOnly || exprStr.trim() === "") return;
+
+            try {
+                // Compilar la función ingresada por el usuario
+                const expr = math.compile(exprStr);
+                
+                ctx.beginPath();
+                ctx.strokeStyle = lineColor;
+                ctx.lineWidth = 2.5;
+
+                // Trazar la curva evaluando X desde -10 hasta 10 (con escalado)
+                let firstPoint = true;
+                for (let x = -10; x <= 10; x += 0.05) {
+                    const y = expr.evaluate({ x: x });
+                    
+                    // Escalamiento (1 unidad = 40 pixeles)
+                    const plotX = width / 2 + (x * 40);
+                    const plotY = height / 2 - (y * 40);
+
+                    if (firstPoint) {
+                        ctx.moveTo(plotX, plotY);
+                        firstPoint = false;
+                    } else {
+                        ctx.lineTo(plotX, plotY);
+                    }
+                }
+                ctx.stroke();
+            } catch (error) {
+                console.error("Función matemática inválida para graficar.");
+            }
+        }
+
+        // --- MÓDULO 5: CONVERSOR INGENIERÍA COMPUTACIONAL ---
+        function convertirDatos() {
+            const inputVal = parseFloat(document.getElementById('conv-input').value);
+            if (isNaN(inputVal)) { alert("Ingresa un número válido para convertir."); return; }
+
+            const unitFrom = document.getElementById('conv-from').value;
+            const unitTo = document.getElementById('conv-to').value;
+
+            // Tabla de conversión (todo se pasa a la base más pequeña: Bits)
+            const factors = {
+                "b": 1,
+                "B": 8,
+                "KB": 8 * 1024,
+                "MB": 8 * Math.pow(1024, 2),
+                "GB": 8 * Math.pow(1024, 3),
+                "TB": 8 * Math.pow(1024, 4)
+            };
+
+            // Paso 1: Input -> Bits
+            const valueInBits = inputVal * factors[unitFrom];
+            // Paso 2: Bits -> Output
+            const finalValue = valueInBits / factors[unitTo];
+
+            // Renderizar con manejo de notación científica para números muy grandes o muy pequeños
+            document.getElementById('conv-result').innerText = fmt(finalValue);
+        }
+
+        // Event listener para redimensionar el canvas si cambia la ventana
+        window.addEventListener('resize', () => {
+            if(document.getElementById('graficadora').classList.contains('active-panel')) {
+                drawPlot();
+            }
+        });
+
     </script>
 </body>
 </html>
