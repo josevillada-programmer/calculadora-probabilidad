@@ -3,46 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora Estadística & Probabilística</title>
-    
+    <title>Calculadora Estadística & Probabilística TITAN</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.8.0/math.js"></script>
-
     <style>
-        /* TEMA OSCURO (Por Defecto) */
         :root {
             --bg-dark: #0d0e12;
             --card-bg: #161920;
             --input-bg: #1f232e;
-            --neon-blue: #42D3F2; 
+            --neon-blue: #42D3F2;
             --tech-blue: #0072ff;
-            --gradient-end: #00c6ff; 
+            --gradient-end: #00c6ff;
             --neon-green: #39ff14;
             --neon-red: #ff3b30;
             --text-main: #e2e8f0;
             --text-muted: #708096;
-            
             --glass-bg: rgba(0, 0, 0, 0.3);
             --glass-card: rgba(0, 0, 0, 0.2);
-            --border-glow: rgba(66, 211, 242, 0.2); 
+            --border-glow: rgba(66, 211, 242, 0.2);
         }
 
-        /* TEMA CLARO (Inverso) */
         body.light-theme {
             --bg-dark: #f0f2f5;
             --card-bg: #ffffff;
             --input-bg: #e2e8f0;
-            --neon-blue: #bd2c0d; 
-            --tech-blue: #bd2c0d; 
-            --gradient-end: #e84521; 
-            --neon-green: #059669; 
-            --neon-red: #dc2626; 
-            --text-main: #0f172a; 
+            --neon-blue: #bd2c0d;
+            --tech-blue: #bd2c0d;
+            --gradient-end: #e84521;
+            --neon-green: #059669;
+            --neon-red: #dc2626;
+            --text-main: #0f172a;
             --text-muted: #64748b;
-            
             --glass-bg: rgba(0, 0, 0, 0.05);
             --glass-card: rgba(0, 0, 0, 0.02);
-            --border-glow: rgba(189, 44, 13, 0.2); 
+            --border-glow: rgba(189, 44, 13, 0.2);
         }
 
         * {
@@ -63,28 +57,10 @@
             transition: background-color 0.3s, color 0.3s;
         }
 
-        .theme-toggle-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: var(--card-bg);
-            color: var(--text-main);
-            border: 1px solid var(--neon-blue);
-            padding: 10px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 10px var(--border-glow);
-        }
-        .theme-toggle-btn:hover {
-            background: var(--glass-bg);
-        }
-
         .main-calculator-card {
             background-color: var(--card-bg);
             width: 100%;
-            max-width: 1100px; 
+            max-width: 1200px;
             border-radius: 16px;
             border: 1px solid var(--border-glow);
             box-shadow: 0 0 30px var(--border-glow);
@@ -98,27 +74,27 @@
             align-items: center;
             background-color: var(--glass-bg);
             border-bottom: 1px solid var(--border-glow);
-            flex-wrap: wrap; 
+            flex-wrap: wrap;
         }
 
         .calc-tabs {
             display: flex;
             flex: 1;
-            min-width: 300px; 
-            flex-wrap: wrap; /* Añadido para soportar más botones sin romper diseño */
+            min-width: 300px;
+            flex-wrap: wrap;
         }
 
         .tab-btn {
             flex: 1;
-            padding: 15px 10px;
+            padding: 14px 8px;
             background: none;
             border: none;
             color: var(--text-muted);
-            font-size: 1rem;
+            font-size: 0.85rem;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
-            white-space: nowrap; /* Evita que el texto de las pestañas se parta */
+            white-space: nowrap;
         }
 
         .tab-btn:hover {
@@ -159,17 +135,25 @@
             .theme-toggle-container {
                 width: 100%;
                 border-top: 1px solid var(--border-glow);
-                justify-content: center; 
+                justify-content: center;
             }
-            .tab-btn { font-size: 0.85rem; padding: 10px 5px; } /* Ajuste celular */
+            .tab-btn {
+                font-size: 0.72rem;
+                padding: 9px 3px;
+            }
         }
 
         .tab-content-container {
             padding: 25px;
         }
 
-        .tab-panel { display: none; }
-        .tab-panel.active-panel { display: block; }
+        .tab-panel {
+            display: none;
+        }
+
+        .tab-panel.active-panel {
+            display: block;
+        }
 
         h3 {
             font-size: 1.1rem;
@@ -180,7 +164,10 @@
             letter-spacing: 1px;
         }
 
-        textarea, input[type="number"], input[type="text"], select {
+        textarea,
+        input[type="number"],
+        input[type="text"],
+        select {
             width: 100%;
             background-color: var(--input-bg);
             border: 1px solid var(--text-muted);
@@ -192,7 +179,9 @@
             transition: all 0.3s;
         }
 
-        textarea:focus, input:focus, select:focus {
+        textarea:focus,
+        input:focus,
+        select:focus {
             outline: none;
             border-color: var(--neon-blue);
             box-shadow: 0 0 10px var(--border-glow);
@@ -219,13 +208,15 @@
             margin-bottom: 15px;
         }
 
-        .btn-action:active { transform: scale(0.98); }
+        .btn-action:active {
+            transform: scale(0.98);
+        }
 
         .flex-row {
             display: flex;
             gap: 10px;
             margin-bottom: 15px;
-            flex-wrap: wrap; /* Asegura que el conversor no se rompa */
+            flex-wrap: wrap;
         }
 
         .btn-small {
@@ -279,7 +270,7 @@
             width: 100%;
             border-collapse: collapse;
             text-align: center;
-            font-size: 0.75rem; 
+            font-size: 0.75rem;
             background-color: var(--glass-bg);
         }
 
@@ -288,7 +279,7 @@
             color: var(--neon-blue);
             padding: 10px 5px;
             font-weight: bold;
-            white-space: nowrap; 
+            white-space: nowrap;
         }
 
         td {
@@ -298,7 +289,8 @@
             word-break: break-all;
         }
 
-        .prob-section, .converter-section {
+        .prob-section,
+        .converter-section {
             background-color: var(--glass-bg);
             padding: 15px;
             border-radius: 10px;
@@ -338,7 +330,9 @@
         }
 
         @media (max-width: 768px) {
-            .charts-grid { grid-template-columns: 1fr; }
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         .dependency-card {
@@ -361,21 +355,35 @@
             margin-bottom: 10px;
             font-weight: bold;
         }
-        #csv-file { display: none; }
-        .or-text { text-align: center; color: var(--text-muted); font-size: 0.8rem; margin-bottom: 10px; }
 
-        .chart-container, .chart-container-full {
+        #csv-file {
+            display: none;
+        }
+
+        .or-text {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+        }
+
+        .chart-container,
+        .chart-container-full {
             background: var(--glass-bg);
             padding: 15px;
             border-radius: 8px;
             border: 1px solid var(--border-glow);
         }
+
         .chart-container {
             display: flex;
             flex-direction: column;
             align-items: center;
         }
-        .chart-container-full { margin-top: 15px; }
+
+        .chart-container-full {
+            margin-top: 15px;
+        }
 
         .pie-wrapper {
             width: 100%;
@@ -383,14 +391,13 @@
             margin: 0 auto;
         }
 
-        /* --- NUEVO: ESTILOS DEL HISTORIAL DE LA CALCULADORA --- */
         .history-panel {
             background-color: var(--input-bg);
             border: 1px solid var(--border-glow);
             border-radius: 8px;
             padding: 10px;
-            height: 100px; /* Tamaño fijo */
-            overflow-y: auto; /* Scroll si hay muchas operaciones */
+            height: 100px;
+            overflow-y: auto;
             margin-bottom: 15px;
             font-size: 0.85rem;
             color: var(--text-muted);
@@ -398,16 +405,23 @@
             flex-direction: column;
             gap: 5px;
         }
+
         .history-entry {
             display: flex;
             justify-content: space-between;
             padding: 5px;
             border-bottom: 1px solid var(--glass-card);
         }
-        .history-expr { color: var(--text-main); }
-        .history-res { color: var(--neon-green); font-weight: bold; }
 
-        /* --- NUEVO: ESTILOS DEL PLOTTER (Canvas Graficadora) --- */
+        .history-expr {
+            color: var(--text-main);
+        }
+
+        .history-res {
+            color: var(--neon-green);
+            font-weight: bold;
+        }
+
         .plot-canvas-wrapper {
             width: 100%;
             overflow: hidden;
@@ -418,13 +432,13 @@
             display: flex;
             justify-content: center;
         }
+
         #plotCanvas {
             width: 100%;
             max-width: 800px;
             height: 400px;
         }
 
-        /* --- ESTILOS: MODO CIBERPSICOSIS (Calculadora Titan) --- */
         .calc-screen {
             background-color: var(--bg-dark);
             padding: 20px;
@@ -438,16 +452,17 @@
             margin-bottom: 15px;
             min-height: 90px;
             word-break: break-all;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
             transition: all 0.3s;
             position: relative;
         }
+
         .light-theme .calc-screen {
             background-color: var(--input-bg);
             color: var(--text-main);
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        
+
         .calc-cursor {
             display: inline-block;
             width: 10px;
@@ -457,15 +472,19 @@
             vertical-align: middle;
             margin-left: 2px;
         }
-        @keyframes blink { 50% { opacity: 0; } }
-        
-        /* El Grid Titán de 8 columnas */
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+
         .calc-grid-titan {
             display: grid;
             grid-template-columns: repeat(8, 1fr);
             gap: 6px;
         }
-        
+
         .calc-btn {
             padding: 12px 2px;
             font-size: 0.9rem;
@@ -481,29 +500,75 @@
             justify-content: center;
             text-align: center;
         }
+
         .calc-btn:hover {
             background-color: var(--border-glow);
             transform: scale(0.95);
         }
+
         .calc-btn:active {
             transform: scale(0.85);
             box-shadow: 0 0 15px var(--neon-red);
         }
-        
-        /* Colores Específicos por Bloque de Funciones */
-        .c-trig { color: #a855f7; background-color: rgba(168, 85, 247, 0.05); }
-        .c-math { color: var(--neon-blue); background-color: rgba(66, 211, 242, 0.05); }
-        .c-stat { color: #f59e0b; background-color: rgba(245, 158, 11, 0.05); }
-        .c-sym { color: var(--neon-green); background-color: rgba(57, 255, 20, 0.05); font-size: 1.1rem; }
-        .c-op { color: var(--gradient-end); background-color: rgba(0, 198, 255, 0.1); font-size: 1.2rem; }
-        .c-num { font-size: 1.2rem; background-color: rgba(255,255,255,0.02); }
-        .c-act { color: var(--neon-red); background-color: rgba(255, 59, 48, 0.1); font-size: 1.1rem; }
-        
-        .light-theme .c-trig { color: #7e22ce; }
-        .light-theme .c-stat { color: #d97706; }
-        .light-theme .c-sym { color: #059669; }
-        .light-theme .c-op { color: var(--neon-blue); background-color: rgba(189, 44, 13, 0.1); }
-        .light-theme .c-num { background-color: #ffffff; }
+
+        .c-trig {
+            color: #a855f7;
+            background-color: rgba(168, 85, 247, 0.05);
+        }
+
+        .c-math {
+            color: var(--neon-blue);
+            background-color: rgba(66, 211, 242, 0.05);
+        }
+
+        .c-stat {
+            color: #f59e0b;
+            background-color: rgba(245, 158, 11, 0.05);
+        }
+
+        .c-sym {
+            color: var(--neon-green);
+            background-color: rgba(57, 255, 20, 0.05);
+            font-size: 1.1rem;
+        }
+
+        .c-op {
+            color: var(--gradient-end);
+            background-color: rgba(0, 198, 255, 0.1);
+            font-size: 1.2rem;
+        }
+
+        .c-num {
+            font-size: 1.2rem;
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        .c-act {
+            color: var(--neon-red);
+            background-color: rgba(255, 59, 48, 0.1);
+            font-size: 1.1rem;
+        }
+
+        .light-theme .c-trig {
+            color: #7e22ce;
+        }
+
+        .light-theme .c-stat {
+            color: #d97706;
+        }
+
+        .light-theme .c-sym {
+            color: #059669;
+        }
+
+        .light-theme .c-op {
+            color: var(--neon-blue);
+            background-color: rgba(189, 44, 13, 0.1);
+        }
+
+        .light-theme .c-num {
+            background-color: #ffffff;
+        }
 
         .btn-equal-titan {
             background: linear-gradient(135deg, var(--neon-red), #991b1b);
@@ -511,33 +576,600 @@
             border: none;
             box-shadow: 0 4px 15px rgba(255, 59, 48, 0.4);
             font-size: 1.5rem;
-            grid-column: span 2; 
+            grid-column: span 2;
         }
 
-        /* Adaptabilidad extrema para celulares */
         @media (max-width: 800px) {
-            .calc-grid-titan { grid-template-columns: repeat(6, 1fr); gap: 5px; }
-            .calc-screen { font-size: 1.5rem; }
-            .calc-btn { font-size: 0.75rem; padding: 10px 1px; }
-            .c-num, .c-op, .c-act { font-size: 1rem; }
+            .calc-grid-titan {
+                grid-template-columns: repeat(6, 1fr);
+                gap: 5px;
+            }
+
+            .calc-screen {
+                font-size: 1.5rem;
+            }
+
+            .calc-btn {
+                font-size: 0.75rem;
+                padding: 10px 1px;
+            }
+
+            .c-num,
+            .c-op,
+            .c-act {
+                font-size: 1rem;
+            }
         }
+
         @media (max-width: 500px) {
-            .calc-grid-titan { grid-template-columns: repeat(4, 1fr); }
-            .btn-equal-titan { grid-column: span 4; padding: 15px; }
+            .calc-grid-titan {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .btn-equal-titan {
+                grid-column: span 4;
+                padding: 15px;
+            }
+        }
+
+        .regression-section {
+            background-color: var(--glass-bg);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 3px solid var(--tech-blue);
+        }
+
+        .regression-results-panel {
+            background-color: var(--input-bg);
+            border: 1px solid var(--border-glow);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .regression-results-panel p {
+            font-size: 1rem;
+            color: var(--text-main);
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        .regression-results-panel span {
+            color: var(--neon-blue);
+            font-weight: bold;
+        }
+
+        .scatter-canvas-wrapper {
+            width: 100%;
+            overflow: hidden;
+            background: var(--bg-dark);
+            border: 1px solid var(--border-glow);
+            border-radius: 8px;
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+        }
+
+        #scatterCanvas {
+            width: 100%;
+            max-width: 900px;
+            height: 420px;
+        }
+
+        .light-theme .scatter-canvas-wrapper {
+            background: var(--input-bg);
+        }
+
+        .light-theme .plot-canvas-wrapper {
+            background: var(--input-bg);
+        }
+
+        .calculus-section {
+            background-color: var(--glass-bg);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 3px solid var(--tech-blue);
+        }
+
+        .calculus-results-panel {
+            background-color: var(--input-bg);
+            border: 1px solid var(--border-glow);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .calculus-results-panel p {
+            font-size: 0.95rem;
+            color: var(--text-main);
+            margin-bottom: 8px;
+            line-height: 1.7;
+        }
+
+        .calculus-results-panel .method-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .calculus-results-panel .big-result {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: var(--neon-blue);
+            word-break: break-all;
+        }
+
+        .method-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .method-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .method-card {
+            background-color: var(--input-bg);
+            border: 1px solid var(--border-glow);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .method-card .method-title {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .method-card .method-value {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--neon-green);
+            word-break: break-all;
+        }
+
+        .finance-section {
+            background-color: var(--glass-bg);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 3px solid var(--tech-blue);
+        }
+
+        .finance-inputs-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .finance-inputs-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .amort-type-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .amort-type-btn {
+            padding: 12px;
+            border: 2px solid var(--border-glow);
+            border-radius: 8px;
+            background-color: var(--input-bg);
+            color: var(--text-muted);
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .amort-type-btn.selected {
+            border-color: var(--neon-blue);
+            color: var(--neon-blue);
+            background-color: var(--glass-bg);
+        }
+
+        .finance-summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 700px) {
+            .finance-summary-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .finance-summary-card {
+            background-color: var(--glass-card);
+            border: 1px solid var(--border-glow);
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .finance-summary-card h4 {
+            font-size: 0.7rem;
+            color: var(--neon-blue);
+            margin-bottom: 5px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .finance-summary-card p {
+            font-size: 1rem;
+            font-weight: bold;
+            color: var(--text-main);
+            word-break: break-all;
+        }
+
+        .amort-table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            margin-top: 15px;
+            border: 1px solid var(--border-glow);
+            border-radius: 8px;
+            max-height: 420px;
+            overflow-y: auto;
+        }
+
+        .amort-table-wrapper table th {
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            background-color: var(--card-bg);
+        }
+
+        .amort-row-even {
+            background-color: rgba(66, 211, 242, 0.02);
+        }
+
+        .amort-row-last {
+            background-color: rgba(57, 255, 20, 0.05);
+            font-weight: bold;
+        }
+
+        .gauss-jordan-section {
+            background-color: var(--glass-bg);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 3px solid var(--tech-blue);
+        }
+
+        .matrix-size-selector {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .matrix-size-btn {
+            padding: 10px;
+            border: 1px solid var(--border-glow);
+            border-radius: 6px;
+            background-color: var(--input-bg);
+            color: var(--text-muted);
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .matrix-size-btn.selected {
+            border-color: var(--neon-blue);
+            color: var(--neon-blue);
+            background-color: var(--glass-bg);
+        }
+
+        .matrix-input-grid {
+            display: inline-grid;
+            gap: 6px;
+            margin-bottom: 15px;
+        }
+
+        .matrix-cell {
+            width: 70px;
+            background-color: var(--input-bg);
+            border: 1px solid var(--text-muted);
+            border-radius: 6px;
+            padding: 8px;
+            color: var(--text-main);
+            font-size: 0.9rem;
+            text-align: center;
+            margin-bottom: 0;
+        }
+
+        .matrix-cell:focus {
+            outline: none;
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 8px var(--border-glow);
+        }
+
+        .augmented-separator {
+            width: 3px;
+            background-color: var(--neon-blue);
+            border-radius: 2px;
+            margin: 0 4px;
+        }
+
+        .gauss-steps-container {
+            margin-top: 20px;
+        }
+
+        .gauss-step-card {
+            background-color: var(--input-bg);
+            border: 1px solid var(--border-glow);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 12px;
+            animation: fadeInStep 0.4s ease-in-out;
+        }
+
+        @keyframes fadeInStep {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .gauss-step-header {
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: var(--neon-blue);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border-glow);
+            padding-bottom: 8px;
+        }
+
+        .gauss-matrix-display {
+            display: inline-block;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            width: 100%;
+        }
+
+        .gauss-matrix-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .gauss-matrix-cell {
+            min-width: 70px;
+            text-align: right;
+            padding: 4px 8px;
+            border-radius: 4px;
+            background-color: var(--glass-card);
+            color: var(--text-main);
+        }
+
+        .gauss-matrix-cell.pivot {
+            background-color: rgba(57, 255, 20, 0.1);
+            color: var(--neon-green);
+            font-weight: bold;
+        }
+
+        .gauss-aug-sep {
+            width: 2px;
+            height: 30px;
+            background-color: var(--neon-blue);
+            border-radius: 1px;
+            flex-shrink: 0;
+        }
+
+        .gauss-solution-display {
+            background-color: var(--glass-card);
+            border: 1px solid var(--neon-green);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .gauss-solution-display p {
+            font-size: 1rem;
+            color: var(--neon-green);
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .gauss-no-solution {
+            background-color: rgba(255, 59, 48, 0.1);
+            border: 1px solid var(--neon-red);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            color: var(--neon-red);
+            font-weight: bold;
+        }
+
+        .input-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+            letter-spacing: 0.5px;
+        }
+
+        .section-divider {
+            border: none;
+            border-top: 1px solid var(--border-glow);
+            margin: 25px 0;
+        }
+
+        .info-chip {
+            display: inline-block;
+            background-color: var(--glass-card);
+            border: 1px solid var(--border-glow);
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .two-col-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .two-col-inputs {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .pearson-badge {
+            display: inline-block;
+            font-size: 1.1rem;
+            font-weight: bold;
+            padding: 6px 14px;
+            border-radius: 6px;
+            margin-top: 8px;
+        }
+
+        .pearson-strong-pos {
+            background-color: rgba(57, 255, 20, 0.1);
+            color: var(--neon-green);
+            border: 1px solid var(--neon-green);
+        }
+
+        .pearson-strong-neg {
+            background-color: rgba(255, 59, 48, 0.1);
+            color: var(--neon-red);
+            border: 1px solid var(--neon-red);
+        }
+
+        .pearson-moderate {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+            border: 1px solid #f59e0b;
+        }
+
+        .pearson-weak {
+            background-color: rgba(112, 128, 150, 0.1);
+            color: var(--text-muted);
+            border: 1px solid var(--text-muted);
+        }
+
+        .integration-formula-box {
+            background-color: var(--glass-card);
+            border: 1px solid var(--border-glow);
+            border-radius: 8px;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.8;
+        }
+
+        .integration-formula-box strong {
+            color: var(--neon-blue);
+        }
+
+        .step-trace-box {
+            background-color: var(--bg-dark);
+            border: 1px solid var(--border-glow);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            max-height: 200px;
+            overflow-y: auto;
+            line-height: 1.7;
+        }
+
+        .light-theme .step-trace-box {
+            background-color: var(--input-bg);
+        }
+
+        .step-trace-box .trace-line {
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--glass-card);
+            padding: 3px 0;
+        }
+
+        .step-trace-box .trace-sum {
+            color: var(--neon-blue);
+            font-weight: bold;
+        }
+
+        .finance-note {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            padding: 8px 12px;
+            background-color: var(--glass-card);
+            border-radius: 6px;
+            border-left: 2px solid var(--tech-blue);
+        }
+
+        .amort-row-highlight {
+            background-color: rgba(66, 211, 242, 0.05);
+        }
+
+        .regression-equation-display {
+            background-color: var(--bg-dark);
+            border: 2px solid var(--neon-blue);
+            border-radius: 10px;
+            padding: 18px;
+            text-align: center;
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--neon-blue);
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            word-break: break-all;
+        }
+
+        .light-theme .regression-equation-display {
+            background-color: var(--input-bg);
         }
     </style>
 </head>
 <body>
 
     <div class="main-calculator-card">
-        
+
         <header class="app-header">
             <nav class="calc-tabs">
                 <button class="tab-btn active" id="btn-descriptiva" onclick="switchTab('descriptiva')">📊 Descriptiva</button>
                 <button class="tab-btn" id="btn-probabilidad" onclick="switchTab('probabilidad')">🎲 Probabilidad</button>
-                <button class="tab-btn" id="btn-basica" onclick="switchTab('basica')">🧠 TITAN Sci-Calc</button>
-                <button class="tab-btn" id="btn-graficadora" onclick="switchTab('graficadora')">📈 Graficadora</button>
+                <button class="tab-btn" id="btn-basica" onclick="switchTab('basica')">🧠 TITAN</button>
+                <button class="tab-btn" id="btn-graficadora" onclick="switchTab('graficadora')">📈 Gráficas</button>
                 <button class="tab-btn" id="btn-conversor" onclick="switchTab('conversor')">⚖️ Conversor</button>
+                <button class="tab-btn" id="btn-regresion" onclick="switchTab('regresion')">📉 Regresión</button>
+                <button class="tab-btn" id="btn-calculo" onclick="switchTab('calculo')">∫ Cálculo</button>
+                <button class="tab-btn" id="btn-finanzas" onclick="switchTab('finanzas')">💰 Finanzas</button>
+                <button class="tab-btn" id="btn-algebra" onclick="switchTab('algebra')">🔢 Álgebra</button>
             </nav>
             <div class="theme-toggle-container">
                 <button id="theme-toggle" class="theme-toggle-btn">☀️ Tema Claro</button>
@@ -545,10 +1177,10 @@
         </header>
 
         <div class="tab-content-container">
-            
+
             <section id="descriptiva" class="tab-panel active-panel">
                 <div class="input-group">
-                    <h3>Ingreso de Datos Prueba</h3>
+                    <h3>Ingreso de Datos</h3>
                     <label for="csv-file" class="custom-file-upload">📁 Cargar archivo de datos (CSV)</label>
                     <input type="file" id="csv-file" accept=".csv" onchange="cargarCSV(event)">
                     <p class="or-text">o ingresa datos separados por comas:</p>
@@ -580,7 +1212,9 @@
                         <input type="number" id="position-value" min="1" max="100" placeholder="Valor">
                         <button class="btn-small" onclick="calcularPosicion()">Calcular</button>
                     </div>
-                    <p style="font-size: 1rem; color: var(--text-main); margin-bottom: 15px;">Resultado Posición: <span id="pos-result" style="color: var(--neon-blue); font-weight: bold;">-</span></p>
+                    <p style="font-size: 1rem; color: var(--text-main); margin-bottom: 15px;">
+                        Resultado Posición: <span id="pos-result" style="color: var(--neon-blue); font-weight: bold;">-</span>
+                    </p>
                 </div>
 
                 <h3>Tabla de Distribución de Frecuencias (Avanzada)</h3>
@@ -603,7 +1237,9 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr><td colspan="12" style="color: var(--text-muted);">Ningún dato procesado aún</td></tr>
+                            <tr>
+                                <td colspan="12" style="color: var(--text-muted);">Ningún dato procesado aún</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -641,7 +1277,9 @@
                         <button class="btn-action" onclick="ejecutarConteo('permutacion')">nPr</button>
                         <button class="btn-action" onclick="ejecutarConteo('combinacion')">nCr</button>
                     </div>
-                    <div class="binom-output">Resultado Conteo: <span id="conteo-result" style="color: var(--neon-blue); font-weight: bold;">-</span></div>
+                    <div class="binom-output">
+                        Resultado Conteo: <span id="conteo-result" style="color: var(--neon-blue); font-weight: bold;">-</span>
+                    </div>
                 </div>
 
                 <div class="prob-section">
@@ -661,23 +1299,23 @@
                         <input type="number" id="prob-inter" step="0.01" placeholder="P(A ∩ B)" min="0" max="1">
                     </div>
                     <button class="btn-action" style="margin-top: 10px;" onclick="analizarEventos()">Analizar Eventos</button>
-                    
+
                     <div class="dependency-card">
-                        <p style="margin-bottom: 8px;">Probabilidad Condicional P(A|B): <span id="prob-condicional" style="color: var(--neon-blue); font-weight: bold;">-</span></p>
+                        <p style="margin-bottom: 8px;">
+                            Probabilidad Condicional P(A|B): <span id="prob-condicional" style="color: var(--neon-blue); font-weight: bold;">-</span>
+                        </p>
                         <p>Estado de Dependencia: <span id="prob-dependencia" style="font-weight: bold;">-</span></p>
                     </div>
                 </div>
             </section>
 
             <section id="basica" class="tab-panel">
-                
-                <div class="history-panel" id="history-panel">
-                    </div>
+                <div class="history-panel" id="history-panel"></div>
 
                 <div class="calc-screen">
                     <span id="calc-display-text"></span><span class="calc-cursor"></span>
                 </div>
-                
+
                 <div class="calc-grid-titan">
                     <button class="calc-btn c-trig" onclick="ac('sin(')">sin</button>
                     <button class="calc-btn c-trig" onclick="ac('cos(')">cos</button>
@@ -712,8 +1350,8 @@
                     <button class="calc-btn c-math" onclick="ac('det(')">det</button>
                     <button class="calc-btn c-math" onclick="ac('inv(')">inv</button>
                     <button class="calc-btn c-math" onclick="ac('cross(')">cross</button>
-                    <button class="calc-btn c-sym" onclick="ac('[')">[</button>
-                    <button class="calc-btn c-sym" onclick="ac(']')">]</button>
+                    <button class="calc-btn c-sym" onclick="ac('[')">[ </button>
+                    <button class="calc-btn c-sym" onclick="ac(']')"> ]</button>
 
                     <button class="calc-btn c-stat" onclick="ac('mean(')">mean</button>
                     <button class="calc-btn c-stat" onclick="ac('median(')">med</button>
@@ -731,7 +1369,7 @@
                     <button class="calc-btn c-sym" onclick="ac('Infinity')">∞</button>
                     <button class="calc-btn c-math" onclick="ac('!')">x!</button>
                     <button class="calc-btn c-op" onclick="ac('^')">^</button>
-                    <button class="calc-btn c-sym" onclick="ac(',')">,</button> 
+                    <button class="calc-btn c-sym" onclick="ac(',')"> , </button>
 
                     <button class="calc-btn c-num" onclick="ac('7')">7</button>
                     <button class="calc-btn c-num" onclick="ac('8')">8</button>
@@ -765,7 +1403,9 @@
             <section id="graficadora" class="tab-panel">
                 <div class="prob-section">
                     <h3>Plotter de Funciones 2D</h3>
-                    <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 10px;">Ingresa una función matemática usando la variable 'x'. Ejemplo: sin(x) * x^2</p>
+                    <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 10px;">
+                        Ingresa una función matemática usando la variable 'x'. Ejemplo: sin(x) * x^2
+                    </p>
                     <div class="flex-row">
                         <input type="text" id="plot-eq" placeholder="f(x) = ...">
                         <button class="btn-action" style="margin-bottom: 0;" onclick="drawPlot()">Graficar</button>
@@ -807,6 +1447,270 @@
                 </div>
             </section>
 
+            <section id="regresion" class="tab-panel">
+                <div class="regression-section">
+                    <h3>Regresión Lineal Simple — Método de Mínimos Cuadrados</h3>
+                    <p class="info-chip">Ingresa los valores separados por comas. Deben tener la misma cantidad de elementos.</p>
+                    <div class="two-col-inputs">
+                        <div>
+                            <p class="input-label">Valores de X (variable independiente)</p>
+                            <textarea id="reg-x-data" placeholder="1, 2, 3, 4, 5"></textarea>
+                        </div>
+                        <div>
+                            <p class="input-label">Valores de Y (variable dependiente)</p>
+                            <textarea id="reg-y-data" placeholder="2.1, 3.9, 6.2, 7.8, 10.1"></textarea>
+                        </div>
+                    </div>
+                    <button class="btn-action" onclick="calcularRegresionLineal()">Calcular Regresión y Correlación</button>
+                </div>
+
+                <div id="regression-output-container" style="display: none;">
+                    <div id="regression-equation-display" class="regression-equation-display">y = mx + b</div>
+
+                    <div class="results-grid">
+                        <div class="result-card">
+                            <h4>Pendiente (m)</h4>
+                            <p id="reg-m">-</p>
+                        </div>
+                        <div class="result-card">
+                            <h4>Intercepto (b)</h4>
+                            <p id="reg-b">-</p>
+                        </div>
+                        <div class="result-card">
+                            <h4>Correlación Pearson (r)</h4>
+                            <p id="reg-r">-</p>
+                        </div>
+                        <div class="result-card">
+                            <h4>Coef. Determinación (R²)</h4>
+                            <p id="reg-r2">-</p>
+                        </div>
+                        <div class="result-card">
+                            <h4>Error Estándar (SEE)</h4>
+                            <p id="reg-see">-</p>
+                        </div>
+                        <div class="result-card">
+                            <h4>Suma Cuad. Residuales (SSR)</h4>
+                            <p id="reg-ssr">-</p>
+                        </div>
+                    </div>
+
+                    <div class="regression-results-panel">
+                        <p>Tipo de Correlación: <span id="reg-corr-type">-</span></p>
+                        <div id="reg-pearson-badge"></div>
+                        <p style="margin-top: 12px;">Predicción: para predecir Y, ingresa un valor de X:</p>
+                        <div class="flex-row" style="margin-top: 8px;">
+                            <input type="number" id="reg-predict-x" placeholder="Valor de X" style="margin-bottom: 0;">
+                            <button class="btn-small" onclick="predecirY()">Predecir Y</button>
+                        </div>
+                        <p style="margin-top: 10px;">Y estimada = <span id="reg-predicted-y" style="color: var(--neon-blue); font-weight: bold; font-size: 1.2rem;">-</span></p>
+                    </div>
+
+                    <div class="regression-section">
+                        <h3>Tabla de Valores y Residuales</h3>
+                        <div class="table-container">
+                            <table id="regression-table">
+                                <thead>
+                                    <tr>
+                                        <th>i</th>
+                                        <th>Xi</th>
+                                        <th>Yi</th>
+                                        <th>Ŷi (estimada)</th>
+                                        <th>Residual (Yi - Ŷi)</th>
+                                        <th>Residual²</th>
+                                        <th>Xi²</th>
+                                        <th>Xi · Yi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="reg-table-body">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="scatter-canvas-wrapper">
+                        <canvas id="scatterCanvas"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <section id="calculo" class="tab-panel">
+                <div class="calculus-section">
+                    <h3>Integración Numérica — Regla del Trapecio y Simpson 1/3</h3>
+                    <p class="info-chip">Escribe la función f(x). El algoritmo iterativo calculará la integral definida desde a hasta b.</p>
+
+                    <div class="integration-formula-box">
+                        <strong>Regla del Trapecio:</strong> ∫f(x)dx ≈ (h/2) · [f(x₀) + 2f(x₁) + ... + 2f(xₙ₋₁) + f(xₙ)] &nbsp;|&nbsp; h = (b-a)/n
+                        <br>
+                        <strong>Regla de Simpson 1/3:</strong> ∫f(x)dx ≈ (h/3) · [f(x₀) + 4f(x₁) + 2f(x₂) + ... + 4f(xₙ₋₁) + f(xₙ)] &nbsp;|&nbsp; n debe ser par
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <p class="input-label">Función f(x)</p>
+                        <input type="text" id="calc-function" placeholder="Ejemplo: x^2 + sin(x)" style="margin-bottom: 0;">
+                    </div>
+
+                    <div class="flex-grid-3" style="margin-bottom: 15px;">
+                        <div>
+                            <p class="input-label">Límite Inferior (a)</p>
+                            <input type="number" id="calc-lower" placeholder="a = 0" value="0" step="0.1" style="margin-bottom: 0;">
+                        </div>
+                        <div>
+                            <p class="input-label">Límite Superior (b)</p>
+                            <input type="number" id="calc-upper" placeholder="b = 1" value="1" step="0.1" style="margin-bottom: 0;">
+                        </div>
+                        <div>
+                            <p class="input-label">Número de Intervalos (n)</p>
+                            <input type="number" id="calc-n" placeholder="n = 4" value="4" min="2" step="2" style="margin-bottom: 0;">
+                        </div>
+                    </div>
+
+                    <button class="btn-action" onclick="calcularIntegrales()">Calcular Integral Numérica</button>
+                </div>
+
+                <div id="calculus-output-container" style="display: none;">
+                    <div class="method-grid">
+                        <div class="method-card">
+                            <div class="method-title">Regla del Trapecio</div>
+                            <div class="method-value" id="trap-result">-</div>
+                        </div>
+                        <div class="method-card">
+                            <div class="method-title">Regla de Simpson 1/3</div>
+                            <div class="method-value" id="simp-result">-</div>
+                        </div>
+                    </div>
+
+                    <div class="calculus-results-panel">
+                        <p class="method-label">Parámetros del Cálculo</p>
+                        <p>Función: <span style="color: var(--neon-blue); font-weight: bold;" id="calc-func-display">-</span></p>
+                        <p>Intervalo: [ <span style="color: var(--neon-blue);" id="calc-a-display">-</span> , <span style="color: var(--neon-blue);" id="calc-b-display">-</span> ] &nbsp;|&nbsp; n = <span style="color: var(--neon-blue);" id="calc-n-display">-</span> &nbsp;|&nbsp; h = <span style="color: var(--neon-blue);" id="calc-h-display">-</span></p>
+                        <p>Diferencia entre métodos: <span style="color: #f59e0b; font-weight: bold;" id="calc-diff-display">-</span></p>
+                    </div>
+
+                    <div class="calculus-section">
+                        <h3>Tabla de Evaluación de Puntos</h3>
+                        <div class="table-container">
+                            <table id="calculus-points-table">
+                                <thead>
+                                    <tr>
+                                        <th>i</th>
+                                        <th>xᵢ</th>
+                                        <th>f(xᵢ)</th>
+                                        <th>Peso Trapecio</th>
+                                        <th>Contribución Trapecio</th>
+                                        <th>Peso Simpson</th>
+                                        <th>Contribución Simpson</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="calc-points-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="calculus-section">
+                        <h3>Trazado Iterativo del Algoritmo (Simpson 1/3)</h3>
+                        <div class="step-trace-box" id="simpson-trace-box"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="finanzas" class="tab-panel">
+                <div class="finance-section">
+                    <h3>Tabla de Amortización — Sistema Francés y Alemán</h3>
+                    <p class="finance-note">
+                        Sistema Francés: cuotas iguales. Sistema Alemán: abono a capital fijo, intereses decrecientes.
+                    </p>
+
+                    <div class="finance-inputs-grid">
+                        <div>
+                            <p class="input-label">Monto del Préstamo ($)</p>
+                            <input type="number" id="fin-monto" placeholder="10000" value="10000" min="1" style="margin-bottom: 0;">
+                        </div>
+                        <div>
+                            <p class="input-label">Tasa de Interés Anual (%)</p>
+                            <input type="number" id="fin-tasa" placeholder="12" value="12" step="0.01" min="0" style="margin-bottom: 0;">
+                        </div>
+                        <div>
+                            <p class="input-label">Plazo (meses)</p>
+                            <input type="number" id="fin-plazo" placeholder="12" value="12" min="1" step="1" style="margin-bottom: 0;">
+                        </div>
+                    </div>
+
+                    <p class="input-label" style="margin-top: 15px;">Tipo de Amortización</p>
+                    <div class="amort-type-selector">
+                        <div class="amort-type-btn selected" id="btn-frances" onclick="seleccionarTipoAmort('frances')">
+                            Sistema Francés (Cuota Fija)
+                        </div>
+                        <div class="amort-type-btn" id="btn-aleman" onclick="seleccionarTipoAmort('aleman')">
+                            Sistema Alemán (Capital Fijo)
+                        </div>
+                    </div>
+
+                    <button class="btn-action" onclick="generarAmortizacion()">Generar Tabla de Amortización</button>
+                </div>
+
+                <div id="finanzas-output-container" style="display: none;">
+                    <div class="finance-summary-grid">
+                        <div class="finance-summary-card">
+                            <h4>Monto Original</h4>
+                            <p id="fin-res-monto">-</p>
+                        </div>
+                        <div class="finance-summary-card">
+                            <h4>Total Intereses</h4>
+                            <p id="fin-res-intereses">-</p>
+                        </div>
+                        <div class="finance-summary-card">
+                            <h4>Total Pagado</h4>
+                            <p id="fin-res-total">-</p>
+                        </div>
+                        <div class="finance-summary-card">
+                            <h4>Tasa Mensual</h4>
+                            <p id="fin-res-tasa">-</p>
+                        </div>
+                    </div>
+
+                    <div class="amort-table-wrapper">
+                        <table id="amort-table">
+                            <thead>
+                                <tr>
+                                    <th>Período</th>
+                                    <th>Saldo Inicial</th>
+                                    <th>Cuota</th>
+                                    <th>Interés</th>
+                                    <th>Abono Capital</th>
+                                    <th>Saldo Final</th>
+                                </tr>
+                            </thead>
+                            <tbody id="amort-table-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="algebra" class="tab-panel">
+                <div class="gauss-jordan-section">
+                    <h3>Método de Gauss-Jordan — Eliminación Paso a Paso</h3>
+                    <p class="info-chip">Selecciona el tamaño del sistema, luego ingresa los coeficientes. La última columna es el vector de términos independientes (b).</p>
+
+                    <p class="input-label">Tamaño del Sistema (n × n)</p>
+                    <div class="matrix-size-selector">
+                        <div class="matrix-size-btn selected" id="size-btn-2" onclick="seleccionarTamanoMatriz(2)">2 × 2</div>
+                        <div class="matrix-size-btn" id="size-btn-3" onclick="seleccionarTamanoMatriz(3)">3 × 3</div>
+                        <div class="matrix-size-btn" id="size-btn-4" onclick="seleccionarTamanoMatriz(4)">4 × 4</div>
+                        <div class="matrix-size-btn" id="size-btn-5" onclick="seleccionarTamanoMatriz(5)">5 × 5</div>
+                    </div>
+
+                    <p class="input-label">Matriz Aumentada [A | b]</p>
+                    <div id="matrix-input-container" style="overflow-x: auto; padding-bottom: 10px;"></div>
+
+                    <button class="btn-action" onclick="ejecutarGaussJordan()">Resolver con Gauss-Jordan</button>
+                </div>
+
+                <div id="gauss-output-container" style="display: none;">
+                    <h3>Proceso de Eliminación</h3>
+                    <div id="gauss-steps-container" class="gauss-steps-container"></div>
+                </div>
+            </section>
+
         </div>
     </div>
 
@@ -814,41 +1718,57 @@
         let histogramInstance = null;
         let boxplotInstance = null;
         let pieInstance = null;
+        let scatterInstance = null;
+        let tipoAmortizacionActual = 'frances';
+        let tamanoMatrizActual = 2;
+        let regresionM = 0;
+        let regresionB = 0;
 
-        // --- Lógica del Switch de Tema ---
         const themeToggleBtn = document.getElementById('theme-toggle');
-        themeToggleBtn.addEventListener('click', () => {
+        themeToggleBtn.addEventListener('click', function() {
             document.body.classList.toggle('light-theme');
             const isLight = document.body.classList.contains('light-theme');
             themeToggleBtn.innerText = isLight ? '🌙 Tema Oscuro' : '☀️ Tema Claro';
-            
+
             if (window.currentDataset && document.getElementById('stat-n').innerText !== "-") {
                 procesarEstadistica();
             }
-            // Repintar gráfica si está activa para que agarre los nuevos colores
-            if (document.getElementById('plot-eq').value.trim() !== "") drawPlot();
+
+            const plotEqValue = document.getElementById('plot-eq').value;
+            if (plotEqValue.trim() !== "") {
+                drawPlot();
+            }
         });
 
-        // --- Navegación de Pestañas ---
         function switchTab(tabId) {
-            document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active-panel'));
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-panel').forEach(function(panel) {
+                panel.classList.remove('active-panel');
+            });
+            document.querySelectorAll('.tab-btn').forEach(function(btn) {
+                btn.classList.remove('active');
+            });
             document.getElementById(tabId).classList.add('active-panel');
             document.getElementById('btn-' + tabId).classList.add('active');
-            
-            // Si el usuario entra al plotter, dibuja el grid base
-            if(tabId === 'graficadora') drawPlot(true);
+
+            if (tabId === 'graficadora') {
+                drawPlot(true);
+            }
+
+            if (tabId === 'algebra') {
+                renderizarInputMatriz(tamanoMatrizActual);
+            }
         }
 
-        // --- Restricción del Textarea para Datos Manuales ---
         const textareaManual = document.getElementById('manual-data');
         textareaManual.addEventListener('input', function() {
-            this.value = this.value.replace(/[^0-9, .\n]/g, ''); 
+            this.value = this.value.replace(/[^0-9, .\n]/g, '');
         });
 
         function cargarCSV(event) {
             const file = event.target.files[0];
-            if (!file) return;
+            if (!file) {
+                return;
+            }
             const reader = new FileReader();
             reader.onload = function(e) {
                 const text = e.target.result;
@@ -860,66 +1780,110 @@
         }
 
         function fmt(num) {
-            if (Math.abs(num) > 1e10) return num.toExponential(4);
-            return Number(num.toFixed(4)); 
+            if (Math.abs(num) > 1e10) {
+                return num.toExponential(4);
+            }
+            return Number(num.toFixed(4));
         }
 
-        // --- Módulo 1: Motor Estadístico Completo ---
+        function fmtMoney(num) {
+            return num.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
         function procesarEstadistica() {
             let inputString = document.getElementById('manual-data').value;
-            if (!inputString.trim()) { alert("Ingresa datos o carga un archivo CSV."); return; }
-            
-            let coincidencias = inputString.match(/\d*\.?\d+/g);
-            if (!coincidencias || coincidencias.length === 0) { alert("No se encontraron números válidos."); return; }
+            if (!inputString.trim()) {
+                alert("Ingresa datos o carga un archivo CSV.");
+                return;
+            }
 
-            let datos = coincidencias.map(n => parseFloat(n));
-            datos.sort((a, b) => a - b);
+            let coincidencias = inputString.match(/\d*\.?\d+/g);
+            if (!coincidencias || coincidencias.length === 0) {
+                alert("No se encontraron números válidos.");
+                return;
+            }
+
+            let datos = coincidencias.map(function(n) {
+                return parseFloat(n);
+            });
+            datos.sort(function(a, b) {
+                return a - b;
+            });
             window.currentDataset = datos;
 
             const n = datos.length;
             document.getElementById('stat-n').innerText = n;
 
-            // Media
-            const suma = datos.reduce((acc, curr) => acc + curr, 0);
+            const suma = datos.reduce(function(acc, curr) {
+                return acc + curr;
+            }, 0);
             const media = suma / n;
-            document.getElementById('stat-media').innerText = media > 1e10 ? media.toExponential(4) : media.toFixed(2);
 
-            // Mediana
+            if (media > 1e10) {
+                document.getElementById('stat-media').innerText = media.toExponential(4);
+            } else {
+                document.getElementById('stat-media').innerText = media.toFixed(2);
+            }
+
             let mediana;
             if (n % 2 === 0) {
                 mediana = (datos[n / 2 - 1] + datos[n / 2]) / 2;
             } else {
                 mediana = datos[Math.floor(n / 2)];
             }
-            document.getElementById('stat-mediana').innerText = mediana > 1e10 ? mediana.toExponential(4) : mediana.toFixed(2);
 
-            // Moda
+            if (mediana > 1e10) {
+                document.getElementById('stat-mediana').innerText = mediana.toExponential(4);
+            } else {
+                document.getElementById('stat-mediana').innerText = mediana.toFixed(2);
+            }
+
             let frecuencias = {};
             let maxFrec = 0;
             let modas = [];
-            datos.forEach(v => {
+            datos.forEach(function(v) {
                 frecuencias[v] = (frecuencias[v] || 0) + 1;
-                if (frecuencias[v] > maxFrec) maxFrec = frecuencias[v];
+                if (frecuencias[v] > maxFrec) {
+                    maxFrec = frecuencias[v];
+                }
             });
             for (let k in frecuencias) {
-                if (frecuencias[k] === maxFrec) modas.push(k);
+                if (frecuencias[k] === maxFrec) {
+                    modas.push(k);
+                }
             }
-            document.getElementById('stat-moda').innerText = (modas.length === Object.keys(frecuencias).length || maxFrec === 1) ? "No hay" : modas.join(', ');
 
-            // Varianza y Desviación Estándar
+            if (modas.length === Object.keys(frecuencias).length || maxFrec === 1) {
+                document.getElementById('stat-moda').innerText = "No hay";
+            } else {
+                document.getElementById('stat-moda').innerText = modas.join(', ');
+            }
+
             let varianzaMuestral = 0;
             let desvEstandar = 0;
+
             if (n > 1) {
-                varianzaMuestral = datos.reduce((acc, v) => acc + Math.pow(v - media, 2), 0) / (n - 1);
+                varianzaMuestral = datos.reduce(function(acc, v) {
+                    return acc + Math.pow(v - media, 2);
+                }, 0) / (n - 1);
                 desvEstandar = Math.sqrt(varianzaMuestral);
-                document.getElementById('stat-varianza').innerText = varianzaMuestral > 1e10 ? varianzaMuestral.toExponential(4) : varianzaMuestral.toFixed(4);
-                document.getElementById('stat-desviacion').innerText = desvEstandar > 1e10 ? desvEstandar.toExponential(4) : desvEstandar.toFixed(4);
+
+                if (varianzaMuestral > 1e10) {
+                    document.getElementById('stat-varianza').innerText = varianzaMuestral.toExponential(4);
+                } else {
+                    document.getElementById('stat-varianza').innerText = varianzaMuestral.toFixed(4);
+                }
+
+                if (desvEstandar > 1e10) {
+                    document.getElementById('stat-desviacion').innerText = desvEstandar.toExponential(4);
+                } else {
+                    document.getElementById('stat-desviacion').innerText = desvEstandar.toFixed(4);
+                }
             } else {
                 document.getElementById('stat-varianza').innerText = "N/A";
                 document.getElementById('stat-desviacion').innerText = "N/A";
             }
 
-            // --- Rango, K y Amplitud ---
             const numClases = Math.max(1, Math.ceil(1 + 3.322 * Math.log10(n)));
             const valorMin = datos[0];
             const valorMax = datos[n - 1];
@@ -943,8 +1907,10 @@
                 let fronSup = limSuperior + 0.5;
                 let marcaClase = (limInferior + limSuperior) / 2;
 
-                let frecAbs = datos.filter(v => {
-                    if (i === numClases - 1) return v >= limInferior && v <= limSuperior;
+                let frecAbs = datos.filter(function(v) {
+                    if (i === numClases - 1) {
+                        return v >= limInferior && v <= limSuperior;
+                    }
                     return v >= limInferior && v < limSuperior;
                 }).length;
 
@@ -954,54 +1920,81 @@
                 let xi_media_sq = Math.pow(xi_media, 2);
                 let xi_media_sq_f = xi_media_sq * frecAbs;
 
-                labelsClases.push(`[${limInferior.toExponential(1)} - ${limSuperior.toExponential(1)}]`);
+                labelsClases.push('[' + limInferior.toExponential(1) + ' - ' + limSuperior.toExponential(1) + ']');
                 conteosClases.push(frecAbs);
 
-                let row = `<tr>
-                    <td>${i + 1}</td>
-                    <td>${fmt(limInferior)}</td>
-                    <td>${fmt(limSuperior)}</td>
-                    <td>${fmt(fronInf)}</td>
-                    <td>${fmt(fronSup)}</td>
-                    <td>${fmt(marcaClase)}</td>
-                    <td>${frecAbs}</td>
-                    <td style="color: var(--neon-blue);">${fmt(xi_fi)}</td>
-                    <td>${fmt(xi_media)}</td>
-                    <td>${fmt(xi_media_f)}</td>
-                    <td>${fmt(xi_media_sq)}</td>
-                    <td style="color: var(--neon-red); font-weight: bold;">${fmt(xi_media_sq_f)}</td>
-                </tr>`;
+                let row = '<tr>';
+                row += '<td>' + (i + 1) + '</td>';
+                row += '<td>' + fmt(limInferior) + '</td>';
+                row += '<td>' + fmt(limSuperior) + '</td>';
+                row += '<td>' + fmt(fronInf) + '</td>';
+                row += '<td>' + fmt(fronSup) + '</td>';
+                row += '<td>' + fmt(marcaClase) + '</td>';
+                row += '<td>' + frecAbs + '</td>';
+                row += '<td style="color: var(--neon-blue);">' + fmt(xi_fi) + '</td>';
+                row += '<td>' + fmt(xi_media) + '</td>';
+                row += '<td>' + fmt(xi_media_f) + '</td>';
+                row += '<td>' + fmt(xi_media_sq) + '</td>';
+                row += '<td style="color: var(--neon-red); font-weight: bold;">' + fmt(xi_media_sq_f) + '</td>';
+                row += '</tr>';
                 tbody.innerHTML += row;
 
                 limInferior = limSuperior;
             }
 
-            let labelsGraficas = labelsClases.map((_, index) => `Clase ${index + 1}`);
+            let labelsGraficas = labelsClases.map(function(_, index) {
+                return 'Clase ' + (index + 1);
+            });
             renderizarHistograma(labelsGraficas, conteosClases);
-            renderizarPastel(labelsGraficas, conteosClases); 
+            renderizarPastel(labelsGraficas, conteosClases);
             renderizarBoxplot(valorMin, mediana, valorMax, media);
         }
 
         function calcularPosicion() {
-            if (!window.currentDataset) { alert("Carga datos primero."); return; }
+            if (!window.currentDataset) {
+                alert("Carga datos primero.");
+                return;
+            }
             const tipo = document.getElementById('position-type').value;
             const valor = parseInt(document.getElementById('position-value').value);
             const datos = window.currentDataset;
-            
-            let p = (tipo === 'cuartil') ? valor * 25 : (tipo === 'decil') ? valor * 10 : valor;
-            if (isNaN(p) || p <= 0 || p > 100) { alert("Valor fuera de límites."); return; }
+
+            let p;
+            if (tipo === 'cuartil') {
+                p = valor * 25;
+            } else if (tipo === 'decil') {
+                p = valor * 10;
+            } else {
+                p = valor;
+            }
+
+            if (isNaN(p) || p <= 0 || p > 100) {
+                alert("Valor fuera de límites.");
+                return;
+            }
 
             let index = (p / 100) * (datos.length - 1);
-            let result = Number.isInteger(index) ? datos[index] : datos[Math.floor(index)] + (index % 1) * (datos[Math.ceil(index)] - datos[Math.floor(index)]);
-            
-            document.getElementById('pos-result').innerText = result > 1e10 ? result.toExponential(4) : result.toFixed(2);
+            let result;
+            if (Number.isInteger(index)) {
+                result = datos[index];
+            } else {
+                result = datos[Math.floor(index)] + (index % 1) * (datos[Math.ceil(index)] - datos[Math.floor(index)]);
+            }
+
+            if (result > 1e10) {
+                document.getElementById('pos-result').innerText = result.toExponential(4);
+            } else {
+                document.getElementById('pos-result').innerText = result.toFixed(2);
+            }
         }
 
         function renderizarHistograma(labels, datos) {
-            if (histogramInstance) histogramInstance.destroy();
+            if (histogramInstance) {
+                histogramInstance.destroy();
+            }
             const ctx = document.getElementById('histogramChart').getContext('2d');
             const isLight = document.body.classList.contains('light-theme');
-            
+
             const gridColor = isLight ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.05)';
             const barColor = isLight ? 'rgba(189, 44, 13, 0.4)' : 'rgba(66, 211, 242, 0.4)';
             const borderColor = isLight ? '#bd2c0d' : '#42D3F2';
@@ -1020,25 +2013,43 @@
                         categoryPercentage: 1.0
                     }]
                 },
-                options: { scales: { y: { beginAtZero: true, grid: { color: gridColor } }, x: { grid: { display: false } } } }
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: gridColor
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
             });
         }
 
         function renderizarPastel(labels, datos) {
-            if (pieInstance) pieInstance.destroy();
+            if (pieInstance) {
+                pieInstance.destroy();
+            }
             const ctx = document.getElementById('pieChart').getContext('2d');
             const isLight = document.body.classList.contains('light-theme');
 
             const bgColors = [
-                isLight ? 'rgba(189, 44, 13, 0.8)' : 'rgba(66, 211, 242, 0.8)', 
-                isLight ? 'rgba(0, 114, 255, 0.8)' : 'rgba(0, 198, 255, 0.8)',  
-                isLight ? 'rgba(5, 150, 105, 0.8)' : 'rgba(57, 255, 20, 0.8)',   
-                isLight ? 'rgba(220, 38, 38, 0.8)' : 'rgba(255, 59, 48, 0.8)',   
-                isLight ? 'rgba(234, 179, 8, 0.8)'  : 'rgba(255, 214, 10, 0.8)',   
-                isLight ? 'rgba(147, 51, 234, 0.8)' : 'rgba(191, 90, 242, 0.8)'  
+                isLight ? 'rgba(189, 44, 13, 0.8)' : 'rgba(66, 211, 242, 0.8)',
+                isLight ? 'rgba(0, 114, 255, 0.8)' : 'rgba(0, 198, 255, 0.8)',
+                isLight ? 'rgba(5, 150, 105, 0.8)' : 'rgba(57, 255, 20, 0.8)',
+                isLight ? 'rgba(220, 38, 38, 0.8)' : 'rgba(255, 59, 48, 0.8)',
+                isLight ? 'rgba(234, 179, 8, 0.8)' : 'rgba(255, 214, 10, 0.8)',
+                isLight ? 'rgba(147, 51, 234, 0.8)' : 'rgba(191, 90, 242, 0.8)'
             ];
-            
-            const dynamicColors = labels.map((_, i) => bgColors[i % bgColors.length]);
+
+            const dynamicColors = labels.map(function(_, i) {
+                return bgColors[i % bgColors.length];
+            });
             const borderColor = isLight ? '#ffffff' : '#161920';
             const textColor = isLight ? '#0f172a' : '#e2e8f0';
 
@@ -1058,7 +2069,9 @@
                     plugins: {
                         legend: {
                             position: 'bottom',
-                            labels: { color: textColor }
+                            labels: {
+                                color: textColor
+                            }
                         }
                     }
                 }
@@ -1066,10 +2079,12 @@
         }
 
         function renderizarBoxplot(min, med, max, avg) {
-            if (boxplotInstance) boxplotInstance.destroy();
+            if (boxplotInstance) {
+                boxplotInstance.destroy();
+            }
             const ctx = document.getElementById('boxplotChart').getContext('2d');
             const isLight = document.body.classList.contains('light-theme');
-            
+
             const gridColor = isLight ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.05)';
             const mediaMuestraColor = isLight ? '#bd2c0d' : '#0072ff';
 
@@ -1078,40 +2093,84 @@
                 data: {
                     labels: ['Distribución'],
                     datasets: [
-                        { label: 'Mínimo', data: [min], backgroundColor: '#708096' },
-                        { label: 'Media Muestra', data: [avg], backgroundColor: mediaMuestraColor },
-                        { label: 'Mediana', data: [med], backgroundColor: isLight ? '#059669' : '#39ff14' },
-                        { label: 'Máximo', data: [max], backgroundColor: isLight ? '#dc2626' : '#ff3b30' }
+                        {
+                            label: 'Mínimo',
+                            data: [min],
+                            backgroundColor: '#708096'
+                        },
+                        {
+                            label: 'Media Muestra',
+                            data: [avg],
+                            backgroundColor: mediaMuestraColor
+                        },
+                        {
+                            label: 'Mediana',
+                            data: [med],
+                            backgroundColor: isLight ? '#059669' : '#39ff14'
+                        },
+                        {
+                            label: 'Máximo',
+                            data: [max],
+                            backgroundColor: isLight ? '#dc2626' : '#ff3b30'
+                        }
                     ]
                 },
-                options: { responsive: true, scales: { y: { grid: { color: gridColor } } } }
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            grid: {
+                                color: gridColor
+                            }
+                        }
+                    }
+                }
             });
         }
 
-        // --- Módulo 2: Probabilidad Avanzada ---
         function ejecutarConteo(tipo) {
             const n = parseInt(document.getElementById('count-n').value);
             const r = parseInt(document.getElementById('count-r').value);
             const output = document.getElementById('conteo-result');
 
-            if (isNaN(n) || n < 0) { alert("n inválido."); return; }
-            if (tipo === 'factorial') { output.innerText = math.factorial(n); return; }
-            if (isNaN(r) || r < 0 || r > n) { alert("r inválido."); return; }
+            if (isNaN(n) || n < 0) {
+                alert("n inválido.");
+                return;
+            }
 
-            if (tipo === 'permutacion') output.innerText = math.permutations(n, r);
-            if (tipo === 'combinacion') output.innerText = math.combinations(n, r);
+            if (tipo === 'factorial') {
+                output.innerText = math.factorial(n);
+                return;
+            }
+
+            if (isNaN(r) || r < 0 || r > n) {
+                alert("r inválido.");
+                return;
+            }
+
+            if (tipo === 'permutacion') {
+                output.innerText = math.permutations(n, r);
+            }
+
+            if (tipo === 'combinacion') {
+                output.innerText = math.combinations(n, r);
+            }
         }
 
         function desarrollarBinomio() {
             const n = parseInt(document.getElementById('binom-n').value);
             const output = document.getElementById('binom-result');
-            if (isNaN(n) || n < 0) { alert("n debe ser positivo."); return; }
+
+            if (isNaN(n) || n < 0) {
+                alert("n debe ser positivo.");
+                return;
+            }
 
             let coefs = [];
             for (let r = 0; r <= n; r++) {
                 coefs.push(math.combinations(n, r));
             }
-            output.innerText = `Coeficientes (n=${n}): [ ${coefs.join(', ')} ]`;
+            output.innerText = 'Coeficientes (n=' + n + '): [ ' + coefs.join(', ') + ' ]';
         }
 
         function analizarEventos() {
@@ -1119,8 +2178,15 @@
             const pB = parseFloat(document.getElementById('prob-b').value);
             const pInter = parseFloat(document.getElementById('prob-inter').value);
 
-            if (isNaN(pA) || isNaN(pB) || isNaN(pInter)) { alert("Faltan probabilidades."); return; }
-            if (pB === 0) { document.getElementById('prob-condicional').innerText = "Indefinido"; return; }
+            if (isNaN(pA) || isNaN(pB) || isNaN(pInter)) {
+                alert("Faltan probabilidades.");
+                return;
+            }
+
+            if (pB === 0) {
+                document.getElementById('prob-condicional').innerText = "Indefinido";
+                return;
+            }
 
             const pCond = pInter / pB;
             document.getElementById('prob-condicional').innerText = pCond.toFixed(4);
@@ -1128,7 +2194,7 @@
             const esIndep = Math.abs(pInter - (pA * pB)) < 0.0001;
             const badge = document.getElementById('prob-dependencia');
             const isLight = document.body.classList.contains('light-theme');
-            
+
             if (esIndep) {
                 badge.innerText = "Independientes";
                 badge.style.color = isLight ? "#059669" : "#39ff14";
@@ -1138,13 +2204,19 @@
             }
         }
 
-        // --- MÓDULO 3: CALCULADORA TITAN CIBERPSICOSIS ---
         let calcDisplay = document.getElementById('calc-display-text');
-        let isCalcDone = false; 
+        let isCalcDone = false;
         let lastAns = "0";
 
-        // Inicializar Historial desde LocalStorage
-        let calcHistory = JSON.parse(localStorage.getItem('titanHistory')) || [];
+        let calcHistory = [];
+        try {
+            const stored = localStorage.getItem('titanHistory');
+            if (stored) {
+                calcHistory = JSON.parse(stored);
+            }
+        } catch (e) {
+            calcHistory = [];
+        }
 
         function renderHistory() {
             const panel = document.getElementById('history-panel');
@@ -1152,25 +2224,34 @@
                 panel.innerHTML = '<span style="opacity: 0.5;">No hay cálculos recientes en memoria...</span>';
                 return;
             }
-            panel.innerHTML = calcHistory.map(item => 
-                `<div class="history-entry">
-                    <span class="history-expr">${item.expr}</span> 
-                    <span class="history-res">= ${item.res}</span>
-                </div>`
-            ).join('');
-            panel.scrollTop = panel.scrollHeight; // Auto-scroll al fondo
+            let html = '';
+            calcHistory.forEach(function(item) {
+                html += '<div class="history-entry">';
+                html += '<span class="history-expr">' + item.expr + '</span>';
+                html += '<span class="history-res">= ' + item.res + '</span>';
+                html += '</div>';
+            });
+            panel.innerHTML = html;
+            panel.scrollTop = panel.scrollHeight;
         }
-        
-        // Ejecutar al cargar la página
+
         renderHistory();
 
         function ac(val) {
-            if (val === 'ANS') val = lastAns;
-            
-            if (calcDisplay.innerText === "" && isCalcDone === false) {
-                // Estado inicial vacío
-            } else if (calcDisplay.innerText === "Error" || isCalcDone) {
-                if (!['+', '−', '×', '÷', '^', '!', '%', '==', '!=', '[', ']', ',', ';'].includes(val)) {
+            if (val === 'ANS') {
+                val = lastAns;
+            }
+
+            if (calcDisplay.innerText === "Error" || isCalcDone === true) {
+                const operatorChars = ['+', '−', '×', '÷', '^', '!', '%', '==', '!=', '[', ']', ',', ';'];
+                let isOperator = false;
+                for (let i = 0; i < operatorChars.length; i++) {
+                    if (val === operatorChars[i]) {
+                        isOperator = true;
+                        break;
+                    }
+                }
+                if (!isOperator) {
                     calcDisplay.innerText = "";
                 }
                 isCalcDone = false;
@@ -1193,31 +2274,39 @@
         }
 
         function calcResult() {
-            if (calcDisplay.innerText.trim() === "") return;
+            if (calcDisplay.innerText.trim() === "") {
+                return;
+            }
             let originalExpr = calcDisplay.innerText;
-            
+
             try {
                 let expr = originalExpr
-                           .replace(/×/g, '*')
-                           .replace(/÷/g, '/')
-                           .replace(/−/g, '-');
-                
+                    .replace(/×/g, '*')
+                    .replace(/÷/g, '/')
+                    .replace(/−/g, '-');
+
                 let result = math.evaluate(expr);
-                
+
                 if (typeof result === 'object' && result !== null) {
                     result = math.format(result, { precision: 10 });
                 } else if (typeof result === 'number' && !Number.isInteger(result)) {
                     result = parseFloat(result.toPrecision(10));
                 }
-                
+
                 calcDisplay.innerText = result;
                 lastAns = result.toString();
                 isCalcDone = true;
 
-                // Guardar en Historial Persistente
                 calcHistory.push({ expr: originalExpr, res: lastAns });
-                if (calcHistory.length > 15) calcHistory.shift(); // Mantiene solo los últimos 15 cálculos
-                localStorage.setItem('titanHistory', JSON.stringify(calcHistory));
+                if (calcHistory.length > 15) {
+                    calcHistory.shift();
+                }
+
+                try {
+                    localStorage.setItem('titanHistory', JSON.stringify(calcHistory));
+                } catch (storageErr) {
+                }
+
                 renderHistory();
 
             } catch (e) {
@@ -1226,18 +2315,20 @@
             }
         }
 
-        // --- MÓDULO 4: GRAFICADORA MATEMÁTICA 2D ---
-        function drawPlot(initOnly = false) {
+        function drawPlot(initOnly) {
+            if (initOnly === undefined) {
+                initOnly = false;
+            }
+
             const canvas = document.getElementById('plotCanvas');
-            // Aseguramos tamaño correcto en HD
             canvas.width = canvas.parentElement.clientWidth;
-            canvas.height = 400; 
-            
+            canvas.height = 400;
+
             const ctx = canvas.getContext('2d');
             const exprStr = document.getElementById('plot-eq').value;
             const width = canvas.width;
             const height = canvas.height;
-            
+
             const isLight = document.body.classList.contains('light-theme');
             const gridColor = isLight ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.1)';
             const axisColor = isLight ? '#64748b' : '#708096';
@@ -1245,39 +2336,42 @@
 
             ctx.clearRect(0, 0, width, height);
 
-            // Dibujar Grid de Fondo
             ctx.beginPath();
             ctx.strokeStyle = gridColor;
             ctx.lineWidth = 1;
-            for(let i=0; i<width; i+=40) { ctx.moveTo(i, 0); ctx.lineTo(i, height); }
-            for(let i=0; i<height; i+=40) { ctx.moveTo(0, i); ctx.lineTo(width, i); }
+            for (let i = 0; i < width; i += 40) {
+                ctx.moveTo(i, 0);
+                ctx.lineTo(i, height);
+            }
+            for (let i = 0; i < height; i += 40) {
+                ctx.moveTo(0, i);
+                ctx.lineTo(width, i);
+            }
             ctx.stroke();
 
-            // Dibujar Ejes X e Y
             ctx.beginPath();
             ctx.strokeStyle = axisColor;
             ctx.lineWidth = 2;
-            ctx.moveTo(0, height / 2); ctx.lineTo(width, height / 2);
-            ctx.moveTo(width / 2, 0); ctx.lineTo(width / 2, height);
+            ctx.moveTo(0, height / 2);
+            ctx.lineTo(width, height / 2);
+            ctx.moveTo(width / 2, 0);
+            ctx.lineTo(width / 2, height);
             ctx.stroke();
 
-            // Si es solo inicialización, salimos antes de procesar matemáticas
-            if(initOnly || exprStr.trim() === "") return;
+            if (initOnly || exprStr.trim() === "") {
+                return;
+            }
 
             try {
-                // Compilar la función ingresada por el usuario
                 const expr = math.compile(exprStr);
-                
                 ctx.beginPath();
                 ctx.strokeStyle = lineColor;
                 ctx.lineWidth = 2.5;
 
-                // Trazar la curva evaluando X desde -10 hasta 10 (con escalado)
                 let firstPoint = true;
-                for (let x = -10; x <= 10; x += 0.05) {
+                let x = -10;
+                while (x <= 10) {
                     const y = expr.evaluate({ x: x });
-                    
-                    // Escalamiento (1 unidad = 40 pixeles)
                     const plotX = width / 2 + (x * 40);
                     const plotY = height / 2 - (y * 40);
 
@@ -1287,6 +2381,7 @@
                     } else {
                         ctx.lineTo(plotX, plotY);
                     }
+                    x = x + 0.05;
                 }
                 ctx.stroke();
             } catch (error) {
@@ -1294,15 +2389,16 @@
             }
         }
 
-        // --- MÓDULO 5: CONVERSOR INGENIERÍA COMPUTACIONAL ---
         function convertirDatos() {
             const inputVal = parseFloat(document.getElementById('conv-input').value);
-            if (isNaN(inputVal)) { alert("Ingresa un número válido para convertir."); return; }
+            if (isNaN(inputVal)) {
+                alert("Ingresa un número válido para convertir.");
+                return;
+            }
 
             const unitFrom = document.getElementById('conv-from').value;
             const unitTo = document.getElementById('conv-to').value;
 
-            // Tabla de conversión (todo se pasa a la base más pequeña: Bits)
             const factors = {
                 "b": 1,
                 "B": 8,
@@ -1312,22 +2408,837 @@
                 "TB": 8 * Math.pow(1024, 4)
             };
 
-            // Paso 1: Input -> Bits
             const valueInBits = inputVal * factors[unitFrom];
-            // Paso 2: Bits -> Output
             const finalValue = valueInBits / factors[unitTo];
 
-            // Renderizar con manejo de notación científica para números muy grandes o muy pequeños
             document.getElementById('conv-result').innerText = fmt(finalValue);
         }
 
-        // Event listener para redimensionar el canvas si cambia la ventana
-        window.addEventListener('resize', () => {
-            if(document.getElementById('graficadora').classList.contains('active-panel')) {
+        function calcularRegresionLineal() {
+            const xRaw = document.getElementById('reg-x-data').value;
+            const yRaw = document.getElementById('reg-y-data').value;
+
+            const xMatches = xRaw.match(/-?\d*\.?\d+/g);
+            const yMatches = yRaw.match(/-?\d*\.?\d+/g);
+
+            if (!xMatches || !yMatches) {
+                alert("Ingresa valores numéricos válidos en ambos campos.");
+                return;
+            }
+
+            const xArr = xMatches.map(function(v) {
+                return parseFloat(v);
+            });
+            const yArr = yMatches.map(function(v) {
+                return parseFloat(v);
+            });
+
+            if (xArr.length !== yArr.length) {
+                alert("Los arrays X e Y deben tener la misma cantidad de elementos. X tiene " + xArr.length + " y Y tiene " + yArr.length);
+                return;
+            }
+
+            const n = xArr.length;
+
+            if (n < 2) {
+                alert("Se necesitan al menos 2 pares de datos para la regresión.");
+                return;
+            }
+
+            let sumaX = 0;
+            let sumaY = 0;
+            let sumaXY = 0;
+            let sumaX2 = 0;
+            let sumaY2 = 0;
+
+            for (let i = 0; i < n; i++) {
+                sumaX = sumaX + xArr[i];
+                sumaY = sumaY + yArr[i];
+                sumaXY = sumaXY + (xArr[i] * yArr[i]);
+                sumaX2 = sumaX2 + (xArr[i] * xArr[i]);
+                sumaY2 = sumaY2 + (yArr[i] * yArr[i]);
+            }
+
+            const mediaX = sumaX / n;
+            const mediaY = sumaY / n;
+
+            const numeradorM = (n * sumaXY) - (sumaX * sumaY);
+            const denominadorM = (n * sumaX2) - (sumaX * sumaX);
+
+            if (denominadorM === 0) {
+                alert("Todos los valores de X son iguales. No se puede calcular la pendiente.");
+                return;
+            }
+
+            const m = numeradorM / denominadorM;
+            const b = mediaY - (m * mediaX);
+
+            regresionM = m;
+            regresionB = b;
+
+            const numeradorR = (n * sumaXY) - (sumaX * sumaY);
+            const denominadorR = Math.sqrt(((n * sumaX2) - (sumaX * sumaX)) * ((n * sumaY2) - (sumaY * sumaY)));
+
+            let r = 0;
+            if (denominadorR !== 0) {
+                r = numeradorR / denominadorR;
+            }
+
+            const r2 = r * r;
+
+            let sumaResidualesCuadrados = 0;
+            for (let i = 0; i < n; i++) {
+                const yEstimada = m * xArr[i] + b;
+                const residual = yArr[i] - yEstimada;
+                sumaResidualesCuadrados = sumaResidualesCuadrados + (residual * residual);
+            }
+
+            let see = 0;
+            if (n > 2) {
+                see = Math.sqrt(sumaResidualesCuadrados / (n - 2));
+            }
+
+            const mStr = m >= 0 ? m.toFixed(6) : '(' + m.toFixed(6) + ')';
+            const bStr = b >= 0 ? '+ ' + b.toFixed(6) : '- ' + Math.abs(b).toFixed(6);
+            document.getElementById('regression-equation-display').innerText = 'ŷ = ' + mStr + 'x ' + bStr;
+
+            document.getElementById('reg-m').innerText = m.toFixed(6);
+            document.getElementById('reg-b').innerText = b.toFixed(6);
+            document.getElementById('reg-r').innerText = r.toFixed(6);
+            document.getElementById('reg-r2').innerText = r2.toFixed(6);
+            document.getElementById('reg-see').innerText = see.toFixed(6);
+            document.getElementById('reg-ssr').innerText = sumaResidualesCuadrados.toFixed(6);
+
+            let corrType = '';
+            let pearsonClass = '';
+
+            const absR = Math.abs(r);
+            if (absR >= 0.9) {
+                if (r > 0) {
+                    corrType = 'Correlación Positiva Muy Fuerte';
+                } else {
+                    corrType = 'Correlación Negativa Muy Fuerte';
+                }
+                pearsonClass = r > 0 ? 'pearson-strong-pos' : 'pearson-strong-neg';
+            } else if (absR >= 0.7) {
+                if (r > 0) {
+                    corrType = 'Correlación Positiva Fuerte';
+                } else {
+                    corrType = 'Correlación Negativa Fuerte';
+                }
+                pearsonClass = r > 0 ? 'pearson-strong-pos' : 'pearson-strong-neg';
+            } else if (absR >= 0.5) {
+                corrType = r > 0 ? 'Correlación Positiva Moderada' : 'Correlación Negativa Moderada';
+                pearsonClass = 'pearson-moderate';
+            } else if (absR >= 0.3) {
+                corrType = r > 0 ? 'Correlación Positiva Débil' : 'Correlación Negativa Débil';
+                pearsonClass = 'pearson-weak';
+            } else {
+                corrType = 'Correlación Muy Débil o Nula';
+                pearsonClass = 'pearson-weak';
+            }
+
+            document.getElementById('reg-corr-type').innerText = corrType;
+
+            const badgeContainer = document.getElementById('reg-pearson-badge');
+            badgeContainer.innerHTML = '<span class="pearson-badge ' + pearsonClass + '">r = ' + r.toFixed(4) + ' | R² = ' + r2.toFixed(4) + '</span>';
+
+            const tbodyReg = document.getElementById('reg-table-body');
+            tbodyReg.innerHTML = '';
+
+            for (let i = 0; i < n; i++) {
+                const yEstimada = m * xArr[i] + b;
+                const residual = yArr[i] - yEstimada;
+                const residualCuad = residual * residual;
+                const xi2 = xArr[i] * xArr[i];
+                const xiyi = xArr[i] * yArr[i];
+
+                let row = '<tr>';
+                row += '<td>' + (i + 1) + '</td>';
+                row += '<td>' + xArr[i].toFixed(4) + '</td>';
+                row += '<td>' + yArr[i].toFixed(4) + '</td>';
+                row += '<td style="color: var(--neon-blue);">' + yEstimada.toFixed(4) + '</td>';
+                row += '<td style="color: ' + (residual >= 0 ? 'var(--neon-green)' : 'var(--neon-red)') + ';">' + residual.toFixed(4) + '</td>';
+                row += '<td>' + residualCuad.toFixed(4) + '</td>';
+                row += '<td>' + xi2.toFixed(4) + '</td>';
+                row += '<td>' + xiyi.toFixed(4) + '</td>';
+                row += '</tr>';
+                tbodyReg.innerHTML += row;
+            }
+
+            document.getElementById('regression-output-container').style.display = 'block';
+
+            dibujarScatterPlot(xArr, yArr, m, b);
+        }
+
+        function predecirY() {
+            const xVal = parseFloat(document.getElementById('reg-predict-x').value);
+            if (isNaN(xVal)) {
+                alert("Ingresa un valor numérico para X.");
+                return;
+            }
+            const yPred = regresionM * xVal + regresionB;
+            document.getElementById('reg-predicted-y').innerText = yPred.toFixed(6);
+        }
+
+        function dibujarScatterPlot(xArr, yArr, m, b) {
+            const canvas = document.getElementById('scatterCanvas');
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = 420;
+
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+            const isLight = document.body.classList.contains('light-theme');
+
+            ctx.clearRect(0, 0, width, height);
+
+            const marginLeft = 60;
+            const marginRight = 30;
+            const marginTop = 30;
+            const marginBottom = 50;
+
+            const plotWidth = width - marginLeft - marginRight;
+            const plotHeight = height - marginTop - marginBottom;
+
+            let xMin = Math.min.apply(null, xArr);
+            let xMax = Math.max.apply(null, xArr);
+            let yMin = Math.min.apply(null, yArr);
+            let yMax = Math.max.apply(null, yArr);
+
+            const xPad = (xMax - xMin) * 0.15 || 1;
+            const yPad = (yMax - yMin) * 0.15 || 1;
+
+            xMin = xMin - xPad;
+            xMax = xMax + xPad;
+            yMin = yMin - yPad;
+            yMax = yMax + yPad;
+
+            function toCanvasX(xVal) {
+                return marginLeft + ((xVal - xMin) / (xMax - xMin)) * plotWidth;
+            }
+
+            function toCanvasY(yVal) {
+                return marginTop + plotHeight - ((yVal - yMin) / (yMax - yMin)) * plotHeight;
+            }
+
+            const gridColor = isLight ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.06)';
+            const axisColor = isLight ? '#64748b' : '#708096';
+            const textColor = isLight ? '#0f172a' : '#e2e8f0';
+            const dotColor = isLight ? '#bd2c0d' : '#42D3F2';
+            const lineColor = isLight ? '#059669' : '#39ff14';
+
+            ctx.strokeStyle = gridColor;
+            ctx.lineWidth = 1;
+
+            const numGridLines = 6;
+            for (let g = 0; g <= numGridLines; g++) {
+                const gx = marginLeft + (g / numGridLines) * plotWidth;
+                ctx.beginPath();
+                ctx.moveTo(gx, marginTop);
+                ctx.lineTo(gx, marginTop + plotHeight);
+                ctx.stroke();
+
+                const gy = marginTop + (g / numGridLines) * plotHeight;
+                ctx.beginPath();
+                ctx.moveTo(marginLeft, gy);
+                ctx.lineTo(marginLeft + plotWidth, gy);
+                ctx.stroke();
+            }
+
+            ctx.strokeStyle = axisColor;
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(marginLeft, marginTop);
+            ctx.lineTo(marginLeft, marginTop + plotHeight);
+            ctx.lineTo(marginLeft + plotWidth, marginTop + plotHeight);
+            ctx.stroke();
+
+            ctx.fillStyle = textColor;
+            ctx.font = '11px Courier New';
+            ctx.textAlign = 'center';
+
+            for (let g = 0; g <= numGridLines; g++) {
+                const xTickVal = xMin + (g / numGridLines) * (xMax - xMin);
+                const gx = marginLeft + (g / numGridLines) * plotWidth;
+                ctx.fillText(xTickVal.toFixed(1), gx, marginTop + plotHeight + 18);
+
+                const yTickVal = yMax - (g / numGridLines) * (yMax - yMin);
+                const gy = marginTop + (g / numGridLines) * plotHeight;
+                ctx.textAlign = 'right';
+                ctx.fillText(yTickVal.toFixed(1), marginLeft - 8, gy + 4);
+                ctx.textAlign = 'center';
+            }
+
+            ctx.strokeStyle = lineColor;
+            ctx.lineWidth = 2;
+            ctx.setLineDash([6, 3]);
+            ctx.beginPath();
+
+            const yAtXmin = m * xMin + b;
+            const yAtXmax = m * xMax + b;
+            ctx.moveTo(toCanvasX(xMin), toCanvasY(yAtXmin));
+            ctx.lineTo(toCanvasX(xMax), toCanvasY(yAtXmax));
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            for (let i = 0; i < xArr.length; i++) {
+                const cx = toCanvasX(xArr[i]);
+                const cy = toCanvasY(yArr[i]);
+                ctx.beginPath();
+                ctx.arc(cx, cy, 6, 0, 2 * Math.PI);
+                ctx.fillStyle = dotColor;
+                ctx.fill();
+                ctx.strokeStyle = isLight ? '#fff' : '#161920';
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+            }
+
+            ctx.fillStyle = textColor;
+            ctx.font = 'bold 12px Courier New';
+            ctx.textAlign = 'center';
+            ctx.fillText('Diagrama de Dispersión con Línea de Tendencia', width / 2, 18);
+        }
+
+        function calcularIntegrales() {
+            const funcStr = document.getElementById('calc-function').value.trim();
+            const a = parseFloat(document.getElementById('calc-lower').value);
+            const b = parseFloat(document.getElementById('calc-upper').value);
+            let n = parseInt(document.getElementById('calc-n').value);
+
+            if (!funcStr) {
+                alert("Ingresa una función f(x).");
+                return;
+            }
+
+            if (isNaN(a) || isNaN(b)) {
+                alert("Ingresa límites de integración válidos.");
+                return;
+            }
+
+            if (a >= b) {
+                alert("El límite inferior (a) debe ser menor al límite superior (b).");
+                return;
+            }
+
+            if (isNaN(n) || n < 2) {
+                alert("El número de intervalos debe ser al menos 2.");
+                return;
+            }
+
+            if (n % 2 !== 0) {
+                n = n + 1;
+                document.getElementById('calc-n').value = n;
+                alert("Simpson 1/3 requiere n par. Se ajustó automáticamente a n = " + n);
+            }
+
+            let compiledExpr;
+            try {
+                compiledExpr = math.compile(funcStr);
+            } catch (err) {
+                alert("La función ingresada es inválida. Verifica la sintaxis.");
+                return;
+            }
+
+            function evalFunc(xVal) {
+                return compiledExpr.evaluate({ x: xVal });
+            }
+
+            const h = (b - a) / n;
+
+            let puntos = [];
+            for (let i = 0; i <= n; i++) {
+                const xi = a + i * h;
+                const fxi = evalFunc(xi);
+                puntos.push({ i: i, x: xi, fx: fxi });
+            }
+
+            let sumaTrapecio = 0;
+            sumaTrapecio = sumaTrapecio + puntos[0].fx;
+            for (let i = 1; i < n; i++) {
+                sumaTrapecio = sumaTrapecio + 2 * puntos[i].fx;
+            }
+            sumaTrapecio = sumaTrapecio + puntos[n].fx;
+            const resultadoTrapecio = (h / 2) * sumaTrapecio;
+
+            let sumaSimpson = 0;
+            sumaSimpson = sumaSimpson + puntos[0].fx;
+            for (let i = 1; i < n; i++) {
+                if (i % 2 === 0) {
+                    sumaSimpson = sumaSimpson + 2 * puntos[i].fx;
+                } else {
+                    sumaSimpson = sumaSimpson + 4 * puntos[i].fx;
+                }
+            }
+            sumaSimpson = sumaSimpson + puntos[n].fx;
+            const resultadoSimpson = (h / 3) * sumaSimpson;
+
+            document.getElementById('trap-result').innerText = resultadoTrapecio.toFixed(8);
+            document.getElementById('simp-result').innerText = resultadoSimpson.toFixed(8);
+
+            document.getElementById('calc-func-display').innerText = funcStr;
+            document.getElementById('calc-a-display').innerText = a;
+            document.getElementById('calc-b-display').innerText = b;
+            document.getElementById('calc-n-display').innerText = n;
+            document.getElementById('calc-h-display').innerText = h.toFixed(6);
+
+            const diferencia = Math.abs(resultadoTrapecio - resultadoSimpson);
+            document.getElementById('calc-diff-display').innerText = diferencia.toFixed(8);
+
+            const tbodyCalc = document.getElementById('calc-points-body');
+            tbodyCalc.innerHTML = '';
+
+            for (let i = 0; i <= n; i++) {
+                const punto = puntos[i];
+                let pesoTrap;
+                let pesoSimp;
+
+                if (i === 0 || i === n) {
+                    pesoTrap = 1;
+                } else {
+                    pesoTrap = 2;
+                }
+
+                if (i === 0 || i === n) {
+                    pesoSimp = 1;
+                } else if (i % 2 === 0) {
+                    pesoSimp = 2;
+                } else {
+                    pesoSimp = 4;
+                }
+
+                const contribTrap = (h / 2) * pesoTrap * punto.fx;
+                const contribSimp = (h / 3) * pesoSimp * punto.fx;
+
+                let row = '<tr>';
+                row += '<td>' + i + '</td>';
+                row += '<td>' + punto.x.toFixed(6) + '</td>';
+                row += '<td style="color: var(--neon-blue);">' + punto.fx.toFixed(6) + '</td>';
+                row += '<td>' + pesoTrap + '</td>';
+                row += '<td>' + contribTrap.toFixed(6) + '</td>';
+                row += '<td style="color: #f59e0b;">' + pesoSimp + '</td>';
+                row += '<td>' + contribSimp.toFixed(6) + '</td>';
+                row += '</tr>';
+                tbodyCalc.innerHTML += row;
+            }
+
+            const traceBox = document.getElementById('simpson-trace-box');
+            traceBox.innerHTML = '';
+
+            let acumuladorSimpson = puntos[0].fx;
+            let traceHTML = '<div class="trace-line">i=0 → x₀ = ' + puntos[0].x.toFixed(4) + ' | f(x₀) = ' + puntos[0].fx.toFixed(6) + ' | peso = 1 | acum = ' + acumuladorSimpson.toFixed(6) + '</div>';
+
+            for (let i = 1; i < n; i++) {
+                const peso = (i % 2 === 0) ? 2 : 4;
+                const contribucion = peso * puntos[i].fx;
+                acumuladorSimpson = acumuladorSimpson + contribucion;
+                traceHTML += '<div class="trace-line">i=' + i + ' → x_i = ' + puntos[i].x.toFixed(4) + ' | f(x_i) = ' + puntos[i].fx.toFixed(6) + ' | peso = ' + peso + ' | contrib = ' + contribucion.toFixed(6) + ' | acum = ' + acumuladorSimpson.toFixed(6) + '</div>';
+            }
+
+            acumuladorSimpson = acumuladorSimpson + puntos[n].fx;
+            traceHTML += '<div class="trace-line">i=' + n + ' → x_n = ' + puntos[n].x.toFixed(4) + ' | f(x_n) = ' + puntos[n].fx.toFixed(6) + ' | peso = 1 | acum = ' + acumuladorSimpson.toFixed(6) + '</div>';
+            traceHTML += '<div class="trace-sum">Resultado = (h/3) × Σ = (' + h.toFixed(4) + '/3) × ' + acumuladorSimpson.toFixed(6) + ' = ' + resultadoSimpson.toFixed(8) + '</div>';
+
+            traceBox.innerHTML = traceHTML;
+
+            document.getElementById('calculus-output-container').style.display = 'block';
+        }
+
+        function seleccionarTipoAmort(tipo) {
+            tipoAmortizacionActual = tipo;
+
+            document.getElementById('btn-frances').classList.remove('selected');
+            document.getElementById('btn-aleman').classList.remove('selected');
+            document.getElementById('btn-' + tipo).classList.add('selected');
+        }
+
+        function generarAmortizacion() {
+            const monto = parseFloat(document.getElementById('fin-monto').value);
+            const tasaAnual = parseFloat(document.getElementById('fin-tasa').value);
+            const plazo = parseInt(document.getElementById('fin-plazo').value);
+
+            if (isNaN(monto) || monto <= 0) {
+                alert("Ingresa un monto válido y mayor a cero.");
+                return;
+            }
+
+            if (isNaN(tasaAnual) || tasaAnual < 0) {
+                alert("Ingresa una tasa de interés válida.");
+                return;
+            }
+
+            if (isNaN(plazo) || plazo < 1) {
+                alert("El plazo debe ser al menos 1 mes.");
+                return;
+            }
+
+            const tasaMensual = tasaAnual / 100 / 12;
+
+            document.getElementById('fin-res-monto').innerText = '$' + fmtMoney(monto);
+            document.getElementById('fin-res-tasa').innerText = (tasaMensual * 100).toFixed(4) + '%';
+
+            const tbody = document.getElementById('amort-table-body');
+            tbody.innerHTML = '';
+
+            let totalIntereses = 0;
+            let totalPagado = 0;
+
+            if (tipoAmortizacionActual === 'frances') {
+                let cuotaFija;
+
+                if (tasaMensual === 0) {
+                    cuotaFija = monto / plazo;
+                } else {
+                    const factorCuota = (tasaMensual * Math.pow(1 + tasaMensual, plazo)) / (Math.pow(1 + tasaMensual, plazo) - 1);
+                    cuotaFija = monto * factorCuota;
+                }
+
+                let saldoActual = monto;
+
+                for (let periodo = 1; periodo <= plazo; periodo++) {
+                    const interesPeriodo = saldoActual * tasaMensual;
+                    let abonoCapital = cuotaFija - interesPeriodo;
+                    let cuotaPeriodo = cuotaFija;
+
+                    if (periodo === plazo) {
+                        abonoCapital = saldoActual;
+                        cuotaPeriodo = abonoCapital + interesPeriodo;
+                    }
+
+                    const saldoFinal = Math.max(0, saldoActual - abonoCapital);
+
+                    totalIntereses = totalIntereses + interesPeriodo;
+                    totalPagado = totalPagado + cuotaPeriodo;
+
+                    let rowClass = '';
+                    if (periodo % 2 === 0) {
+                        rowClass = 'amort-row-even';
+                    }
+                    if (periodo === plazo) {
+                        rowClass = 'amort-row-last';
+                    }
+
+                    let row = '<tr class="' + rowClass + '">';
+                    row += '<td style="font-weight: bold;">' + periodo + '</td>';
+                    row += '<td>$' + fmtMoney(saldoActual) + '</td>';
+                    row += '<td style="color: var(--neon-blue); font-weight: bold;">$' + fmtMoney(cuotaPeriodo) + '</td>';
+                    row += '<td style="color: var(--neon-red);">$' + fmtMoney(interesPeriodo) + '</td>';
+                    row += '<td style="color: var(--neon-green);">$' + fmtMoney(abonoCapital) + '</td>';
+                    row += '<td>$' + fmtMoney(saldoFinal) + '</td>';
+                    row += '</tr>';
+                    tbody.innerHTML += row;
+
+                    saldoActual = saldoFinal;
+                }
+
+            } else {
+                const abonoCapitalFijo = monto / plazo;
+                let saldoActual = monto;
+
+                for (let periodo = 1; periodo <= plazo; periodo++) {
+                    const interesPeriodo = saldoActual * tasaMensual;
+                    let abonoCapital = abonoCapitalFijo;
+
+                    if (periodo === plazo) {
+                        abonoCapital = saldoActual;
+                    }
+
+                    const cuotaPeriodo = abonoCapital + interesPeriodo;
+                    const saldoFinal = Math.max(0, saldoActual - abonoCapital);
+
+                    totalIntereses = totalIntereses + interesPeriodo;
+                    totalPagado = totalPagado + cuotaPeriodo;
+
+                    let rowClass = '';
+                    if (periodo % 2 === 0) {
+                        rowClass = 'amort-row-even';
+                    }
+                    if (periodo === plazo) {
+                        rowClass = 'amort-row-last';
+                    }
+
+                    let row = '<tr class="' + rowClass + '">';
+                    row += '<td style="font-weight: bold;">' + periodo + '</td>';
+                    row += '<td>$' + fmtMoney(saldoActual) + '</td>';
+                    row += '<td style="color: var(--neon-blue); font-weight: bold;">$' + fmtMoney(cuotaPeriodo) + '</td>';
+                    row += '<td style="color: var(--neon-red);">$' + fmtMoney(interesPeriodo) + '</td>';
+                    row += '<td style="color: var(--neon-green);">$' + fmtMoney(abonoCapital) + '</td>';
+                    row += '<td>$' + fmtMoney(saldoFinal) + '</td>';
+                    row += '</tr>';
+                    tbody.innerHTML += row;
+
+                    saldoActual = saldoFinal;
+                }
+            }
+
+            document.getElementById('fin-res-intereses').innerText = '$' + fmtMoney(totalIntereses);
+            document.getElementById('fin-res-total').innerText = '$' + fmtMoney(totalPagado);
+
+            document.getElementById('finanzas-output-container').style.display = 'block';
+        }
+
+        function seleccionarTamanoMatriz(n) {
+            tamanoMatrizActual = n;
+
+            document.querySelectorAll('.matrix-size-btn').forEach(function(btn) {
+                btn.classList.remove('selected');
+            });
+            document.getElementById('size-btn-' + n).classList.add('selected');
+
+            renderizarInputMatriz(n);
+        }
+
+        function renderizarInputMatriz(n) {
+            const container = document.getElementById('matrix-input-container');
+            container.innerHTML = '';
+
+            const grid = document.createElement('div');
+            grid.style.display = 'inline-grid';
+            grid.style.gridTemplateColumns = 'repeat(' + (n + 1) + ', auto) 6px repeat(1, auto)';
+            grid.style.gap = '5px';
+            grid.style.alignItems = 'center';
+
+            for (let row = 0; row < n; row++) {
+                for (let col = 0; col < n; col++) {
+                    const input = document.createElement('input');
+                    input.type = 'number';
+                    input.className = 'matrix-cell';
+                    input.id = 'cell-' + row + '-' + col;
+                    input.placeholder = (row === col) ? '1' : '0';
+                    input.value = '';
+                    input.step = 'any';
+                    grid.appendChild(input);
+                }
+
+                const sep = document.createElement('div');
+                sep.style.width = '3px';
+                sep.style.height = '36px';
+                sep.style.backgroundColor = 'var(--neon-blue)';
+                sep.style.borderRadius = '2px';
+                sep.style.gridRow = (row + 1).toString();
+                grid.appendChild(sep);
+
+                const bInput = document.createElement('input');
+                bInput.type = 'number';
+                bInput.className = 'matrix-cell';
+                bInput.id = 'cell-' + row + '-' + n;
+                bInput.placeholder = '0';
+                bInput.value = '';
+                bInput.step = 'any';
+                bInput.style.borderColor = 'var(--neon-blue)';
+                grid.appendChild(bInput);
+            }
+
+            container.appendChild(grid);
+        }
+
+        function leerMatriz(n) {
+            let M = [];
+            for (let row = 0; row < n; row++) {
+                let fila = [];
+                for (let col = 0; col <= n; col++) {
+                    const val = parseFloat(document.getElementById('cell-' + row + '-' + col).value);
+                    if (isNaN(val)) {
+                        fila.push(0);
+                    } else {
+                        fila.push(val);
+                    }
+                }
+                M.push(fila);
+            }
+            return M;
+        }
+
+        function copiarMatriz(M) {
+            let copia = [];
+            for (let i = 0; i < M.length; i++) {
+                copia.push(M[i].slice());
+            }
+            return copia;
+        }
+
+        function renderizarMatrizGauss(M, n, pivotRow, pivotCol) {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'gauss-matrix-display';
+
+            for (let row = 0; row < n; row++) {
+                const rowDiv = document.createElement('div');
+                rowDiv.className = 'gauss-matrix-row';
+
+                for (let col = 0; col < n; col++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'gauss-matrix-cell';
+                    if (row === pivotRow && col === pivotCol) {
+                        cell.classList.add('pivot');
+                    }
+                    cell.innerText = M[row][col].toFixed(4);
+                    rowDiv.appendChild(cell);
+                }
+
+                const sep = document.createElement('div');
+                sep.className = 'gauss-aug-sep';
+                rowDiv.appendChild(sep);
+
+                const bCell = document.createElement('div');
+                bCell.className = 'gauss-matrix-cell';
+                if (row === pivotRow) {
+                    bCell.classList.add('pivot');
+                }
+                bCell.innerText = M[row][n].toFixed(4);
+                rowDiv.appendChild(bCell);
+
+                wrapper.appendChild(rowDiv);
+            }
+
+            return wrapper;
+        }
+
+        function ejecutarGaussJordan() {
+            const n = tamanoMatrizActual;
+            let M = leerMatriz(n);
+
+            const stepsContainer = document.getElementById('gauss-steps-container');
+            stepsContainer.innerHTML = '';
+
+            const outputContainer = document.getElementById('gauss-output-container');
+            outputContainer.style.display = 'block';
+
+            const stepInicial = document.createElement('div');
+            stepInicial.className = 'gauss-step-card';
+            const headerInicial = document.createElement('div');
+            headerInicial.className = 'gauss-step-header';
+            headerInicial.innerText = 'PASO 0 — Matriz Aumentada Inicial [A | b]';
+            stepInicial.appendChild(headerInicial);
+            stepInicial.appendChild(renderizarMatrizGauss(copiarMatriz(M), n, -1, -1));
+            stepsContainer.appendChild(stepInicial);
+
+            let stepCounter = 1;
+
+            for (let col = 0; col < n; col++) {
+                let maxRow = col;
+                let maxVal = Math.abs(M[col][col]);
+
+                for (let row = col + 1; row < n; row++) {
+                    if (Math.abs(M[row][col]) > maxVal) {
+                        maxVal = Math.abs(M[row][col]);
+                        maxRow = row;
+                    }
+                }
+
+                if (maxRow !== col) {
+                    const temp = M[col];
+                    M[col] = M[maxRow];
+                    M[maxRow] = temp;
+
+                    const stepPivot = document.createElement('div');
+                    stepPivot.className = 'gauss-step-card';
+                    const headerPivot = document.createElement('div');
+                    headerPivot.className = 'gauss-step-header';
+                    headerPivot.innerText = 'PASO ' + stepCounter + ' — Pivoteo Parcial: Intercambiar Fila ' + (col + 1) + ' ↔ Fila ' + (maxRow + 1);
+                    stepPivot.appendChild(headerPivot);
+                    stepPivot.appendChild(renderizarMatrizGauss(copiarMatriz(M), n, col, col));
+                    stepsContainer.appendChild(stepPivot);
+                    stepCounter = stepCounter + 1;
+                }
+
+                const pivotValue = M[col][col];
+
+                if (Math.abs(pivotValue) < 1e-10) {
+                    const noSolDiv = document.createElement('div');
+                    noSolDiv.className = 'gauss-no-solution';
+                    noSolDiv.innerText = 'El sistema no tiene solución única (pivote cero en columna ' + (col + 1) + '). Puede ser un sistema inconsistente o con infinitas soluciones.';
+                    stepsContainer.appendChild(noSolDiv);
+                    return;
+                }
+
+                for (let j = 0; j <= n; j++) {
+                    M[col][j] = M[col][j] / pivotValue;
+                }
+
+                const stepNorm = document.createElement('div');
+                stepNorm.className = 'gauss-step-card';
+                const headerNorm = document.createElement('div');
+                headerNorm.className = 'gauss-step-header';
+                headerNorm.innerText = 'PASO ' + stepCounter + ' — Normalizar Fila ' + (col + 1) + ': F' + (col + 1) + ' ÷ ' + pivotValue.toFixed(4);
+                stepNorm.appendChild(headerNorm);
+                stepNorm.appendChild(renderizarMatrizGauss(copiarMatriz(M), n, col, col));
+                stepsContainer.appendChild(stepNorm);
+                stepCounter = stepCounter + 1;
+
+                for (let row = 0; row < n; row++) {
+                    if (row !== col) {
+                        const factor = M[row][col];
+
+                        if (Math.abs(factor) > 1e-10) {
+                            for (let j = 0; j <= n; j++) {
+                                M[row][j] = M[row][j] - factor * M[col][j];
+                            }
+
+                            const stepElim = document.createElement('div');
+                            stepElim.className = 'gauss-step-card';
+                            const headerElim = document.createElement('div');
+                            headerElim.className = 'gauss-step-header';
+                            headerElim.innerText = 'PASO ' + stepCounter + ' — Eliminar en Fila ' + (row + 1) + ': F' + (row + 1) + ' - (' + factor.toFixed(4) + ') × F' + (col + 1);
+                            stepElim.appendChild(headerElim);
+                            stepElim.appendChild(renderizarMatrizGauss(copiarMatriz(M), n, row, col));
+                            stepsContainer.appendChild(stepElim);
+                            stepCounter = stepCounter + 1;
+                        }
+                    }
+                }
+            }
+
+            const stepFinal = document.createElement('div');
+            stepFinal.className = 'gauss-step-card';
+            const headerFinal = document.createElement('div');
+            headerFinal.className = 'gauss-step-header';
+            headerFinal.innerText = 'RESULTADO FINAL — Matriz Identidad [I | x]';
+            stepFinal.appendChild(headerFinal);
+            stepFinal.appendChild(renderizarMatrizGauss(copiarMatriz(M), n, -1, -1));
+            stepsContainer.appendChild(stepFinal);
+
+            const solucionDiv = document.createElement('div');
+            solucionDiv.className = 'gauss-solution-display';
+
+            let solucionHTML = '<p>✅ SOLUCIÓN DEL SISTEMA:</p>';
+            const varNames = ['x₁', 'x₂', 'x₃', 'x₄', 'x₅'];
+
+            for (let i = 0; i < n; i++) {
+                const valor = M[i][n];
+                solucionHTML += '<p>' + (varNames[i] || ('x' + (i + 1))) + ' = ' + valor.toFixed(6) + '</p>';
+            }
+
+            solucionDiv.innerHTML = solucionHTML;
+            stepsContainer.appendChild(solucionDiv);
+        }
+
+        window.addEventListener('resize', function() {
+            const grafPanel = document.getElementById('graficadora');
+            if (grafPanel.classList.contains('active-panel')) {
                 drawPlot();
+            }
+
+            const regPanel = document.getElementById('regresion');
+            if (regPanel.classList.contains('active-panel')) {
+                const xRaw = document.getElementById('reg-x-data').value;
+                const yRaw = document.getElementById('reg-y-data').value;
+                if (xRaw.trim() !== '' && yRaw.trim() !== '') {
+                    const xMatches = xRaw.match(/-?\d*\.?\d+/g);
+                    const yMatches = yRaw.match(/-?\d*\.?\d+/g);
+                    if (xMatches && yMatches && xMatches.length === yMatches.length) {
+                        const xArr = xMatches.map(function(v) {
+                            return parseFloat(v);
+                        });
+                        const yArr = yMatches.map(function(v) {
+                            return parseFloat(v);
+                        });
+                        dibujarScatterPlot(xArr, yArr, regresionM, regresionB);
+                    }
+                }
             }
         });
 
+        renderizarInputMatriz(tamanoMatrizActual);
     </script>
 </body>
 </html>
