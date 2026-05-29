@@ -15,6 +15,7 @@
             --input-bg: #1f232e;
             --neon-blue: #00f0ff;
             --tech-blue: #0072ff;
+            --gradient-end: #00c6ff; /* Variable para el degradado del botón */
             --neon-green: #39ff14;
             --neon-red: #ff3b30;
             --text-main: #e2e8f0;
@@ -25,13 +26,14 @@
             --border-glow: rgba(0, 240, 255, 0.2);
         }
 
-        /* TEMA CLARO (Inverso) */
+        /* TEMA CLARO (Inverso con tu color #bd2c0d) */
         body.light-theme {
             --bg-dark: #f0f2f5;
             --card-bg: #ffffff;
             --input-bg: #e2e8f0;
-            --neon-blue: #0056b3; 
-            --tech-blue: #0072ff;
+            --neon-blue: #bd2c0d; /* Tu color personalizado */
+            --tech-blue: #bd2c0d; /* Tu color personalizado */
+            --gradient-end: #e84521; /* Un tono naranja/rojo para que el degradado se vea genial */
             --neon-green: #059669; 
             --neon-red: #dc2626; 
             --text-main: #0f172a; 
@@ -39,7 +41,7 @@
             
             --glass-bg: rgba(0, 0, 0, 0.05);
             --glass-card: rgba(0, 0, 0, 0.02);
-            --border-glow: rgba(0, 86, 179, 0.2);
+            --border-glow: rgba(189, 44, 13, 0.2); /* Es el RGB de #bd2c0d con opacidad */
         }
 
         * {
@@ -159,7 +161,7 @@
 
         .btn-action {
             width: 100%;
-            background: linear-gradient(135deg, var(--tech-blue), #00c6ff);
+            background: linear-gradient(135deg, var(--tech-blue), var(--gradient-end));
             color: white;
             border: none;
             padding: 14px;
@@ -464,7 +466,7 @@
             themeToggleBtn.innerText = isLight ? '🌙 Tema Oscuro' : '☀️ Tema Claro';
             
             // Si ya hay datos cargados, redibujamos las gráficas para que cambien sus colores
-            if (window.currentDataset) {
+            if (window.currentDataset && document.getElementById('stat-n').innerText !== "-") {
                 procesarEstadistica();
             }
         });
@@ -490,7 +492,6 @@
             const reader = new FileReader();
             reader.onload = function(e) {
                 const text = e.target.result;
-                // ACTUALIZACIÓN DE REGEX: Acepta decimales que empiecen con punto
                 let coincidencias = text.match(/\d*\.?\d+/g);
                 let valores = coincidencias ? coincidencias.map(Number) : [];
                 document.getElementById('manual-data').value = valores.join(', ');
@@ -506,8 +507,6 @@
                 return;
             }
             
-            // ACTUALIZACIÓN DE REGEX: /\d*\.?\d+/g 
-            // Esto permite capturar números como .7, 0.7, 7, o 7. sin problema.
             let coincidencias = inputString.match(/\d*\.?\d+/g);
             
             if (!coincidencias || coincidencias.length === 0) {
@@ -625,14 +624,16 @@
             document.getElementById('pos-result').innerText = result.toFixed(2);
         }
 
-        // Renderizadores de Gráficos
+        // Renderizadores de Gráficos (Ajustados con #bd2c0d para tema claro)
         function renderizarHistograma(labels, datos) {
             if (histogramInstance) histogramInstance.destroy();
             const ctx = document.getElementById('histogramChart').getContext('2d');
             const isLight = document.body.classList.contains('light-theme');
+            
             const gridColor = isLight ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.05)';
-            const barColor = isLight ? 'rgba(0, 86, 179, 0.4)' : 'rgba(0, 240, 255, 0.4)';
-            const borderColor = isLight ? '#0056b3' : '#00f0ff';
+            // En tema claro, las barras toman el color #bd2c0d con un poco de transparencia
+            const barColor = isLight ? 'rgba(189, 44, 13, 0.4)' : 'rgba(0, 240, 255, 0.4)';
+            const borderColor = isLight ? '#bd2c0d' : '#00f0ff';
 
             histogramInstance = new Chart(ctx, {
                 type: 'bar',
@@ -656,7 +657,10 @@
             if (boxplotInstance) boxplotInstance.destroy();
             const ctx = document.getElementById('boxplotChart').getContext('2d');
             const isLight = document.body.classList.contains('light-theme');
+            
             const gridColor = isLight ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.05)';
+            // También la Media Muestra cambia a tu color en el boxplot para tema claro
+            const mediaMuestraColor = isLight ? '#bd2c0d' : '#0072ff';
 
             boxplotInstance = new Chart(ctx, {
                 type: 'bar',
@@ -664,7 +668,7 @@
                     labels: ['Distribución'],
                     datasets: [
                         { label: 'Mínimo', data: [min], backgroundColor: '#708096' },
-                        { label: 'Media Muestra', data: [avg], backgroundColor: '#0072ff' },
+                        { label: 'Media Muestra', data: [avg], backgroundColor: mediaMuestraColor },
                         { label: 'Mediana', data: [med], backgroundColor: isLight ? '#059669' : '#39ff14' },
                         { label: 'Máximo', data: [max], backgroundColor: isLight ? '#dc2626' : '#ff3b30' }
                     ]
