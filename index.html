@@ -83,7 +83,7 @@
         .main-calculator-card {
             background-color: var(--card-bg);
             width: 100%;
-            max-width: 950px; /* Un pelín más ancho para que luzca la súper tabla */
+            max-width: 950px; 
             border-radius: 16px;
             border: 1px solid var(--border-glow);
             box-shadow: 0 0 30px var(--border-glow);
@@ -285,6 +285,20 @@
             gap: 10px;
         }
 
+        /* Layout para las gráficas: Histograma y Caja lado a lado si hay espacio */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        @media (max-width: 768px) {
+            .charts-grid {
+                grid-template-columns: 1fr; 
+            }
+        }
+
         .dependency-card {
             margin-top: 15px;
             background-color: var(--input-bg);
@@ -309,7 +323,17 @@
         .or-text { text-align: center; color: var(--text-muted); font-size: 0.8rem; margin-bottom: 10px; }
 
         .chart-container {
-            margin-top: 25px;
+            background: var(--glass-bg);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border-glow);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .chart-container-full {
+            margin-top: 15px;
             background: var(--glass-bg);
             padding: 15px;
             border-radius: 8px;
@@ -325,6 +349,13 @@
             font-weight: bold;
             color: var(--text-main);
             border: 1px solid var(--border-glow);
+        }
+        
+        /* Contenedor específico para el pastel */
+        .pie-wrapper {
+            width: 100%;
+            max-width: 350px;
+            margin: 0 auto;
         }
     </style>
 </head>
@@ -357,9 +388,14 @@
                     <div class="result-card"><h4>Tamaño (n)</h4><p id="stat-n">-</p></div>
                     <div class="result-card"><h4>Media (x̄)</h4><p id="stat-media">-</p></div>
                     <div class="result-card"><h4>Mediana (Me)</h4><p id="stat-mediana">-</p></div>
+                    
                     <div class="result-card"><h4>Moda (Mo)</h4><p id="stat-moda">-</p></div>
                     <div class="result-card"><h4>Varianza (s²)</h4><p id="stat-varianza">-</p></div>
                     <div class="result-card"><h4>Desv. Estándar (s)</h4><p id="stat-desviacion">-</p></div>
+                    
+                    <div class="result-card"><h4>Rango (R)</h4><p id="stat-rango">-</p></div>
+                    <div class="result-card"><h4>Intervalos (k)</h4><p id="stat-k">-</p></div>
+                    <div class="result-card"><h4>Amplitud (A)</h4><p id="stat-amplitud">-</p></div>
                 </div>
 
                 <div class="position-measures">
@@ -384,7 +420,8 @@
                                 <th>Clase</th>
                                 <th>Lím. Inf.</th>
                                 <th>Lím. Sup.</th>
-                                <th>Front. Inf.</th> <th>Front. Sup.</th>
+                                <th>Front. Inf.</th>
+                                <th>Front. Sup.</th>
                                 <th>Marca (Xi)</th>
                                 <th>Frec (Fi)</th>
                                 <th>Xi · Fi</th>
@@ -400,14 +437,24 @@
                     </table>
                 </div>
 
-                <div class="chart-container">
+                <div class="chart-container-full">
                     <h3>Histograma de Frecuencias</h3>
                     <canvas id="histogramChart"></canvas>
                 </div>
 
-                <div class="chart-container">
-                    <h3>Diagrama de Caja (Box Plot Representativo)</h3>
-                    <canvas id="boxplotChart"></canvas>
+                <div class="charts-grid">
+                    <div class="chart-container">
+                        <h3>Frecuencias (Pastel)</h3>
+                        <div class="pie-wrapper">
+                            <canvas id="pieChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Diagrama de Caja</h3>
+                        <div style="width: 100%; margin: auto 0;">
+                            <canvas id="boxplotChart"></canvas>
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -464,6 +511,7 @@
     <script>
         let histogramInstance = null;
         let boxplotInstance = null;
+        let pieInstance = null;
 
         // --- Lógica del Switch de Tema ---
         const themeToggleBtn = document.getElementById('theme-toggle');
@@ -559,7 +607,7 @@
             }
             document.getElementById('stat-moda').innerText = (modas.length === Object.keys(frecuencias).length || maxFrec === 1) ? "No hay" : modas.join(', ');
 
-            // Varianza y Desviación Estándar Muestral (n-1)
+            // Varianza y Desviación Estándar
             let varianzaMuestral = 0;
             let desvEstandar = 0;
             if (n > 1) {
@@ -572,12 +620,16 @@
                 document.getElementById('stat-desviacion').innerText = "N/A";
             }
 
-            // Generar Tabla de Frecuencias Agrupada (Sturges)
+            // --- VARIABLES CLAVE: Rango, K y Amplitud ---
             const numClases = Math.max(1, Math.ceil(1 + 3.322 * Math.log10(n)));
             const valorMin = datos[0];
             const valorMax = datos[n - 1];
             const rango = valorMax - valorMin;
             const anchoClase = rango === 0 ? 1 : rango / numClases;
+
+            document.getElementById('stat-rango').innerText = fmt(rango);
+            document.getElementById('stat-k').innerText = numClases;
+            document.getElementById('stat-amplitud').innerText = fmt(anchoClase);
 
             let tbody = document.querySelector('#frecuencias-table tbody');
             tbody.innerHTML = "";
@@ -588,11 +640,8 @@
             let limInferior = valorMin;
             for (let i = 0; i < numClases; i++) {
                 let limSuperior = limInferior + anchoClase;
-                
-                // ¡Fronteras calculadas de nuevo!
                 let fronInf = limInferior - 0.5;
                 let fronSup = limSuperior + 0.5;
-                
                 let marcaClase = (limInferior + limSuperior) / 2;
 
                 let frecAbs = datos.filter(v => {
@@ -600,7 +649,6 @@
                     return v >= limInferior && v < limSuperior;
                 }).length;
 
-                // --- CÁLCULOS AVANZADOS ---
                 let xi_fi = marcaClase * frecAbs;
                 let xi_media = marcaClase - media;
                 let xi_media_f = xi_media * frecAbs;
@@ -614,7 +662,9 @@
                     <td>${i + 1}</td>
                     <td>${fmt(limInferior)}</td>
                     <td>${fmt(limSuperior)}</td>
-                    <td>${fmt(fronInf)}</td>  <td>${fmt(fronSup)}</td>  <td>${fmt(marcaClase)}</td>
+                    <td>${fmt(fronInf)}</td>
+                    <td>${fmt(fronSup)}</td>
+                    <td>${fmt(marcaClase)}</td>
                     <td>${frecAbs}</td>
                     <td style="color: var(--neon-blue);">${fmt(xi_fi)}</td>
                     <td>${fmt(xi_media)}</td>
@@ -629,6 +679,7 @@
 
             let labelsGraficas = labelsClases.map((_, index) => `Clase ${index + 1}`);
             renderizarHistograma(labelsGraficas, conteosClases);
+            renderizarPastel(labelsGraficas, conteosClases); 
             renderizarBoxplot(valorMin, mediana, valorMax, media);
         }
 
@@ -673,6 +724,47 @@
                     }]
                 },
                 options: { scales: { y: { beginAtZero: true, grid: { color: gridColor } }, x: { grid: { display: false } } } }
+            });
+        }
+
+        function renderizarPastel(labels, datos) {
+            if (pieInstance) pieInstance.destroy();
+            const ctx = document.getElementById('pieChart').getContext('2d');
+            const isLight = document.body.classList.contains('light-theme');
+
+            const bgColors = [
+                isLight ? 'rgba(189, 44, 13, 0.8)' : 'rgba(66, 211, 242, 0.8)', 
+                isLight ? 'rgba(0, 114, 255, 0.8)' : 'rgba(0, 198, 255, 0.8)',  
+                isLight ? 'rgba(5, 150, 105, 0.8)' : 'rgba(57, 255, 20, 0.8)',   
+                isLight ? 'rgba(220, 38, 38, 0.8)' : 'rgba(255, 59, 48, 0.8)',   
+                isLight ? 'rgba(234, 179, 8, 0.8)'  : 'rgba(255, 214, 10, 0.8)',   
+                isLight ? 'rgba(147, 51, 234, 0.8)' : 'rgba(191, 90, 242, 0.8)'  
+            ];
+            
+            const dynamicColors = labels.map((_, i) => bgColors[i % bgColors.length]);
+            const borderColor = isLight ? '#ffffff' : '#161920';
+            const textColor = isLight ? '#0f172a' : '#e2e8f0';
+
+            pieInstance = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: datos,
+                        backgroundColor: dynamicColors,
+                        borderColor: borderColor,
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: textColor }
+                        }
+                    }
+                }
             });
         }
 
