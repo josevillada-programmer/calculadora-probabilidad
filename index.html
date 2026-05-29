@@ -13,7 +13,7 @@
             --bg-dark: #0d0e12;
             --card-bg: #161920;
             --input-bg: #1f232e;
-            --neon-blue: #42D3F2; /* <-- Tu nuevo azul */
+            --neon-blue: #42D3F2; 
             --tech-blue: #0072ff;
             --gradient-end: #00c6ff; 
             --neon-green: #39ff14;
@@ -23,7 +23,7 @@
             
             --glass-bg: rgba(0, 0, 0, 0.3);
             --glass-card: rgba(0, 0, 0, 0.2);
-            --border-glow: rgba(66, 211, 242, 0.2); /* <-- Brillo ajustado a tu nuevo azul */
+            --border-glow: rgba(66, 211, 242, 0.2); 
         }
 
         /* TEMA CLARO (Inverso con tu color #bd2c0d) */
@@ -215,10 +215,12 @@
             letter-spacing: 0.5px;
         }
 
+        /* ESCUDO CSS PARA NÚMEROS GIGANTES */
         .result-card p {
             font-size: 1.1rem;
             font-weight: bold;
             color: var(--text-main);
+            word-break: break-all; /* <-- Fuerza el salto de línea para evitar desbordes */
         }
 
         .table-container {
@@ -248,6 +250,7 @@
             padding: 10px;
             border-bottom: 1px solid var(--border-glow);
             color: var(--text-main);
+            word-break: break-all; /* <-- Aplica también a la tabla para que no se deforme */
         }
 
         .prob-section {
@@ -525,7 +528,9 @@
             // Media
             const suma = datos.reduce((acc, curr) => acc + curr, 0);
             const media = suma / n;
-            document.getElementById('stat-media').innerText = media.toFixed(2);
+            
+            // FORMATEO ANTI-NÚMEROS INFINITOS
+            document.getElementById('stat-media').innerText = media > 1e10 ? media.toExponential(4) : media.toFixed(2);
 
             // Mediana
             let mediana;
@@ -534,7 +539,7 @@
             } else {
                 mediana = datos[Math.floor(n / 2)];
             }
-            document.getElementById('stat-mediana').innerText = mediana.toFixed(2);
+            document.getElementById('stat-mediana').innerText = mediana > 1e10 ? mediana.toExponential(4) : mediana.toFixed(2);
 
             // Moda
             let frecuencias = {};
@@ -556,8 +561,10 @@
             if (n > 1) {
                 varianzaMuestral = datos.reduce((acc, v) => acc + Math.pow(v - media, 2), 0) / (n - 1);
                 desvEstandar = Math.sqrt(varianzaMuestral);
-                document.getElementById('stat-varianza').innerText = varianzaMuestral.toFixed(4);
-                document.getElementById('stat-desviacion').innerText = desvEstandar.toFixed(4);
+                
+                // FORMATEO ANTI-NÚMEROS INFINITOS
+                document.getElementById('stat-varianza').innerText = varianzaMuestral > 1e10 ? varianzaMuestral.toExponential(4) : varianzaMuestral.toFixed(4);
+                document.getElementById('stat-desviacion').innerText = desvEstandar > 1e10 ? desvEstandar.toExponential(4) : desvEstandar.toFixed(4);
             } else {
                 document.getElementById('stat-varianza').innerText = "N/A";
                 document.getElementById('stat-desviacion').innerText = "N/A";
@@ -588,16 +595,16 @@
                     return v >= limInferior && v < limSuperior;
                 }).length;
 
-                labelsClases.push(`[${limInferior.toFixed(1)} - ${limSuperior.toFixed(1)}]`);
+                labelsClases.push(`[${limInferior.toExponential(1)} - ${limSuperior.toExponential(1)}]`);
                 conteosClases.push(frecAbs);
 
                 let row = `<tr>
                     <td>${i + 1}</td>
-                    <td>${limInferior.toFixed(2)}</td>
-                    <td>${limSuperior.toFixed(2)}</td>
-                    <td>${fronInf.toFixed(2)}</td>
-                    <td>${fronSup.toFixed(2)}</td>
-                    <td>${marcaClase.toFixed(2)}</td>
+                    <td>${limInferior > 1e10 ? limInferior.toExponential(2) : limInferior.toFixed(2)}</td>
+                    <td>${limSuperior > 1e10 ? limSuperior.toExponential(2) : limSuperior.toFixed(2)}</td>
+                    <td>${fronInf > 1e10 ? fronInf.toExponential(2) : fronInf.toFixed(2)}</td>
+                    <td>${fronSup > 1e10 ? fronSup.toExponential(2) : fronSup.toFixed(2)}</td>
+                    <td>${marcaClase > 1e10 ? marcaClase.toExponential(2) : marcaClase.toFixed(2)}</td>
                     <td>${frecAbs}</td>
                 </tr>`;
                 tbody.innerHTML += row;
@@ -605,7 +612,9 @@
                 limInferior = limSuperior;
             }
 
-            renderizarHistograma(labelsClases, conteosClases);
+            // Pasamos etiquetas genéricas a las gráficas para que no exploten si los números son enormes
+            let labelsGraficas = labelsClases.map((_, index) => `Clase ${index + 1}`);
+            renderizarHistograma(labelsGraficas, conteosClases);
             renderizarBoxplot(valorMin, mediana, valorMax, media);
         }
 
@@ -621,17 +630,17 @@
 
             let index = (p / 100) * (datos.length - 1);
             let result = Number.isInteger(index) ? datos[index] : datos[Math.floor(index)] + (index % 1) * (datos[Math.ceil(index)] - datos[Math.floor(index)]);
-            document.getElementById('pos-result').innerText = result.toFixed(2);
+            
+            document.getElementById('pos-result').innerText = result > 1e10 ? result.toExponential(4) : result.toFixed(2);
         }
 
-        // Renderizadores de Gráficos (Ajustados al nuevo azul #42D3F2 en el modo oscuro)
+        // Renderizadores de Gráficos 
         function renderizarHistograma(labels, datos) {
             if (histogramInstance) histogramInstance.destroy();
             const ctx = document.getElementById('histogramChart').getContext('2d');
             const isLight = document.body.classList.contains('light-theme');
             
             const gridColor = isLight ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.05)';
-            // En modo oscuro ahora usa el RGBA de tu nuevo azul #42D3F2
             const barColor = isLight ? 'rgba(189, 44, 13, 0.4)' : 'rgba(66, 211, 242, 0.4)';
             const borderColor = isLight ? '#bd2c0d' : '#42D3F2';
 
