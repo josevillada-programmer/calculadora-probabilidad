@@ -13,9 +13,9 @@
             --bg-dark: #0d0e12;
             --card-bg: #161920;
             --input-bg: #1f232e;
-            --neon-blue: #00f0ff;
+            --neon-blue: #42D3F2; /* <-- Tu nuevo azul */
             --tech-blue: #0072ff;
-            --gradient-end: #00c6ff; /* Variable para el degradado del botón */
+            --gradient-end: #00c6ff; 
             --neon-green: #39ff14;
             --neon-red: #ff3b30;
             --text-main: #e2e8f0;
@@ -23,7 +23,7 @@
             
             --glass-bg: rgba(0, 0, 0, 0.3);
             --glass-card: rgba(0, 0, 0, 0.2);
-            --border-glow: rgba(0, 240, 255, 0.2);
+            --border-glow: rgba(66, 211, 242, 0.2); /* <-- Brillo ajustado a tu nuevo azul */
         }
 
         /* TEMA CLARO (Inverso con tu color #bd2c0d) */
@@ -31,9 +31,9 @@
             --bg-dark: #f0f2f5;
             --card-bg: #ffffff;
             --input-bg: #e2e8f0;
-            --neon-blue: #bd2c0d; /* Tu color personalizado */
-            --tech-blue: #bd2c0d; /* Tu color personalizado */
-            --gradient-end: #e84521; /* Un tono naranja/rojo para que el degradado se vea genial */
+            --neon-blue: #bd2c0d; 
+            --tech-blue: #bd2c0d; 
+            --gradient-end: #e84521; 
             --neon-green: #059669; 
             --neon-red: #dc2626; 
             --text-main: #0f172a; 
@@ -41,7 +41,7 @@
             
             --glass-bg: rgba(0, 0, 0, 0.05);
             --glass-card: rgba(0, 0, 0, 0.02);
-            --border-glow: rgba(189, 44, 13, 0.2); /* Es el RGB de #bd2c0d con opacidad */
+            --border-glow: rgba(189, 44, 13, 0.2); 
         }
 
         * {
@@ -624,16 +624,16 @@
             document.getElementById('pos-result').innerText = result.toFixed(2);
         }
 
-        // Renderizadores de Gráficos (Ajustados con #bd2c0d para tema claro)
+        // Renderizadores de Gráficos (Ajustados al nuevo azul #42D3F2 en el modo oscuro)
         function renderizarHistograma(labels, datos) {
             if (histogramInstance) histogramInstance.destroy();
             const ctx = document.getElementById('histogramChart').getContext('2d');
             const isLight = document.body.classList.contains('light-theme');
             
             const gridColor = isLight ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.05)';
-            // En tema claro, las barras toman el color #bd2c0d con un poco de transparencia
-            const barColor = isLight ? 'rgba(189, 44, 13, 0.4)' : 'rgba(0, 240, 255, 0.4)';
-            const borderColor = isLight ? '#bd2c0d' : '#00f0ff';
+            // En modo oscuro ahora usa el RGBA de tu nuevo azul #42D3F2
+            const barColor = isLight ? 'rgba(189, 44, 13, 0.4)' : 'rgba(66, 211, 242, 0.4)';
+            const borderColor = isLight ? '#bd2c0d' : '#42D3F2';
 
             histogramInstance = new Chart(ctx, {
                 type: 'bar',
@@ -659,7 +659,6 @@
             const isLight = document.body.classList.contains('light-theme');
             
             const gridColor = isLight ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.05)';
-            // También la Media Muestra cambia a tu color en el boxplot para tema claro
             const mediaMuestraColor = isLight ? '#bd2c0d' : '#0072ff';
 
             boxplotInstance = new Chart(ctx, {
