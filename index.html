@@ -20,7 +20,6 @@
             --text-main: #e2e8f0;
             --text-muted: #708096;
             
-            /* Nuevas variables para fondos translúcidos */
             --glass-bg: rgba(0, 0, 0, 0.3);
             --glass-card: rgba(0, 0, 0, 0.2);
             --border-glow: rgba(0, 240, 255, 0.2);
@@ -31,11 +30,11 @@
             --bg-dark: #f0f2f5;
             --card-bg: #ffffff;
             --input-bg: #e2e8f0;
-            --neon-blue: #0056b3; /* Azul más oscuro para contraste en fondo blanco */
+            --neon-blue: #0056b3; 
             --tech-blue: #0072ff;
-            --neon-green: #059669; /* Verde oscuro */
-            --neon-red: #dc2626; /* Rojo oscuro */
-            --text-main: #0f172a; /* Texto casi negro */
+            --neon-green: #059669; 
+            --neon-red: #dc2626; 
+            --text-main: #0f172a; 
             --text-muted: #64748b;
             
             --glass-bg: rgba(0, 0, 0, 0.05);
@@ -61,7 +60,6 @@
             transition: background-color 0.3s, color 0.3s;
         }
 
-        /* Botón para cambiar de tema */
         .theme-toggle-btn {
             position: absolute;
             top: 20px;
@@ -492,7 +490,8 @@
             const reader = new FileReader();
             reader.onload = function(e) {
                 const text = e.target.result;
-                let coincidencias = text.match(/\d+(\.\d+)?/g);
+                // ACTUALIZACIÓN DE REGEX: Acepta decimales que empiecen con punto
+                let coincidencias = text.match(/\d*\.?\d+/g);
                 let valores = coincidencias ? coincidencias.map(Number) : [];
                 document.getElementById('manual-data').value = valores.join(', ');
             };
@@ -507,7 +506,9 @@
                 return;
             }
             
-            let coincidencias = inputString.match(/\d+(\.\d+)?/g);
+            // ACTUALIZACIÓN DE REGEX: /\d*\.?\d+/g 
+            // Esto permite capturar números como .7, 0.7, 7, o 7. sin problema.
+            let coincidencias = inputString.match(/\d*\.?\d+/g);
             
             if (!coincidencias || coincidencias.length === 0) {
                 alert("No se encontraron números válidos.");
@@ -624,7 +625,7 @@
             document.getElementById('pos-result').innerText = result.toFixed(2);
         }
 
-        // Renderizadores de Gráficos (Actualizados para leer el tema)
+        // Renderizadores de Gráficos
         function renderizarHistograma(labels, datos) {
             if (histogramInstance) histogramInstance.destroy();
             const ctx = document.getElementById('histogramChart').getContext('2d');
