@@ -83,7 +83,7 @@
         .main-calculator-card {
             background-color: var(--card-bg);
             width: 100%;
-            max-width: 900px; /* Un poco más ancho para que quepa la súper tabla */
+            max-width: 950px; /* Un pelín más ancho para que luzca la súper tabla */
             border-radius: 16px;
             border: 1px solid var(--border-glow);
             box-shadow: 0 0 30px var(--border-glow);
@@ -234,7 +234,7 @@
             width: 100%;
             border-collapse: collapse;
             text-align: center;
-            font-size: 0.75rem; /* Un poco más pequeña para que quepan todas las columnas */
+            font-size: 0.75rem; 
             background-color: var(--glass-bg);
         }
 
@@ -243,7 +243,7 @@
             color: var(--neon-blue);
             padding: 10px 5px;
             font-weight: bold;
-            white-space: nowrap; /* Evita que los títulos se rompan feo */
+            white-space: nowrap; 
         }
 
         td {
@@ -384,6 +384,7 @@
                                 <th>Clase</th>
                                 <th>Lím. Inf.</th>
                                 <th>Lím. Sup.</th>
+                                <th>Front. Inf.</th> <th>Front. Sup.</th>
                                 <th>Marca (Xi)</th>
                                 <th>Frec (Fi)</th>
                                 <th>Xi · Fi</th>
@@ -394,7 +395,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr><td colspan="10" style="color: var(--text-muted);">Ningún dato procesado aún</td></tr>
+                            <tr><td colspan="12" style="color: var(--text-muted);">Ningún dato procesado aún</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -507,7 +508,6 @@
         // --- Helper para formatear números de la tabla de forma limpia ---
         function fmt(num) {
             if (Math.abs(num) > 1e10) return num.toExponential(4);
-            // Redondea a 4 decimales máximo para que se parezca a lo que harías a mano
             return Number(num.toFixed(4)); 
         }
 
@@ -532,7 +532,7 @@
             const n = datos.length;
             document.getElementById('stat-n').innerText = n;
 
-            // Media cruda
+            // Media
             const suma = datos.reduce((acc, curr) => acc + curr, 0);
             const media = suma / n;
             document.getElementById('stat-media').innerText = media > 1e10 ? media.toExponential(4) : media.toFixed(2);
@@ -588,6 +588,11 @@
             let limInferior = valorMin;
             for (let i = 0; i < numClases; i++) {
                 let limSuperior = limInferior + anchoClase;
+                
+                // ¡Fronteras calculadas de nuevo!
+                let fronInf = limInferior - 0.5;
+                let fronSup = limSuperior + 0.5;
+                
                 let marcaClase = (limInferior + limSuperior) / 2;
 
                 let frecAbs = datos.filter(v => {
@@ -595,13 +600,12 @@
                     return v >= limInferior && v < limSuperior;
                 }).length;
 
-                // --- CÁLCULOS AVANZADOS PARA LA TABLA ---
+                // --- CÁLCULOS AVANZADOS ---
                 let xi_fi = marcaClase * frecAbs;
                 let xi_media = marcaClase - media;
                 let xi_media_f = xi_media * frecAbs;
                 let xi_media_sq = Math.pow(xi_media, 2);
                 let xi_media_sq_f = xi_media_sq * frecAbs;
-                // -----------------------------------------
 
                 labelsClases.push(`[${limInferior.toExponential(1)} - ${limSuperior.toExponential(1)}]`);
                 conteosClases.push(frecAbs);
@@ -610,7 +614,7 @@
                     <td>${i + 1}</td>
                     <td>${fmt(limInferior)}</td>
                     <td>${fmt(limSuperior)}</td>
-                    <td>${fmt(marcaClase)}</td>
+                    <td>${fmt(fronInf)}</td>  <td>${fmt(fronSup)}</td>  <td>${fmt(marcaClase)}</td>
                     <td>${frecAbs}</td>
                     <td style="color: var(--neon-blue);">${fmt(xi_fi)}</td>
                     <td>${fmt(xi_media)}</td>
