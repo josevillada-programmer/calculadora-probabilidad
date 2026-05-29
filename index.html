@@ -26,7 +26,7 @@
             --border-glow: rgba(66, 211, 242, 0.2); 
         }
 
-        /* TEMA CLARO (Inverso con tu color #bd2c0d) */
+        /* TEMA CLARO (Inverso) */
         body.light-theme {
             --bg-dark: #f0f2f5;
             --card-bg: #ffffff;
@@ -83,7 +83,7 @@
         .main-calculator-card {
             background-color: var(--card-bg);
             width: 100%;
-            max-width: 700px;
+            max-width: 900px; /* Un poco más ancho para que quepa la súper tabla */
             border-radius: 16px;
             border: 1px solid var(--border-glow);
             box-shadow: 0 0 30px var(--border-glow);
@@ -215,12 +215,11 @@
             letter-spacing: 0.5px;
         }
 
-        /* ESCUDO CSS PARA NÚMEROS GIGANTES */
         .result-card p {
             font-size: 1.1rem;
             font-weight: bold;
             color: var(--text-main);
-            word-break: break-all; /* <-- Fuerza el salto de línea para evitar desbordes */
+            word-break: break-all;
         }
 
         .table-container {
@@ -235,22 +234,23 @@
             width: 100%;
             border-collapse: collapse;
             text-align: center;
-            font-size: 0.85rem;
+            font-size: 0.75rem; /* Un poco más pequeña para que quepan todas las columnas */
             background-color: var(--glass-bg);
         }
 
         th {
             background-color: var(--border-glow);
             color: var(--neon-blue);
-            padding: 10px;
+            padding: 10px 5px;
             font-weight: bold;
+            white-space: nowrap; /* Evita que los títulos se rompan feo */
         }
 
         td {
-            padding: 10px;
+            padding: 10px 5px;
             border-bottom: 1px solid var(--border-glow);
             color: var(--text-main);
-            word-break: break-all; /* <-- Aplica también a la tabla para que no se deforme */
+            word-break: break-all;
         }
 
         .prob-section {
@@ -376,22 +376,25 @@
                     <p style="font-size: 1rem; color: var(--text-main); margin-bottom: 15px;">Resultado Posición: <span id="pos-result" style="color: var(--neon-blue); font-weight: bold;">-</span></p>
                 </div>
 
-                <h3>Tabla de Distribución de Frecuencias</h3>
+                <h3>Tabla de Distribución de Frecuencias (Avanzada)</h3>
                 <div class="table-container">
                     <table id="frecuencias-table">
                         <thead>
                             <tr>
                                 <th>Clase</th>
-                                <th>Lím. Inferior</th>
-                                <th>Lím. Superior</th>
-                                <th>Frontera Inf.</th>
-                                <th>Frontera Sup.</th>
+                                <th>Lím. Inf.</th>
+                                <th>Lím. Sup.</th>
                                 <th>Marca (Xi)</th>
-                                <th>Frec. Abs (Fi)</th>
+                                <th>Frec (Fi)</th>
+                                <th>Xi · Fi</th>
+                                <th>Xi - x̄</th>
+                                <th>(Xi - x̄) · Fi</th>
+                                <th>(Xi - x̄)²</th>
+                                <th>(Xi - x̄)² · Fi</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr><td colspan="7" style="color: var(--text-muted);">Ningún dato procesado aún</td></tr>
+                            <tr><td colspan="10" style="color: var(--text-muted);">Ningún dato procesado aún</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -468,7 +471,6 @@
             const isLight = document.body.classList.contains('light-theme');
             themeToggleBtn.innerText = isLight ? '🌙 Tema Oscuro' : '☀️ Tema Claro';
             
-            // Si ya hay datos cargados, redibujamos las gráficas para que cambien sus colores
             if (window.currentDataset && document.getElementById('stat-n').innerText !== "-") {
                 procesarEstadistica();
             }
@@ -502,6 +504,13 @@
             reader.readAsText(file);
         }
 
+        // --- Helper para formatear números de la tabla de forma limpia ---
+        function fmt(num) {
+            if (Math.abs(num) > 1e10) return num.toExponential(4);
+            // Redondea a 4 decimales máximo para que se parezca a lo que harías a mano
+            return Number(num.toFixed(4)); 
+        }
+
         // --- Módulo 1: Motor Estadístico Completo ---
         function procesarEstadistica() {
             let inputString = document.getElementById('manual-data').value;
@@ -511,25 +520,21 @@
             }
             
             let coincidencias = inputString.match(/\d*\.?\d+/g);
-            
             if (!coincidencias || coincidencias.length === 0) {
                 alert("No se encontraron números válidos.");
                 return;
             }
 
             let datos = coincidencias.map(n => parseFloat(n));
-
             datos.sort((a, b) => a - b);
             window.currentDataset = datos;
 
             const n = datos.length;
             document.getElementById('stat-n').innerText = n;
 
-            // Media
+            // Media cruda
             const suma = datos.reduce((acc, curr) => acc + curr, 0);
             const media = suma / n;
-            
-            // FORMATEO ANTI-NÚMEROS INFINITOS
             document.getElementById('stat-media').innerText = media > 1e10 ? media.toExponential(4) : media.toFixed(2);
 
             // Mediana
@@ -557,12 +562,9 @@
             // Varianza y Desviación Estándar Muestral (n-1)
             let varianzaMuestral = 0;
             let desvEstandar = 0;
-            
             if (n > 1) {
                 varianzaMuestral = datos.reduce((acc, v) => acc + Math.pow(v - media, 2), 0) / (n - 1);
                 desvEstandar = Math.sqrt(varianzaMuestral);
-                
-                // FORMATEO ANTI-NÚMEROS INFINITOS
                 document.getElementById('stat-varianza').innerText = varianzaMuestral > 1e10 ? varianzaMuestral.toExponential(4) : varianzaMuestral.toFixed(4);
                 document.getElementById('stat-desviacion').innerText = desvEstandar > 1e10 ? desvEstandar.toExponential(4) : desvEstandar.toFixed(4);
             } else {
@@ -586,8 +588,6 @@
             let limInferior = valorMin;
             for (let i = 0; i < numClases; i++) {
                 let limSuperior = limInferior + anchoClase;
-                let fronInf = limInferior - 0.5;
-                let fronSup = limSuperior + 0.5;
                 let marcaClase = (limInferior + limSuperior) / 2;
 
                 let frecAbs = datos.filter(v => {
@@ -595,24 +595,34 @@
                     return v >= limInferior && v < limSuperior;
                 }).length;
 
+                // --- CÁLCULOS AVANZADOS PARA LA TABLA ---
+                let xi_fi = marcaClase * frecAbs;
+                let xi_media = marcaClase - media;
+                let xi_media_f = xi_media * frecAbs;
+                let xi_media_sq = Math.pow(xi_media, 2);
+                let xi_media_sq_f = xi_media_sq * frecAbs;
+                // -----------------------------------------
+
                 labelsClases.push(`[${limInferior.toExponential(1)} - ${limSuperior.toExponential(1)}]`);
                 conteosClases.push(frecAbs);
 
                 let row = `<tr>
                     <td>${i + 1}</td>
-                    <td>${limInferior > 1e10 ? limInferior.toExponential(2) : limInferior.toFixed(2)}</td>
-                    <td>${limSuperior > 1e10 ? limSuperior.toExponential(2) : limSuperior.toFixed(2)}</td>
-                    <td>${fronInf > 1e10 ? fronInf.toExponential(2) : fronInf.toFixed(2)}</td>
-                    <td>${fronSup > 1e10 ? fronSup.toExponential(2) : fronSup.toFixed(2)}</td>
-                    <td>${marcaClase > 1e10 ? marcaClase.toExponential(2) : marcaClase.toFixed(2)}</td>
+                    <td>${fmt(limInferior)}</td>
+                    <td>${fmt(limSuperior)}</td>
+                    <td>${fmt(marcaClase)}</td>
                     <td>${frecAbs}</td>
+                    <td style="color: var(--neon-blue);">${fmt(xi_fi)}</td>
+                    <td>${fmt(xi_media)}</td>
+                    <td>${fmt(xi_media_f)}</td>
+                    <td>${fmt(xi_media_sq)}</td>
+                    <td style="color: var(--neon-red); font-weight: bold;">${fmt(xi_media_sq_f)}</td>
                 </tr>`;
                 tbody.innerHTML += row;
 
                 limInferior = limSuperior;
             }
 
-            // Pasamos etiquetas genéricas a las gráficas para que no exploten si los números son enormes
             let labelsGraficas = labelsClases.map((_, index) => `Clase ${index + 1}`);
             renderizarHistograma(labelsGraficas, conteosClases);
             renderizarBoxplot(valorMin, mediana, valorMax, media);
