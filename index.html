@@ -169,11 +169,14 @@
             text-align: center;
         }
 
+        /* --- ¡AQUÍ ESTÁ EL CAMBIO! --- */
         .result-card h4 {
             font-size: 0.75rem;
-            color: var(--text-muted);
+            color: var(--neon-blue); /* Cambiado para mayor visibilidad */
             margin-bottom: 5px;
+            letter-spacing: 0.5px; /* Un toque extra para que se vea mejor */
         }
+        /* ----------------------------- */
 
         .result-card p {
             font-size: 1.1rem;
@@ -425,12 +428,10 @@
         }
 
         // --- Restricción del Textarea para Datos Manuales ---
-        // ESTA ES LA ÚNICA PARTE NUEVA QUE SE AGREGÓ
         const textareaManual = document.getElementById('manual-data');
         textareaManual.addEventListener('input', function() {
             this.value = this.value.replace(/[^0-9, \-.]/g, ''); // Permite números, comas, espacios, signos negativos y puntos decimales
         });
-        // ----------------------------------------------------
 
         // --- Lector Automático de Archivos CSV ---
         function cargarCSV(event) {
