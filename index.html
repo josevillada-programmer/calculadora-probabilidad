@@ -1480,6 +1480,83 @@
             margin-left: 3px;
             opacity: 0.6;
         }
+
+        .license-separator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 18px 0 14px 0;
+        }
+
+        .license-separator-line {
+            flex: 1;
+            height: 1px;
+            background: rgba(66, 211, 242, 0.18);
+        }
+
+        .license-separator-text {
+            font-size: 0.78rem;
+            color: #708096;
+            white-space: nowrap;
+            letter-spacing: 0.5px;
+        }
+
+        .license-input-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 14px;
+            align-items: stretch;
+        }
+
+        .license-key-input {
+            flex: 1;
+            background-color: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(66, 211, 242, 0.25);
+            border-radius: 8px;
+            padding: 11px 14px;
+            color: #e2e8f0;
+            font-size: 0.9rem;
+            font-family: 'Courier New', Courier, monospace;
+            letter-spacing: 1px;
+            margin-bottom: 0;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            width: auto;
+        }
+
+        .license-key-input::placeholder {
+            color: #708096;
+            letter-spacing: 0px;
+        }
+
+        .license-key-input:focus {
+            outline: none;
+            border-color: rgba(66, 211, 242, 0.6);
+            box-shadow: 0 0 12px rgba(66, 211, 242, 0.15);
+        }
+
+        .btn-license-activate {
+            background: linear-gradient(135deg, #0072ff, #00c6ff);
+            color: white;
+            border: none;
+            padding: 11px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            transition: transform 0.15s, box-shadow 0.2s;
+            box-shadow: 0 4px 14px rgba(0, 114, 255, 0.35);
+            flex-shrink: 0;
+        }
+
+        .btn-license-activate:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(0, 114, 255, 0.5);
+        }
+
+        .btn-license-activate:active {
+            transform: scale(0.97);
+        }
     </style>
 </head>
 <body>
@@ -2091,6 +2168,15 @@
             <button class="btn-premium" onclick="window.open('https://paypal.me/jossvill200', '_blank')">
                 &#128640; Desbloquear TITAN PRO &mdash; $4.99/mes
             </button>
+            <div class="license-separator">
+                <span class="license-separator-line"></span>
+                <span class="license-separator-text">&#128273; ¿Ya tienes una clave?</span>
+                <span class="license-separator-line"></span>
+            </div>
+            <div class="license-input-row">
+                <input type="text" id="license-key" class="license-key-input" placeholder="Ingresa tu clave PRO...">
+                <button class="btn-license-activate" onclick="activarPro()">Desbloquear</button>
+            </div>
             <button class="paywall-cancel-btn" onclick="cerrarPremium()">
                 Regresar &mdash; Continuar con la versión gratuita
             </button>
@@ -2127,6 +2213,29 @@
         const tabsGratuitas = ['descriptiva', 'probabilidad'];
 
         function switchTab(tabId) {
+            const titanProActivo = localStorage.getItem('titan_pro_active') === 'true';
+
+            if (titanProActivo) {
+                document.querySelectorAll('.tab-panel').forEach(function(panel) {
+                    panel.classList.remove('active-panel');
+                });
+                document.querySelectorAll('.tab-btn').forEach(function(btn) {
+                    btn.classList.remove('active');
+                });
+                document.getElementById(tabId).classList.add('active-panel');
+                document.getElementById('btn-' + tabId).classList.add('active');
+
+                if (tabId === 'graficadora') {
+                    drawPlot(true);
+                }
+
+                if (tabId === 'algebra') {
+                    renderizarInputMatriz(tamanoMatrizActual);
+                }
+
+                return;
+            }
+
             const esPremium = tabsGratuitas.indexOf(tabId) === -1;
 
             if (esPremium) {
@@ -2149,6 +2258,20 @@
 
             if (tabId === 'algebra') {
                 renderizarInputMatriz(tamanoMatrizActual);
+            }
+        }
+
+        function activarPro() {
+            const claveIngresada = document.getElementById('license-key').value.trim();
+            const claveValida = 'JOSE-TECH-VIP-2026';
+
+            if (claveIngresada === claveValida) {
+                localStorage.setItem('titan_pro_active', 'true');
+                cerrarPremium();
+                alert('¡TITAN PRO Desbloqueado! Bienvenido a la suite completa.');
+                location.reload();
+            } else {
+                alert('Clave inválida. Verifica tu clave o adquiere TITAN PRO.');
             }
         }
 
