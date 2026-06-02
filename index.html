@@ -1,9 +1,656 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <meta http-equiv="Content-Security-Policy" content="
+default-src 'self';
+script-src  'self' 'unsafe-inline' cdn.jsdelivr.net cdnjs.cloudflare.com;
+style-src   'self' 'unsafe-inline';
+img-src     'self' data: blob:;
+connect-src cdn.jsdelivr.net cdnjs.cloudflare.com;
+frame-ancestors 'none';
+form-action 'none';
+base-uri    'self';
+object-src  'none';
+">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora Estadística & Probabilística TITAN</title>
+    <!--
+    ╔═══════════════════════════════════════════════════════════════╗
+    ║  TITAN SECURITY SHIELD v2.0  — PRIMER SCRIPT, NO MOVER       ║
+    ║                                                               ║
+    ║  ÚNICO PASO QUE DEBES HACER ANTES DE SUBIR AL SERVIDOR:      ║
+    ║  1. Abre tu terminal                                          ║
+    ║  2. Ejecuta:                                                  ║
+    ║     node -e "console.log(require('crypto')                    ║
+    ║       .createHash('sha256')                                   ║
+    ║       .update('JOSE-TECH-VIP').digest('hex'))"                ║
+    ║  3. Copia los 64 caracteres que aparecen                      ║
+    ║  4. Pégalos en VALID_HASH abajo (reemplaza el placeholder)    ║
+    ╚═══════════════════════════════════════════════════════════════╝
+    -->
+    <script>
+(function () {
+  'use strict';
+
+  /* ══ CONFIGURACIÓN CENTRAL ══════════════════════════════════ */
+  var _CFG = {
+    // ── Paywall ──────────────────────────────────────────────
+    // ⚠ REEMPLAZA con SHA-256('JOSE-TECH-VIP') generado en terminal
+    VALID_HASH:       'e4c6094c024939399e4ed43e942a7588661fd62483726212824afced44ee7a6d',
+    STORAGE_KEY:      '_tp',    // ← diferente de cualquier otra key del app
+    TIMESTAMP_SUFFIX: '_tt',
+    ATTEMPT_KEY:      '_ta',
+    LOCKOUT_KEY:      '_tl',
+    SESSION_TTL_MS:   8 * 3600 * 1000,   // 8 horas
+    MAX_ATTEMPTS:     5,
+    LOCKOUT_MS:       15 * 60 * 1000,    // 15 min lockout
+    RECHECK_MS:       5 * 60 * 1000,     // re-valida cada 5 min
+    // ── Anti-Debug ──────────────────────────────────────────
+    DBG_INTERVAL_MS:   800,
+    CLR_INTERVAL_MS:   120,
+    DEVTOOLS_THRESHOLD:160,
+    SIZE_CHECK_MS:     500,
+    TIMING_CHECK_MS:   1800,
+    TOSTRING_CHECK_MS: 1500,
+    DOM_CHECK_MS:      3000,
+    NUKE_DELAY_MS:     80
+  };
+
+  /* ══ NÚCLEO: NUKE ════════════════════════════════════════════ */
+  var _nuking = false;
+  function _nuke() {
+    if (_nuking) { return; }
+    _nuking = true;
+    setTimeout(function () {
+      try {
+        document.body.style.cssText = 'visibility:hidden!important;opacity:0!important';
+        document.documentElement.innerHTML = '';
+        window.location.replace('about:blank');
+      } catch (e) {
+        try { window.location.href = 'about:blank'; } catch (e2) {}
+      }
+    }, _CFG.NUKE_DELAY_MS);
+  }
+
+  /* ══ MÓDULO 1 — ANTI-DEBUGGER (7 capas) ════════════════════ */
+  var _AntiDebug = (function () {
+
+    /* Capa 1: Silenciar consola con Object.defineProperty irreversible */
+    function _muteConsole() {
+      var noop = function () { return void 0; };
+      ['log','warn','error','info','debug','dir','table','trace',
+       'group','groupEnd','groupCollapsed','assert','count',
+       'time','timeEnd','timeLog','profile','profileEnd'].forEach(function (m) {
+        try {
+          Object.defineProperty(console, m, {
+            get: function () { return noop; },
+            set: function () {},
+            configurable: false,
+            enumerable:   false
+          });
+        } catch (e) {
+          try { console[m] = noop; } catch (e2) {}
+        }
+      });
+      setInterval(function () {
+        try { console.clear(); } catch (e) {}
+      }, _CFG.CLR_INTERVAL_MS);
+    }
+
+    /* Capa 2: Bucle debugger setInterval */
+    function _debuggerLoop() {
+      setInterval(function () {
+        (function () { debugger; }()); // eslint-disable-line no-debugger
+      }, _CFG.DBG_INTERVAL_MS);
+    }
+
+    /* Capa 3: Timing attack */
+    function _timingTrap() {
+      (function _loop() {
+        var t = performance.now();
+        debugger; // eslint-disable-line no-debugger
+        if ((performance.now() - t) > 100) { _nuke(); return; }
+        setTimeout(_loop, _CFG.TIMING_CHECK_MS);
+      }());
+    }
+
+    /* Capa 4: Diferencia outer vs inner window */
+    function _sizeTrap() {
+      setInterval(function () {
+        if ((window.outerWidth  - window.innerWidth)  > _CFG.DEVTOOLS_THRESHOLD ||
+            (window.outerHeight - window.innerHeight) > _CFG.DEVTOOLS_THRESHOLD) {
+          _nuke();
+        }
+      }, _CFG.SIZE_CHECK_MS);
+    }
+
+    /* Capa 5: RegExp toString trick */
+    function _toStringTrap() {
+      var _s = { d: false };
+      var _re = /./;
+      _re.toString = function () { _s.d = true; return '/./' ; };
+      setInterval(function () {
+        _s.d = false;
+        console.log(_re);
+        if (_s.d) { _nuke(); }
+      }, _CFG.TOSTRING_CHECK_MS);
+    }
+
+    /* Capa 6: Firebug */
+    function _firebugTrap() {
+      setInterval(function () {
+        if (window.console && window.console.firebug)           { _nuke(); }
+        if (typeof window.FirebugConsole !== 'undefined')       { _nuke(); }
+        if (typeof window.Firebug        !== 'undefined')       { _nuke(); }
+      }, 2000);
+    }
+
+    /* Capa 7: Headless / Automation (Puppeteer, Selenium, PhantomJS…) */
+    function _automationTrap() {
+      var checks = [
+        function () { return navigator.webdriver === true; },
+        function () { return !!window.phantom || !!window._phantom || !!window.callPhantom; },
+        function () { return !!window.__nightmare; },
+        function () {
+          return !!(window.__webdriver_evaluate || window.__selenium_evaluate ||
+                    window.__driver_evaluate    || window.__webdriver_script_fn ||
+                    window.__fxdriver_evaluate  || window.__webdriverFunc ||
+                    window.__selenium_unwrapped || window.__webdriverAsyncExecutor);
+        },
+        function () {
+          var el = document.documentElement;
+          return el.getAttribute('webdriver') !== null ||
+                 el.getAttribute('selenium')  !== null;
+        },
+        function () {
+          return (!navigator.plugins || navigator.plugins.length === 0) &&
+                 /HeadlessChrome/i.test(navigator.userAgent);
+        },
+        function () { return !navigator.languages || navigator.languages.length === 0; }
+      ];
+      if (checks.some(function (fn) { try { return !!fn(); } catch (e) { return false; } })) {
+        _nuke();
+      }
+    }
+
+    return {
+      init: function () {
+        _muteConsole();
+        _debuggerLoop();
+        _sizeTrap();
+        _toStringTrap();
+        _firebugTrap();
+        _automationTrap();
+        _timingTrap(); // último — recursivo
+      }
+    };
+  }());
+
+  /* ══ MÓDULO 2 — BLOQUEO DE INSPECCIÓN ══════════════════════ */
+  var _BlockInput = (function () {
+    var BLK   = { 123: 1 };                        // F12
+    var CTRL  = { 85:1, 83:1, 80:1 };              // U, S, P
+    var CTRS  = { 73:1, 74:1, 67:1, 75:1 };        // I, J, C, K
+
+    function _onKeyDown(e) {
+      var k = e.which || e.keyCode, ctrl = e.ctrlKey || e.metaKey, shft = e.shiftKey;
+      if (BLK[k])                    { e.preventDefault(); e.stopImmediatePropagation(); return false; }
+      if (ctrl && !shft && CTRL[k])  { e.preventDefault(); e.stopImmediatePropagation(); return false; }
+      if (ctrl && shft  && CTRS[k])  { e.preventDefault(); e.stopImmediatePropagation(); return false; }
+    }
+    function _onKeyUp(e) {
+      if (e.key === 'PrintScreen' || e.keyCode === 44) {
+        try { navigator.clipboard.writeText('').catch(function(){}); } catch(err) {}
+      }
+    }
+    function _injectCSS() {
+      var s = document.createElement('style');
+      s.id  = '_tsec_css';
+      s.textContent =
+        '*{-webkit-user-select:none!important;-moz-user-select:none!important;' +
+        '-ms-user-select:none!important;user-select:none!important;' +
+        '-webkit-touch-callout:none!important}' +
+        'input,textarea,select{-webkit-user-select:text!important;' +
+        '-moz-user-select:text!important;user-select:text!important}';
+      document.head.appendChild(s);
+    }
+    return {
+      init: function () {
+        document.addEventListener('contextmenu', function (e) { e.preventDefault(); e.stopImmediatePropagation(); return false; }, true);
+        document.addEventListener('keydown',     _onKeyDown, true);
+        document.addEventListener('keyup',       _onKeyUp,   true);
+        document.addEventListener('dragstart',   function (e) { e.preventDefault(); return false; }, true);
+        document.addEventListener('touchstart',  function (e) { if (e.touches.length > 1) e.preventDefault(); }, { passive: false, capture: true });
+        document.addEventListener('touchend',    function (e) { if (!e.target.matches('input,textarea,select')) e.preventDefault(); }, { passive: false, capture: true });
+        _injectCSS();
+      }
+    };
+  }());
+
+  /* ══ MÓDULO 3 — PAYWALL SHA-256 ════════════════════════════ */
+  var _Paywall = (function () {
+
+    function _buf2hex(buf) {
+      return Array.prototype.map.call(new Uint8Array(buf), function (b) {
+        return ('00' + b.toString(16)).slice(-2);
+      }).join('');
+    }
+    function _sha256(str) {
+      return window.crypto.subtle.digest('SHA-256', new TextEncoder().encode(String(str)))
+        .then(function (h) { return _buf2hex(h); });
+    }
+    function _safeEq(a, b) {
+      if (typeof a !== 'string' || typeof b !== 'string' || a.length !== b.length) return false;
+      var d = 0;
+      for (var i = 0; i < a.length; i++) d |= a.charCodeAt(i) ^ b.charCodeAt(i);
+      return d === 0;
+    }
+    function _ls(op, key, val) {
+      try {
+        if (op === 'get') return localStorage.getItem(key);
+        if (op === 'set') localStorage.setItem(key, val);
+        if (op === 'del') localStorage.removeItem(key);
+      } catch (e) { return null; }
+    }
+
+    /* ── Sesión con TTL ─────────────────────────────────────── */
+    function _isSessionValid() {
+      var hash = _ls('get', _CFG.STORAGE_KEY);
+      var ts   = parseInt(_ls('get', _CFG.STORAGE_KEY + _CFG.TIMESTAMP_SUFFIX), 10);
+      if (!_safeEq(hash, _CFG.VALID_HASH)) return false;
+      if (!ts || isNaN(ts)) return false;
+      if ((Date.now() - ts) > _CFG.SESSION_TTL_MS) { _clearSession(); return false; }
+      return true;
+    }
+    function _writeSession() {
+      _ls('set', _CFG.STORAGE_KEY, _CFG.VALID_HASH);
+      _ls('set', _CFG.STORAGE_KEY + _CFG.TIMESTAMP_SUFFIX, String(Date.now()));
+    }
+    function _clearSession() {
+      _ls('del', _CFG.STORAGE_KEY);
+      _ls('del', _CFG.STORAGE_KEY + _CFG.TIMESTAMP_SUFFIX);
+    }
+
+    /* ── Rate limiting ──────────────────────────────────────── */
+    function _isLockedOut() {
+      var t = parseInt(_ls('get', _CFG.LOCKOUT_KEY), 10);
+      if (!t || isNaN(t)) return false;
+      if ((Date.now() - t) < _CFG.LOCKOUT_MS) return true;
+      _ls('del', _CFG.LOCKOUT_KEY); _ls('del', _CFG.ATTEMPT_KEY);
+      return false;
+    }
+    function _lockMinutes() {
+      var t = parseInt(_ls('get', _CFG.LOCKOUT_KEY), 10);
+      if (!t || isNaN(t)) return 0;
+      return Math.max(0, Math.ceil((_CFG.LOCKOUT_MS - (Date.now() - t)) / 60000));
+    }
+    function _recordFailure() {
+      var a = parseInt(_ls('get', _CFG.ATTEMPT_KEY), 10) || 0;
+      a++;
+      if (a >= _CFG.MAX_ATTEMPTS) {
+        _ls('set', _CFG.LOCKOUT_KEY, String(Date.now()));
+        _ls('del', _CFG.ATTEMPT_KEY);
+        return 0;
+      }
+      _ls('set', _CFG.ATTEMPT_KEY, String(a));
+      return _CFG.MAX_ATTEMPTS - a;
+    }
+    function _resetAttempts() {
+      _ls('del', _CFG.ATTEMPT_KEY); _ls('del', _CFG.LOCKOUT_KEY);
+    }
+
+    /* ── Re-validación periódica ────────────────────────────── */
+    function _startRecheck(onExpired) {
+      setInterval(function () {
+        if (!_isSessionValid()) { _clearSession(); if (typeof onExpired === 'function') onExpired(); }
+      }, _CFG.RECHECK_MS);
+    }
+
+    return {
+      checkSession: function (onGranted, onDenied) {
+        if (_isSessionValid()) { if (typeof onGranted==='function') onGranted(); }
+        else                   { if (typeof onDenied ==='function') onDenied();  }
+      },
+      validate: function (userInput, onSuccess, onFailure) {
+        var fail = function (t, d) { if (typeof onFailure==='function') onFailure(t, d||0); };
+        if (_isSessionValid())                           { return typeof onSuccess==='function' && onSuccess(); }
+        if (_isLockedOut())                              { return fail('locked', _lockMinutes()); }
+        if (!window.crypto || !window.crypto.subtle)    { return fail('no-crypto', 0); }
+        _sha256(userInput)
+          .then(function (hash) {
+            if (_safeEq(hash, _CFG.VALID_HASH)) {
+              _resetAttempts(); _writeSession();
+              if (typeof onSuccess==='function') onSuccess();
+            } else {
+              var rem = _recordFailure(); _clearSession();
+              fail(rem === 0 && _isLockedOut() ? 'locked' : 'wrong',
+                   rem === 0 ? _lockMinutes() : rem);
+            }
+          })
+          .catch(function () { fail('error', 0); });
+      },
+      startRecheck: _startRecheck,
+      clear:        _clearSession,
+      isLocked:     _isLockedOut,
+      lockMinutes:  _lockMinutes
+    };
+  }());
+
+  /* ══ MÓDULO 4 — INTEGRIDAD DEL DOM ═════════════════════════ */
+  var _DomGuard = (function () {
+    function _init() {
+      if (window.self !== window.top) {
+        try { window.top.location.replace(window.self.location.href); } catch(e) { _nuke(); }
+      }
+      var _baseline = document.querySelectorAll('script').length;
+      setInterval(function () {
+        if (document.querySelectorAll('script').length < _baseline) { _nuke(); }
+      }, _CFG.DOM_CHECK_MS);
+      if (window.MutationObserver) {
+        new MutationObserver(function (muts) {
+          muts.forEach(function (m) {
+            m.removedNodes.forEach(function (n) {
+              if (n === document.head || n === document.body ||
+                  n.nodeName === 'HEAD' || n.nodeName === 'BODY') { _nuke(); }
+            });
+          });
+        }).observe(document.documentElement, { childList: true, subtree: false });
+      }
+    }
+    return { init: _init };
+  }());
+
+  /* ══ BOOTSTRAP ══════════════════════════════════════════════ */
+
+  /* ════════════════════════════════════════════════════════════
+ * MÓDULO 5 — CORTAFUEGOS DE APLICACIÓN (Client-Side WAF)
+ *
+ * 5 capas:
+ *   A. Domain Lock      — app solo corre en dominios autorizados
+ *   B. Network Firewall — intercepta fetch/XHR y bloquea dominios
+ *   C. XSS Input Filter — limpia inputs con patrones peligrosos
+ *   D. Anti-Exfiltración— bloquea sendBeacon/WebSocket externos
+ *   E. Storage Guard    — monitorea cambios sospechosos en localStorage
+ * ════════════════════════════════════════════════════════════ */
+var _Firewall = (function () {
+
+  /* ── CONFIGURACIÓN DEL CORTAFUEGOS ───────────────────────── */
+  var _FW = {
+    /* Dominios permitidos para correr la app.
+     * Agrega el tuyo. 'localhost' y '' son para desarrollo local. */
+    ALLOWED_DOMAINS: [
+      'localhost',
+      '127.0.0.1',
+      '',              // file:// protocol (desarrollo)
+      'calculadora-pro-master-full-complete.onrender.com', // ← CAMBIA ESTO POR TU DOMINIO REAL
+    ],
+
+    /* URLs permitidas para peticiones de red.
+     * Solo los CDN que usa tu app necesitan estar aquí. */
+    ALLOWED_NETWORK: [
+      'cdn.jsdelivr.net',       // chart.js
+      'cdnjs.cloudflare.com',   // math.js
+      'paypal.com/paypalme/jossvill200',              // link de pago
+    ],
+
+    /* Patrones de XSS/inyección a bloquear en inputs */
+    XSS_PATTERNS: [
+    /<\s*script/i,
+    /javascript\s*:/i,
+      /on\w{2,20}\s*=/i,        // onerror=, onclick=, etc.
+    /eval\s*\(/i,
+    /document\s*\.\s*cookie/i,
+    /window\s*\.\s*location/i,
+    /fetch\s*\(/i,
+    /XMLHttpRequest/i,
+    /import\s*\(/i,
+    /__proto__/i,
+    /constructor\s*\[/i
+    ],
+
+    /* Claves de localStorage que la app legítimamente usa.
+     * Cualquier otra clave creada externamente se elimina. */
+    ALLOWED_STORAGE_KEYS: [
+      '_tp', '_tt', '_ta', '_tl', // security shield
+      'titanHistory'              // historial de calculadora
+    ]
+  };
+
+  /* ── CAPA A: DOMAIN LOCK ─────────────────────────────────────
+   * Si el archivo HTML es robado y subido a otro servidor,
+   * la app se destruye al detectar un dominio no autorizado.  */
+  function _domainLock() {
+    var host = window.location.hostname || '';
+    var allowed = _FW.ALLOWED_DOMAINS.some(function (d) {
+      return d === host || host.endsWith('.' + d);
+    });
+    if (!allowed) {
+      /* Pequeño delay para que no sea evidente el trigger */
+      setTimeout(_nuke, 300);
+    }
+  }
+
+  /* ── CAPA B: NETWORK FIREWALL (fetch + XHR) ──────────────────
+   * Intercepta TODAS las peticiones de red antes de que salgan.
+   * Si el destino no está en ALLOWED_NETWORK, las bloquea.     */
+  function _networkFirewall() {
+    /* ── Interceptar fetch ──────────────────────────────────── */
+    var _originalFetch = window.fetch;
+    window.fetch = function (url, options) {
+      var urlStr  = String(url || '');
+      var allowed = _FW.ALLOWED_NETWORK.some(function (domain) {
+        return urlStr.indexOf(domain) !== -1;
+      });
+      /* Peticiones al mismo origen (relativas) siempre permitidas */
+      var isSameOrigin = urlStr.startsWith('/') || urlStr.startsWith('./') ||
+                         urlStr.startsWith(window.location.origin);
+      if (!allowed && !isSameOrigin) {
+        /* Simula una respuesta vacía para no delatar el bloqueo */
+        return Promise.reject(new TypeError('Network request blocked'));
+      }
+      return _originalFetch.apply(this, arguments);
+    };
+
+    /* ── Interceptar XMLHttpRequest ─────────────────────────── */
+    var _OriginalXHR = window.XMLHttpRequest;
+    window.XMLHttpRequest = function () {
+      var xhr          = new _OriginalXHR();
+      var _originalOpen = xhr.open.bind(xhr);
+
+      xhr.open = function (method, url) {
+        var urlStr  = String(url || '');
+        var allowed = _FW.ALLOWED_NETWORK.some(function (domain) {
+          return urlStr.indexOf(domain) !== -1;
+        });
+        var isSameOrigin = urlStr.startsWith('/') ||
+                           urlStr.startsWith(window.location.origin);
+        if (!allowed && !isSameOrigin) {
+          /* Abort silencioso — el XHR simplemente no viaja */
+          var fakeXHR = new _OriginalXHR();
+          fakeXHR.abort();
+          return;
+        }
+        return _originalOpen.apply(this, arguments);
+      };
+      return xhr;
+    };
+    /* Preservar propiedades estáticas del XHR original */
+    Object.keys(_OriginalXHR).forEach(function (k) {
+      try { window.XMLHttpRequest[k] = _OriginalXHR[k]; } catch(e) {}
+    });
+  }
+
+  /* ── CAPA C: INPUT FIREWALL (XSS Protection) ─────────────────
+   * Escanea en tiempo real los inputs del usuario.
+   * Si detecta un patrón de inyección, limpia el campo.        */
+  function _inputFirewall() {
+    var _scanInput = function (e) {
+      var target = e.target;
+      if (!target || !target.matches('input, textarea')) { return; }
+      var val     = target.value;
+      var isXSS   = _FW.XSS_PATTERNS.some(function (pattern) {
+        return pattern.test(val);
+      });
+      if (isXSS) {
+        /* Limpiar el campo sin levantar sospecha */
+        target.value = val.replace(/<|>/g, '').replace(/javascript:/gi, '');
+        /* Flash visual sutil para el usuario legítimo */
+        var originalBorder  = target.style.border;
+        target.style.border = '1px solid #ff3b30';
+        setTimeout(function () { target.style.border = originalBorder; }, 800);
+      }
+    };
+
+    document.addEventListener('input',  _scanInput, true);
+    document.addEventListener('paste',  function (e) {
+      /* Escanear también el texto pegado */
+      setTimeout(function () {
+        if (e.target && e.target.matches('input, textarea')) {
+          _scanInput({ target: e.target });
+        }
+      }, 0);
+    }, true);
+  }
+
+  /* ── CAPA D: ANTI-EXFILTRACIÓN ───────────────────────────────
+   * Bloquea canales alternativos que podrían usarse para
+   * enviar datos sensibles a servidores externos.              */
+  function _antiExfiltration() {
+    /* sendBeacon: usado para telemetría, puede exfiltrar datos */
+    if (navigator.sendBeacon) {
+      navigator.sendBeacon = function (url) {
+        var urlStr  = String(url || '');
+        var allowed = _FW.ALLOWED_NETWORK.some(function (d) {
+          return urlStr.indexOf(d) !== -1;
+        });
+        return allowed ? navigator.sendBeacon.apply(this, arguments) : false;
+      };
+    }
+
+    /* WebSocket: canal bidireccional, potencialmente peligroso */
+    if (window.WebSocket) {
+      var _OriginalWS = window.WebSocket;
+      window.WebSocket = function (url, protocols) {
+        var urlStr  = String(url || '');
+        var allowed = _FW.ALLOWED_NETWORK.some(function (d) {
+          return urlStr.indexOf(d) !== -1;
+        });
+        if (!allowed) {
+          /* Lanza error que parece de red, no de bloqueo */
+          throw new DOMException('WebSocket connection failed', 'NetworkError');
+        }
+        return protocols
+          ? new _OriginalWS(url, protocols)
+          : new _OriginalWS(url);
+      };
+    }
+
+    /* EventSource (Server-Sent Events): otro canal de salida */
+    if (window.EventSource) {
+      var _OriginalES = window.EventSource;
+      window.EventSource = function (url, init) {
+        var urlStr  = String(url || '');
+        var allowed = _FW.ALLOWED_NETWORK.some(function (d) {
+          return urlStr.indexOf(d) !== -1;
+        });
+        if (!allowed) { throw new DOMException('Connection refused', 'NetworkError'); }
+        return init ? new _OriginalES(url, init) : new _OriginalES(url);
+      };
+    }
+
+    /* navigator.share: podría usarse para exfiltrar datos */
+    if (navigator.share) {
+      var _originalShare = navigator.share.bind(navigator);
+      navigator.share = function (data) {
+        /* Solo permite compartir URLs del propio dominio */
+        if (data && data.url) {
+          var urlStr = String(data.url);
+          var isSafe = urlStr.startsWith(window.location.origin) ||
+                       urlStr.startsWith('/');
+          if (!isSafe) { return Promise.reject(new Error('Share blocked')); }
+        }
+        return _originalShare(data);
+      };
+    }
+  }
+
+  /* ── CAPA E: STORAGE GUARD ───────────────────────────────────
+   * Monitorea localStorage cada 10 segundos.
+   * Si alguien (extensión del navegador, script inyectado)
+   * escribe claves no autorizadas, las elimina.               */
+  function _storageGuard() {
+    function _auditStorage() {
+      try {
+        var keys = Object.keys(localStorage);
+        keys.forEach(function (key) {
+          /* Si la clave no está en la lista blanca, eliminarla */
+          if (_FW.ALLOWED_STORAGE_KEYS.indexOf(key) === -1) {
+            /* Solo eliminar si PARECE inyectada (no es una clave del OS) */
+            var suspicious = /^(__|\$\$|_debug|spy|hook|inject|exfil)/i.test(key);
+            if (suspicious) {
+              localStorage.removeItem(key);
+            }
+          }
+        });
+      } catch (e) { /* localStorage deshabilitado — silencioso */ }
+    }
+    /* Auditar al inicio y cada 10 segundos */
+    _auditStorage();
+    setInterval(_auditStorage, 10000);
+
+    /* También interceptar intentos de escritura sospechosos */
+    var _originalSetItem = localStorage.setItem.bind(localStorage);
+    try {
+      Object.defineProperty(localStorage, 'setItem', {
+        value: function (key, value) {
+          var suspicious = /^(__|\$\$|_debug|spy|hook|inject|exfil)/i.test(String(key));
+          if (!suspicious) {
+            _originalSetItem(key, value);
+          }
+        },
+        writable: false, configurable: false
+      });
+    } catch (e) { /* Safari privado puede lanzar error — ignorar */ }
+  }
+
+  return {
+    init: function () {
+      _domainLock();       // A: verificar dominio inmediatamente
+      _networkFirewall();  // B: interceptar fetch y XHR
+      _inputFirewall();    // C: escanear inputs en tiempo real
+      _antiExfiltration(); // D: bloquear canales de salida
+      _storageGuard();     // E: proteger localStorage
+    }
+  };
+}());
+
+function _boot() {
+    _Firewall.init();
+    _AntiDebug.init();
+    _BlockInput.init();
+    _DomGuard.init();
+    Object.defineProperty(window, '_T', {
+    value: Object.freeze({
+        check:       _Paywall.checkSession.bind(_Paywall),
+        validate:    _Paywall.validate.bind(_Paywall),
+        recheck:     _Paywall.startRecheck.bind(_Paywall),
+        clear:       _Paywall.clear,
+        isLocked:    _Paywall.isLocked,
+        lockMinutes: _Paywall.lockMinutes
+    }),
+    writable: false, configurable: false, enumerable: false
+    });
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', _boot);
+} else {
+    _boot();
+}
+
+}());
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.8.0/math.js"></script>
     <style>
@@ -1181,6 +1828,7 @@
         }
 
         .paywall-card {
+            
             background: linear-gradient(160deg, #0d0e12 0%, #161920 60%, #0a0f1a 100%);
             border: 1px solid rgba(66, 211, 242, 0.35);
             border-radius: 20px;
@@ -1501,6 +2149,17 @@
             letter-spacing: 0.5px;
         }
 
+        /*
+        <p id="license-status-msg" style="
+    text-align: center;
+    font-size: 0.85rem;
+    min-height: 1.3em;
+    margin-bottom: 10px;
+    font-weight: bold;
+    letter-spacing: 0.3px;
+    transition: color 0.2s;
+    "></p>
+        */
         .license-input-row {
             display: flex;
             gap: 8px;
@@ -2130,7 +2789,7 @@
                 Estás intentando acceder a una función avanzada. Actualiza a TITAN PRO y lleva tu análisis al siguiente nivel.
             </p>
             <div class="paywall-price-box">
-                <div class="paywall-price-amount">$79.99 mxn</div>
+                <div class="paywall-price-amount">$9.99 mxn</div>
                 <div class="paywall-price-period">por mes &middot; cancela cuando quieras</div>
                 <div class="paywall-price-note">&#10003; Facturación mensual &nbsp;&middot;&nbsp; &#10003; Sin contratos &nbsp;&middot;&nbsp; &#10003; Acceso inmediato</div>
             </div>
@@ -2166,7 +2825,7 @@
                 </li>
             </ul>
             <button class="btn-premium" onclick="window.open('https://paypal.me/jossvill200', '_blank')">
-                &#128640; Desbloquear TITAN PRO &mdash; $79.99 mxn pago unico
+                &#128640; Desbloquear TITAN PRO &mdash; $9.99 mxn pago unico
             </button>
             <div class="license-separator">
                 <span class="license-separator-line"></span>
@@ -2177,6 +2836,8 @@
                 <input type="text" id="license-key" class="license-key-input" placeholder="Ingresa tu clave PRO...">
                 <button class="btn-license-activate" onclick="activarPro()">Desbloquear</button>
             </div>
+            <button class="paywall-cancel-btn" onclick="cerrarPremium()"></button>
+            <p id="license-status-msg" style="text-align:center;font-size:0.85rem;min-height:1.3em;margin-bottom:10px;font-weight:bold;letter-spacing:0.3px;transition:color 0.2s;"></p>
             <button class="paywall-cancel-btn" onclick="cerrarPremium()">
                 Regresar &mdash; Continuar con la versión gratuita
             </button>
@@ -2212,9 +2873,46 @@
 
         const tabsGratuitas = ['descriptiva', 'probabilidad'];
 
-        function switchTab(tabId) {
-            const titanProActivo = localStorage.getItem('titan_pro_active') === 'true';
+function switchTab(tabId) {
+    var proActivo = false;
+    window._T.check(
+        function () { proActivo = true;  },
+        function () { proActivo = false; }
+    );
 
+    if (proActivo) {
+        document.querySelectorAll('.tab-panel').forEach(function(panel) {
+            panel.classList.remove('active-panel');
+        });
+        document.querySelectorAll('.tab-btn').forEach(function(btn) {
+            btn.classList.remove('active');
+        });
+        document.getElementById(tabId).classList.add('active-panel');
+        document.getElementById('btn-' + tabId).classList.add('active');
+        if (tabId === 'graficadora') { drawPlot(true); }
+        if (tabId === 'algebra')     { renderizarInputMatriz(tamanoMatrizActual); }
+        return;
+    }
+
+    const esPremium = tabsGratuitas.indexOf(tabId) === -1;
+    if (esPremium) {
+        abrirPremium();
+        return;
+    }
+
+    document.querySelectorAll('.tab-panel').forEach(function(panel) {
+        panel.classList.remove('active-panel');
+    });
+    document.querySelectorAll('.tab-btn').forEach(function(btn) {
+        btn.classList.remove('active');
+    });
+    document.getElementById(tabId).classList.add('active-panel');
+    document.getElementById('btn-' + tabId).classList.add('active');
+    if (tabId === 'graficadora') { drawPlot(true); }
+    if (tabId === 'algebra')     { renderizarInputMatriz(tamanoMatrizActual); }
+}
+
+        /*
             if (titanProActivo) {
                 document.querySelectorAll('.tab-panel').forEach(function(panel) {
                     panel.classList.remove('active-panel');
@@ -2261,19 +2959,107 @@
             }
         }
 
-        function activarPro() {
-            const claveIngresada = document.getElementById('license-key').value.trim();
-            const claveValida = 'JOSE-TECH-VIP-2026';
+        */
 
-            if (claveIngresada === claveValida) {
-                localStorage.setItem('titan_pro_active', 'true');
-                cerrarPremium();
-                alert('¡TITAN PRO Desbloqueado! Bienvenido a la suite completa.');
-                location.reload();
-            } else {
-                alert('Clave inválida. Verifica tu clave o adquiere TITAN PRO.');
+        /*
+        function activarPro() {
+            if (titanProActivo) {
+                document.querySelectorAll('.tab-panel').forEach(function(panel) {
+                    panel.classList.remove('active-panel');
+                });
+                document.querySelectorAll('.tab-btn').forEach(function(btn) {
+                    btn.classList.remove('active');
+                });
+                document.getElementById(tabId).classList.add('active-panel');
+                document.getElementById('btn-' + tabId).classList.add('active');
+
+                if (tabId === 'graficadora') {
+                    drawPlot(true);
+                }
+
+                if (tabId === 'algebra') {
+                    renderizarInputMatriz(tamanoMatrizActual);
+                }
+
+                return;
+            }
+
+            const esPremium = tabsGratuitas.indexOf(tabId) === -1;
+
+            if (esPremium) {
+                abrirPremium();
+                return;
+            }
+
+            document.querySelectorAll('.tab-panel').forEach(function(panel) {
+                panel.classList.remove('active-panel');
+            });
+            document.querySelectorAll('.tab-btn').forEach(function(btn) {
+                btn.classList.remove('active');
+            });
+            document.getElementById(tabId).classList.add('active-panel');
+            document.getElementById('btn-' + tabId).classList.add('active');
+
+            if (tabId === 'graficadora') {
+                drawPlot(true);
+            }
+
+            if (tabId === 'algebra') {
+                renderizarInputMatriz(tamanoMatrizActual);
             }
         }
+        */
+
+        function activarPro() {
+    var claveIngresada = document.getElementById('license-key').value.trim();
+    var statusEl       = document.getElementById('license-status-msg');
+    var btnActivar     = document.querySelector('.btn-license-activate');
+
+    function setMsg(txt, color) {
+        statusEl.innerText   = txt;
+        statusEl.style.color = color;
+    }
+
+    if (!claveIngresada) {
+        setMsg('⚠️ Ingresa tu clave antes de continuar.', '#f59e0b');
+        return;
+    }
+
+    if (window._T.isLocked()) {
+        setMsg('🔒 Bloqueado. Espera ' + window._T.lockMinutes() + ' minuto(s).', '#ff3b30');
+        return;
+    }
+
+    btnActivar.disabled  = true;
+    btnActivar.innerText = 'Verificando…';
+    statusEl.innerText   = '';
+
+    window._T.validate(
+        claveIngresada,
+        function () {
+            setMsg('✅ ¡TITAN PRO Desbloqueado! Bienvenido.', '#39ff14');
+            btnActivar.innerText = '✅ Activado';
+            setTimeout(function () {
+                cerrarPremium();
+                location.reload();
+            }, 1200);
+        },
+        function (type, data) {
+            btnActivar.disabled  = false;
+            btnActivar.innerText = 'Desbloquear';
+            document.getElementById('license-key').value = '';
+            var msgs = {
+                'wrong':     data > 0
+                                ? '❌ Clave inválida. Intentos restantes: ' + data
+                                : '🔒 Cuenta bloqueada. Espera ' + window._T.lockMinutes() + ' min.',
+                'locked':    '🔒 Demasiados intentos. Espera ' + data + ' minuto(s).',
+                'no-crypto': '⚠️ Navegador incompatible. Usa Chrome / Firefox / Edge.',
+                'error':     '⚠️ Error interno. Recarga la página.'
+            };
+            setMsg(msgs[type] || '❌ Error desconocido.', '#ff3b30');
+        }
+    );
+}
 
         function abrirPremium() {
             const paywall = document.getElementById('premium-paywall');
@@ -3787,6 +4573,35 @@
         });
 
         renderizarInputMatriz(tamanoMatrizActual);
+        /* ══ INIT SEGURIDAD ══════════════════════════════════════════ */
+(function () {
+    window._T.check(
+        function () {
+            /* Sesión Pro activa — vigilar expiración */
+            window._T.recheck(function () {
+                var panelActivo = document.querySelector('.tab-panel.active-panel');
+                if (panelActivo && tabsGratuitas.indexOf(panelActivo.id) === -1) {
+                    document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active-panel'); });
+                    document.querySelectorAll('.tab-btn').forEach(function(b)   { b.classList.remove('active'); });
+                    document.getElementById('descriptiva').classList.add('active-panel');
+                    document.getElementById('btn-descriptiva').classList.add('active');
+                }
+                setTimeout(function () {
+                    abrirPremium();
+                    var msg = document.getElementById('license-status-msg');
+                    if (msg) {
+                        msg.innerText   = '⏱ Tu sesión Pro expiró. Vuelve a ingresar tu clave.';
+                        msg.style.color = '#f59e0b';
+                    }
+                }, 200);
+            });
+        },
+        function () {
+            /* Sin sesión — limpiar clave vieja si existía */
+            try { localStorage.removeItem('titan_pro_active'); } catch(e) {}
+        }
+    );
+}());
     </script>
 </body>
 </html>
