@@ -2216,6 +2216,210 @@ if (document.readyState === 'loading') {
         .btn-license-activate:active {
             transform: scale(0.97);
         }
+        /* ══════════════════════════════════════════════════
+ * NUEVOS ESTILOS — MEJORAS ACADÉMICAS TITAN
+ * ══════════════════════════════════════════════════ */
+
+/* ── Botón de ayuda contextual ─────────────────── */
+.help-btn {
+    background: none;
+    border: 1px solid var(--neon-blue);
+    color: var(--neon-blue);
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    font-size: 0.85rem;
+    font-weight: bold;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 8px;
+    vertical-align: middle;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+.help-btn:hover { background: var(--neon-blue); color: var(--bg-dark); }
+
+/* ── Modal de ayuda ─────────────────────────────── */
+.titan-help-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(4px);
+    z-index: 199998;
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+    animation: paywallFadeIn 0.2s ease;
+}
+.titan-help-card {
+    background: var(--card-bg);
+    border: 1px solid var(--neon-blue);
+    border-radius: 16px;
+    padding: 30px;
+    max-width: 580px; width: 100%;
+    max-height: 80vh; overflow-y: auto;
+    position: relative;
+    box-shadow: 0 0 40px rgba(66,211,242,0.2);
+}
+.titan-help-card h4 {
+    color: var(--neon-blue);
+    font-size: 1.1rem;
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+}
+.titan-help-card ul {
+    padding-left: 18px;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.9;
+}
+.titan-help-card .help-formula {
+    background: var(--input-bg);
+    border-left: 3px solid var(--neon-blue);
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+    color: var(--neon-blue);
+    margin: 10px 0;
+}
+.titan-help-close {
+    position: absolute; top: 14px; right: 16px;
+    background: rgba(255,59,48,0.12);
+    border: 1px solid rgba(255,59,48,0.35);
+    color: #ff3b30; width: 30px; height: 30px;
+    border-radius: 50%; font-size: 1rem;
+    cursor: pointer; display: flex;
+    align-items: center; justify-content: center;
+    transition: all 0.2s;
+}
+.titan-help-close:hover { background: rgba(255,59,48,0.35); }
+
+/* ── Cards individuales de Combinatoria ─────────── */
+.conteo-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 15px;
+}
+@media (max-width: 600px) {
+    .conteo-cards-grid { grid-template-columns: 1fr; }
+}
+.conteo-card {
+    background: var(--glass-card);
+    border: 1px solid var(--border-glow);
+    border-radius: 10px;
+    padding: 14px;
+    text-align: center;
+    transition: border-color 0.2s;
+}
+.conteo-card:hover { border-color: var(--neon-blue); }
+.conteo-card-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+.conteo-card-value {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: var(--neon-blue);
+    word-break: break-all;
+    min-height: 32px;
+}
+.conteo-error-msg {
+    background: rgba(255,59,48,0.08);
+    border: 1px solid rgba(255,59,48,0.3);
+    border-radius: 8px;
+    padding: 10px 14px;
+    color: #ff3b30;
+    font-size: 0.88rem;
+    margin-top: 10px;
+    display: none;
+    line-height: 1.5;
+}
+
+/* ── Contenedor paso a paso (Estadística) ───────── */
+.paso-a-paso-box {
+    background: var(--input-bg);
+    border: 1px solid var(--border-glow);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 20px 0;
+    font-size: 0.88rem;
+    line-height: 1.9;
+}
+.paso-a-paso-box .pap-title {
+    font-size: 0.75rem;
+    color: var(--neon-blue);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    border-bottom: 1px solid var(--border-glow);
+    padding-bottom: 6px;
+}
+.paso-a-paso-box .pap-line {
+    color: var(--text-muted);
+    padding: 2px 0;
+}
+.paso-a-paso-box .pap-line strong {
+    color: var(--neon-blue);
+    font-weight: bold;
+}
+.paso-a-paso-box .pap-result {
+    margin-top: 8px;
+    color: var(--neon-green);
+    font-weight: bold;
+    font-size: 0.95rem;
+}
+
+/* ── Colores de porcentaje en tabla de frecuencias ─ */
+.pct-alta  { color: #39ff14; font-weight: bold; }
+.pct-media { color: #f59e0b; font-weight: bold; }
+.pct-baja  { color: #42D3F2; }
+
+/* ── Binomio: desarrollo paso a paso ────────────── */
+.binomio-desarrollo {
+    background: var(--input-bg);
+    border: 1px solid var(--border-glow);
+    border-radius: 10px;
+    padding: 16px;
+    margin-top: 14px;
+    display: none;
+}
+.paso-formula {
+    background: var(--glass-card);
+    border-left: 3px solid var(--neon-blue);
+    padding: 8px 12px;
+    border-radius: 4px;
+    margin-bottom: 12px;
+    font-size: 0.85rem;
+    color: var(--neon-blue);
+    font-family: 'Courier New', monospace;
+}
+.paso-item {
+    padding: 5px 0;
+    border-bottom: 1px solid var(--glass-card);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+}
+.paso-k { color: var(--text-main); font-weight: bold; margin-right: 8px; }
+.paso-termino { color: var(--neon-green); font-weight: bold; font-size: 0.95rem; }
+
+/* ── Encabezado de sección con ayuda ────────────── */
+.section-header-row {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    gap: 6px;
+}
+.section-header-row h3 {
+    margin: 0;
+    flex: 1;
+}
     </style>
 </head>
 <body>
@@ -2243,12 +2447,17 @@ if (document.readyState === 'loading') {
 
             <section id="descriptiva" class="tab-panel active-panel">
                 <div class="input-group">
-                    <h3>Ingreso de Datos</h3>
+                    <div class="section-header-row">
+    <h3>Ingreso de Datos</h3>
+    <button class="help-btn" onclick="abrirAyuda('descriptiva')" title="Ayuda de este módulo">?</button>
+</div>
                     <label for="csv-file" class="custom-file-upload">📁 Cargar archivo de datos (CSV)</label>
                     <input type="file" id="csv-file" accept=".csv" onchange="cargarCSV(event)">
                     <p class="or-text">o ingresa datos separados por comas:</p>
                     <textarea id="manual-data" placeholder="Datos"></textarea>
                     <button class="btn-action" onclick="procesarEstadistica()">Calcular Muestra Completa</button>
+                    <!-- Contenedor paso a paso — se llena dinámicamente -->
+                    <div id="pap-estadistica" class="paso-a-paso-box" style="display:none;"></div>
                 </div>
 
                 <h3>Medidas Base e Intervalos</h3>
@@ -2278,6 +2487,7 @@ if (document.readyState === 'loading') {
                     <p style="font-size: 1rem; color: var(--text-main); margin-bottom: 15px;">
                         Resultado Posición: <span id="pos-result" style="color: var(--neon-blue); font-weight: bold;">-</span>
                     </p>
+                    <div id="position-step-box" class="paso-a-paso-box" style="display:none; margin-top: 10px;"></div>
                 </div>
 
                 <h3>Tabla de Distribución de Frecuencias (Avanzada)</h3>
@@ -2291,8 +2501,9 @@ if (document.readyState === 'loading') {
                                 <th>Front. Inf.</th>
                                 <th>Front. Sup.</th>
                                 <th>Marca (Xi)</th>
-                                <th>Frec (Fi)</th>
-                                <th>Xi · Fi</th>
+<th>Frec (Fi)</th>
+<th>% Relativo</th>
+<th>Xi · Fi</th>
                                 <th>Xi - x̄</th>
                                 <th>(Xi - x̄) · Fi</th>
                                 <th>(Xi - x̄)²</th>
@@ -2320,7 +2531,7 @@ if (document.readyState === 'loading') {
                         </div>
                     </div>
                     <div class="chart-container">
-                        <h3>Diagrama de Caja</h3>
+                        <h3>Gráfico de Bigotes y Cajas (Boxplot)</h3>
                         <div style="width: 100%; margin: auto 0;">
                             <canvas id="boxplotChart"></canvas>
                         </div>
@@ -2330,32 +2541,82 @@ if (document.readyState === 'loading') {
 
             <section id="probabilidad" class="tab-panel">
                 <div class="prob-section">
-                    <h3>Combinatoria y Conteo</h3>
-                    <div class="flex-row">
-                        <input type="number" id="count-n" placeholder="Valor n" min="0">
-                        <input type="number" id="count-r" placeholder="Valor r" min="0">
-                    </div>
-                    <div class="buttons-row">
-                        <button class="btn-action" onclick="ejecutarConteo('factorial')">n!</button>
-                        <button class="btn-action" onclick="ejecutarConteo('permutacion')">nPr</button>
-                        <button class="btn-action" onclick="ejecutarConteo('combinacion')">nCr</button>
-                    </div>
-                    <div class="binom-output">
-                        Resultado Conteo: <span id="conteo-result" style="color: var(--neon-blue); font-weight: bold;">-</span>
-                    </div>
-                </div>
+    <div class="section-header-row">
+        <h3>Combinatoria y Conteo</h3>
+        <button class="help-btn" onclick="abrirAyuda('combinatoria')" title="Ayuda">?</button>
+    </div>
+    <div class="instructions-box">
+        <strong>Instrucciones:</strong> Ingresa n y r. Presiona <em>n!</em> para factorial, <em>nPr</em> para permutaciones (orden importa) o <em>nCr</em> para combinaciones (orden no importa). Si solo quieres factorial, deja r vacío.
+    </div>
+
+    <div class="flex-row">
+        <div style="flex:1;">
+            <p class="input-label">Valor de n (total elementos)</p>
+            <input type="number" id="count-n" placeholder="Ej: 5" min="0" style="margin-bottom:0;">
+        </div>
+        <div style="flex:1;">
+            <p class="input-label">Valor de r (elementos elegidos)</p>
+            <input type="number" id="count-r" placeholder="Ej: 2" min="0" style="margin-bottom:0;">
+        </div>
+    </div>
+
+    <!-- Mensaje de error descriptivo -->
+    <div id="conteo-error" class="conteo-error-msg"></div>
+
+    <div class="buttons-row" style="margin-top:12px;">
+        <button class="btn-action" onclick="ejecutarConteo('factorial')">n! — Factorial</button>
+        <button class="btn-action" onclick="ejecutarConteo('permutacion')">nPr — Permutación</button>
+        <button class="btn-action" onclick="ejecutarConteo('combinacion')">nCr — Combinación</button>
+    </div>
+
+    <!-- Cards individuales de resultado -->
+    <div class="conteo-cards-grid">
+        <div class="conteo-card">
+            <div class="conteo-card-label">n! Factorial</div>
+            <div class="conteo-card-value" id="card-factorial">—</div>
+        </div>
+        <div class="conteo-card">
+            <div class="conteo-card-label">nPr Permutación</div>
+            <div class="conteo-card-value" id="card-permutacion">—</div>
+        </div>
+        <div class="conteo-card">
+            <div class="conteo-card-label">nCr Combinación</div>
+            <div class="conteo-card-value" id="card-combinacion">—</div>
+        </div>
+    </div>
+    <div id="conteo-step-box" class="paso-a-paso-box" style="display:none; margin-top: 10px;"></div>
+</div>
 
                 <div class="prob-section">
-                    <h3>Teorema del Binomio (A + B)ⁿ</h3>
-                    <div class="flex-row">
-                        <input type="number" id="binom-n" placeholder="Potencia n" min="0">
-                        <button class="btn-action" style="margin-bottom: 0;" onclick="desarrollarBinomio()">Desarrollar Coeficientes</button>
-                    </div>
-                    <div class="binom-output" id="binom-result">Los coeficientes aparecerán aquí...</div>
-                </div>
+    <div class="section-header-row">
+        <h3>Teorema del Binomio (a + b)ⁿ</h3>
+        <button class="help-btn" onclick="abrirAyuda('binomio')" title="Ayuda">?</button>
+    </div>
+    <p class="info-chip">Expande (a+b)ⁿ mostrando cada término con su coeficiente, variables y exponentes.</p>
+
+    <div class="flex-row">
+        <div style="flex:1;">
+            <p class="input-label">Potencia n (0 – 15)</p>
+            <input type="number" id="binom-n" placeholder="Ej: 4" min="0" max="15" style="margin-bottom:0;">
+        </div>
+        <button class="btn-action" style="margin-bottom:0; align-self:flex-end;"
+                onclick="desarrollarBinomio()">Desarrollar Expansión</button>
+    </div>
+
+    <!-- Resultado principal -->
+    <div class="binom-output" id="binom-result" style="min-height:55px;">
+        La expansión aparecerá aquí...
+    </div>
+
+    <!-- Desarrollo paso a paso -->
+    <div class="binomio-desarrollo" id="binom-desarrollo"></div>
+</div>
 
                 <div class="prob-section">
                     <h3>Probabilidad de Eventos y Dependencia</h3>
+                    <div class="instructions-box">
+                        <strong>Instrucciones:</strong> Ingresa P(A), P(B) y P(A ∩ B). Luego presiona <em>Analizar Eventos</em> para ver la probabilidad condicional y si A y B son independientes o dependientes.
+                    </div>
                     <div class="flex-grid-3">
                         <input type="number" id="prob-a" step="0.01" placeholder="P(A)" min="0" max="1">
                         <input type="number" id="prob-b" step="0.01" placeholder="P(B)" min="0" max="1">
@@ -2369,6 +2630,7 @@ if (document.readyState === 'loading') {
                         </p>
                         <p>Estado de Dependencia: <span id="prob-dependencia" style="font-weight: bold;">-</span></p>
                     </div>
+                    <div id="probabilidad-step-box" class="paso-a-paso-box" style="display:none; margin-top: 10px;"></div>
                 </div>
             </section>
 
@@ -3125,164 +3387,169 @@ function switchTab(tabId) {
         }
 
         function procesarEstadistica() {
-            let inputString = document.getElementById('manual-data').value;
-            if (!inputString.trim()) {
-                alert("Ingresa datos o carga un archivo CSV.");
-                return;
-            }
+    var inputString = document.getElementById('manual-data').value;
+    var papBox = document.getElementById('pap-estadistica');
 
-            let coincidencias = inputString.match(/\d*\.?\d+/g);
-            if (!coincidencias || coincidencias.length === 0) {
-                alert("No se encontraron números válidos.");
-                return;
-            }
+    if (!inputString.trim()) {
+        alert('⚠️ Campo vacío: Ingresa al menos un dato numérico o carga un archivo CSV.');
+        return;
+    }
 
-            let datos = coincidencias.map(function(n) {
-                return parseFloat(n);
-            });
-            datos.sort(function(a, b) {
-                return a - b;
-            });
-            window.currentDataset = datos;
+    var coincidencias = inputString.match(/\d*\.?\d+/g);
+    if (!coincidencias || coincidencias.length === 0) {
+        alert('❌ No se encontraron números válidos. Asegúrate de separar los datos con comas (ej: 12, 45, 7).');
+        return;
+    }
+    if (coincidencias.length < 2) {
+        alert('⚠️ Datos insuficientes: Se necesitan al menos 2 datos para calcular estadísticas.');
+        return;
+    }
 
-            const n = datos.length;
-            document.getElementById('stat-n').innerText = n;
+    var datos = coincidencias.map(function(n) { return parseFloat(n); });
+    datos.sort(function(a, b) { return a - b; });
+    window.currentDataset = datos;
 
-            const suma = datos.reduce(function(acc, curr) {
-                return acc + curr;
-            }, 0);
-            const media = suma / n;
+    var n    = datos.length;
+    var suma = datos.reduce(function(acc, curr) { return acc + curr; }, 0);
+    var media = suma / n;
 
-            if (media > 1e10) {
-                document.getElementById('stat-media').innerText = media.toExponential(4);
-            } else {
-                document.getElementById('stat-media').innerText = media.toFixed(2);
-            }
+    document.getElementById('stat-n').innerText = n;
+    document.getElementById('stat-media').innerText = media > 1e10 ? media.toExponential(4) : media.toFixed(2);
 
-            let mediana;
-            if (n % 2 === 0) {
-                mediana = (datos[n / 2 - 1] + datos[n / 2]) / 2;
-            } else {
-                mediana = datos[Math.floor(n / 2)];
-            }
+    /* ── Mediana ──────────────────────────────── */
+    var mediana;
+    if (n % 2 === 0) {
+        mediana = (datos[n / 2 - 1] + datos[n / 2]) / 2;
+    } else {
+        mediana = datos[Math.floor(n / 2)];
+    }
+    document.getElementById('stat-mediana').innerText = mediana > 1e10 ? mediana.toExponential(4) : mediana.toFixed(2);
 
-            if (mediana > 1e10) {
-                document.getElementById('stat-mediana').innerText = mediana.toExponential(4);
-            } else {
-                document.getElementById('stat-mediana').innerText = mediana.toFixed(2);
-            }
+    /* ── Moda ─────────────────────────────────── */
+    var frecuencias = {}, maxFrec = 0, modas = [];
+    datos.forEach(function(v) {
+        frecuencias[v] = (frecuencias[v] || 0) + 1;
+        if (frecuencias[v] > maxFrec) maxFrec = frecuencias[v];
+    });
+    for (var k in frecuencias) {
+        if (frecuencias[k] === maxFrec) modas.push(k);
+    }
+    document.getElementById('stat-moda').innerText =
+        (modas.length === Object.keys(frecuencias).length || maxFrec === 1) ? 'Sin moda' : modas.join(', ');
 
-            let frecuencias = {};
-            let maxFrec = 0;
-            let modas = [];
-            datos.forEach(function(v) {
-                frecuencias[v] = (frecuencias[v] || 0) + 1;
-                if (frecuencias[v] > maxFrec) {
-                    maxFrec = frecuencias[v];
-                }
-            });
-            for (let k in frecuencias) {
-                if (frecuencias[k] === maxFrec) {
-                    modas.push(k);
-                }
-            }
+    /* ── Varianza y Desv. Estándar ────────────── */
+    var varianzaMuestral = 0, desvEstandar = 0;
+    if (n > 1) {
+        varianzaMuestral = datos.reduce(function(acc, v) {
+            return acc + Math.pow(v - media, 2);
+        }, 0) / (n - 1);
+        desvEstandar = Math.sqrt(varianzaMuestral);
+        document.getElementById('stat-varianza').innerText   = varianzaMuestral > 1e10 ? varianzaMuestral.toExponential(4) : varianzaMuestral.toFixed(4);
+        document.getElementById('stat-desviacion').innerText = desvEstandar > 1e10     ? desvEstandar.toExponential(4)     : desvEstandar.toFixed(4);
+    } else {
+        document.getElementById('stat-varianza').innerText   = 'N/A (n=1)';
+        document.getElementById('stat-desviacion').innerText = 'N/A (n=1)';
+    }
 
-            if (modas.length === Object.keys(frecuencias).length || maxFrec === 1) {
-                document.getElementById('stat-moda').innerText = "No hay";
-            } else {
-                document.getElementById('stat-moda').innerText = modas.join(', ');
-            }
+    /* ── Rango, intervalos, amplitud ─────────── */
+    var valorMin   = datos[0];
+    var valorMax   = datos[n - 1];
+    var rango      = valorMax - valorMin;
+    var numClases  = Math.max(1, Math.ceil(1 + 3.322 * Math.log10(n)));
+    var anchoClase = rango === 0 ? 1 : rango / numClases;
 
-            let varianzaMuestral = 0;
-            let desvEstandar = 0;
+    document.getElementById('stat-rango').innerText    = fmt(rango);
+    document.getElementById('stat-k').innerText        = numClases;
+    document.getElementById('stat-amplitud').innerText = fmt(anchoClase);
 
-            if (n > 1) {
-                varianzaMuestral = datos.reduce(function(acc, v) {
-                    return acc + Math.pow(v - media, 2);
-                }, 0) / (n - 1);
-                desvEstandar = Math.sqrt(varianzaMuestral);
+    /* ── Paso a paso ─────────────────────────── */
+    if (papBox) {
+        papBox.style.display = 'block';
+        var modaTexto = (modas.length === Object.keys(frecuencias).length || maxFrec === 1)
+            ? 'Sin moda (todos los valores aparecen la misma cantidad de veces)' 
+            : 'Moda = ' + modas.join(', ') + ' (' + maxFrec + ' veces)';
 
-                if (varianzaMuestral > 1e10) {
-                    document.getElementById('stat-varianza').innerText = varianzaMuestral.toExponential(4);
-                } else {
-                    document.getElementById('stat-varianza').innerText = varianzaMuestral.toFixed(4);
-                }
+        papBox.innerHTML =
+            '<div class="pap-title">▶ Proceso de Cálculo</div>' +
+            '<div class="pap-line">• Datos originales: <strong>' + inputString + '</strong></div>' +
+            '<div class="pap-line">• Datos ordenados: <strong>' + datos.join(', ') + '</strong></div>' +
+            '<div class="pap-line">• Tamaño de la muestra n = <strong>' + n + '</strong></div>' +
+            '<div class="pap-line">• Suma total Σx = <strong>' + suma.toFixed(4) + '</strong></div>' +
+            '<div class="pap-line">• Media x̄ = Σx / n = ' + suma.toFixed(4) + ' / ' + n + ' = <strong>' + media.toFixed(4) + '</strong></div>' +
+            '<div class="pap-line">• Cálculo de mediana: ' +
+                (n % 2 === 0
+                    ? 'promedio de ' + datos[n / 2 - 1] + ' y ' + datos[n / 2] + ' → <strong>' + mediana.toFixed(4) + '</strong>'
+                    : 'valor central ' + datos[Math.floor(n / 2)] + ' → <strong>' + mediana.toFixed(4) + '</strong>') + '</div>' +
+            '<div class="pap-line">• Cálculo de frecuencia para moda: ' +
+                Object.keys(frecuencias).map(function(k) { return k + '×' + frecuencias[k]; }).join(', ') + '</div>' +
+            '<div class="pap-line">• Resultado de moda: <strong>' + modaTexto + '</strong></div>' +
+            '<div class="pap-line">• Cálculo de varianza muestral: Σ(xᵢ−x̄)² = <strong>' + varianzaMuestral.toFixed(4) + '</strong>, luego dividir entre n-1 = ' + (n - 1) + '</div>' +
+            '<div class="pap-line">• Varianza s² = <strong>' + (n > 1 ? varianzaMuestral.toFixed(4) : 'N/A') + '</strong></div>' +
+            '<div class="pap-line">• Desviación estándar s = √s² = <strong>' + (n > 1 ? desvEstandar.toFixed(4) : 'N/A') + '</strong></div>' +
+            '<div class="pap-line">• Rango R = X_max − X_min = ' + valorMax + ' − ' + valorMin + ' = <strong>' + rango.toFixed(4) + '</strong></div>' +
+            '<div class="pap-line">• Número de intervalos k = 1 + 3.322·log₁₀(n) = <strong>' + numClases + '</strong></div>' +
+            '<div class="pap-line">• Amplitud de clase A = R / k = ' + fmt(rango) + ' / ' + numClases + ' = <strong>' + fmt(anchoClase) + '</strong></div>' +
+            '<div class="pap-line">• Se construye la tabla de frecuencias con ' + numClases + ' clases y se generan las gráficas.</div>' +
+            '<div class="pap-result">✅ Todo calculado y visualizado paso a paso.</div>';
+    }
 
-                if (desvEstandar > 1e10) {
-                    document.getElementById('stat-desviacion').innerText = desvEstandar.toExponential(4);
-                } else {
-                    document.getElementById('stat-desviacion').innerText = desvEstandar.toFixed(4);
-                }
-            } else {
-                document.getElementById('stat-varianza').innerText = "N/A";
-                document.getElementById('stat-desviacion').innerText = "N/A";
-            }
+    /* ── Tabla de distribución de frecuencias ─── */
+    var tbody = document.querySelector('#frecuencias-table tbody');
+    tbody.innerHTML = '';
+    var labelsClases = [], conteosClases = [];
+    var limInferior = valorMin;
 
-            const numClases = Math.max(1, Math.ceil(1 + 3.322 * Math.log10(n)));
-            const valorMin = datos[0];
-            const valorMax = datos[n - 1];
-            const rango = valorMax - valorMin;
-            const anchoClase = rango === 0 ? 1 : rango / numClases;
+    for (var i = 0; i < numClases; i++) {
+        var limSuperior = limInferior + anchoClase;
+        var fronInf     = limInferior - 0.5;
+        var fronSup     = limSuperior + 0.5;
+        var marcaClase  = (limInferior + limSuperior) / 2;
 
-            document.getElementById('stat-rango').innerText = fmt(rango);
-            document.getElementById('stat-k').innerText = numClases;
-            document.getElementById('stat-amplitud').innerText = fmt(anchoClase);
+        var frecAbs = datos.filter(function(v) {
+            return i === numClases - 1 ? v >= limInferior && v <= limSuperior
+                                       : v >= limInferior && v < limSuperior;
+        }).length;
 
-            let tbody = document.querySelector('#frecuencias-table tbody');
-            tbody.innerHTML = "";
+        /* Porcentaje con color dinámico */
+        var pctVal = (frecAbs / n) * 100;
+        var pctClass = pctVal >= 30 ? 'pct-alta' : pctVal >= 15 ? 'pct-media' : 'pct-baja';
+        var pctStr = pctVal.toFixed(1) + '%';
 
-            let labelsClases = [];
-            let conteosClases = [];
+        var xi_fi        = marcaClase * frecAbs;
+        var xi_media     = marcaClase - media;
+        var xi_media_f   = xi_media * frecAbs;
+        var xi_media_sq  = Math.pow(xi_media, 2);
+        var xi_media_sq_f = xi_media_sq * frecAbs;
 
-            let limInferior = valorMin;
-            for (let i = 0; i < numClases; i++) {
-                let limSuperior = limInferior + anchoClase;
-                let fronInf = limInferior - 0.5;
-                let fronSup = limSuperior + 0.5;
-                let marcaClase = (limInferior + limSuperior) / 2;
+        labelsClases.push(fmt(limInferior) + ' - ' + fmt(limSuperior));
+        conteosClases.push(frecAbs);
 
-                let frecAbs = datos.filter(function(v) {
-                    if (i === numClases - 1) {
-                        return v >= limInferior && v <= limSuperior;
-                    }
-                    return v >= limInferior && v < limSuperior;
-                }).length;
+        var row = '<tr>';
+        row += '<td>' + (i + 1) + '</td>';
+        row += '<td>' + fmt(limInferior) + '</td>';
+        row += '<td>' + fmt(limSuperior) + '</td>';
+        row += '<td>' + fmt(fronInf) + '</td>';
+        row += '<td>' + fmt(fronSup) + '</td>';
+        row += '<td>' + fmt(marcaClase) + '</td>';
+        row += '<td>' + frecAbs + '</td>';
+        /* NUEVA columna % con color */
+        row += '<td class="' + pctClass + '">' + pctStr + '</td>';
+        row += '<td style="color:var(--neon-blue);">' + fmt(xi_fi) + '</td>';
+        row += '<td>' + fmt(xi_media) + '</td>';
+        row += '<td>' + fmt(xi_media_f) + '</td>';
+        row += '<td>' + fmt(xi_media_sq) + '</td>';
+        row += '<td style="color:var(--neon-red);font-weight:bold;">' + fmt(xi_media_sq_f) + '</td>';
+        row += '</tr>';
+        tbody.innerHTML += row;
 
-                let xi_fi = marcaClase * frecAbs;
-                let xi_media = marcaClase - media;
-                let xi_media_f = xi_media * frecAbs;
-                let xi_media_sq = Math.pow(xi_media, 2);
-                let xi_media_sq_f = xi_media_sq * frecAbs;
+        limInferior = limSuperior;
+    }
 
-                labelsClases.push('[' + limInferior.toExponential(1) + ' - ' + limSuperior.toExponential(1) + ']');
-                conteosClases.push(frecAbs);
-
-                let row = '<tr>';
-                row += '<td>' + (i + 1) + '</td>';
-                row += '<td>' + fmt(limInferior) + '</td>';
-                row += '<td>' + fmt(limSuperior) + '</td>';
-                row += '<td>' + fmt(fronInf) + '</td>';
-                row += '<td>' + fmt(fronSup) + '</td>';
-                row += '<td>' + fmt(marcaClase) + '</td>';
-                row += '<td>' + frecAbs + '</td>';
-                row += '<td style="color: var(--neon-blue);">' + fmt(xi_fi) + '</td>';
-                row += '<td>' + fmt(xi_media) + '</td>';
-                row += '<td>' + fmt(xi_media_f) + '</td>';
-                row += '<td>' + fmt(xi_media_sq) + '</td>';
-                row += '<td style="color: var(--neon-red); font-weight: bold;">' + fmt(xi_media_sq_f) + '</td>';
-                row += '</tr>';
-                tbody.innerHTML += row;
-
-                limInferior = limSuperior;
-            }
-
-            let labelsGraficas = labelsClases.map(function(_, index) {
-                return 'Clase ' + (index + 1);
-            });
-            renderizarHistograma(labelsGraficas, conteosClases);
-            renderizarPastel(labelsGraficas, conteosClases);
-            renderizarBoxplot(valorMin, mediana, valorMax, media);
-        }
+    var labelsGraficas = labelsClases;
+    renderizarHistograma(labelsGraficas, conteosClases);
+    renderizarPastel(labelsGraficas, conteosClases);
+    renderizarBoxplot(valorMin, mediana, valorMax, media);
+}
 
         function calcularPosicion() {
             if (!window.currentDataset) {
@@ -3320,6 +3587,30 @@ function switchTab(tabId) {
             } else {
                 document.getElementById('pos-result').innerText = result.toFixed(2);
             }
+
+            var positionStep = document.getElementById('position-step-box');
+            if (positionStep) {
+                positionStep.style.display = 'block';
+                var tipoTexto = tipo === 'cuartil' ? 'Cuartil Q' + valor : tipo === 'decil' ? 'Decil D' + valor : 'Percentil P' + valor;
+                var formula = tipo === 'cuartil' ? valor + ' × 25 = ' + p + '%' : tipo === 'decil' ? valor + ' × 10 = ' + p + '%' : p + '%';
+                var indexText = index.toFixed(4);
+                var interpText = Number.isInteger(index)
+                    ? 'Índice entero: toma el valor en la posición ' + index + ' de los datos ordenados.'
+                    : 'Índice no entero: interpola entre posición ' + Math.floor(index) + ' y ' + Math.ceil(index) + '.';
+                var valorA = datos[Math.floor(index)];
+                var valorB = datos[Math.ceil(index)];
+                var interpolacion = Number.isInteger(index)
+                    ? ''
+                    : '<div class="pap-line">• Interpolación: ' + valorA + ' + ' + (index % 1).toFixed(4) + ' × (' + valorB + ' − ' + valorA + ') = <strong>' + result.toFixed(4) + '</strong></div>';
+
+                positionStep.innerHTML =
+                    '<div class="pap-title">▶ Cálculo de ' + tipoTexto + '</div>' +
+                    '<div class="pap-line">• Conversión a porcentaje: ' + formula + '</div>' +
+                    '<div class="pap-line">• Índice = p / 100 × (n - 1) = ' + p + ' / 100 × (' + datos.length + ' - 1) = <strong>' + indexText + '</strong></div>' +
+                    '<div class="pap-line">• Datos ordenados: ' + datos.join(', ') + '</div>' +
+                    '<div class="pap-line">' + interpText + '</div>' +
+                    (Number.isInteger(index) ? '<div class="pap-line">• Resultado = valor en posición ' + index + ' = <strong>' + result.toFixed(4) + '</strong></div>' : interpolacion);
+            }
         }
 
         function renderizarHistograma(labels, datos) {
@@ -3332,6 +3623,7 @@ function switchTab(tabId) {
             const gridColor = isLight ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.05)';
             const barColor = isLight ? 'rgba(189, 44, 13, 0.4)' : 'rgba(66, 211, 242, 0.4)';
             const borderColor = isLight ? '#bd2c0d' : '#42D3F2';
+            const textColor = isLight ? '#0f172a' : '#e2e8f0';
 
             histogramInstance = new Chart(ctx, {
                 type: 'bar',
@@ -3348,20 +3640,59 @@ function switchTab(tabId) {
                     }]
                 },
                 options: {
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: textColor
+                            }
+                        }
+                    },
                     scales: {
                         y: {
                             beginAtZero: true,
                             grid: {
                                 color: gridColor
+                            },
+                            ticks: {
+                                color: textColor
                             }
                         },
                         x: {
                             grid: {
                                 display: false
+                            },
+                            ticks: {
+                                color: textColor,
+                                font: {
+                                    size: 12
+                                },
+                                autoSkip: false,
+                                maxRotation: 45,
+                                minRotation: 0
                             }
                         }
                     }
-                }
+                },
+                plugins: [{
+                    id: 'barValueLabels',
+                    afterDatasetsDraw: function(chart) {
+                        var ctx = chart.ctx;
+                        chart.data.datasets.forEach(function(dataset, datasetIndex) {
+                            var meta = chart.getDatasetMeta(datasetIndex);
+                            meta.data.forEach(function(bar, index) {
+                                var value = dataset.data[index];
+                                ctx.save();
+                                ctx.fillStyle = textColor;
+                                ctx.font = '12px Arial';
+                                ctx.textAlign = 'center';
+                                ctx.textBaseline = 'bottom';
+                                ctx.fillText(value, bar.x, bar.y - 6);
+                                ctx.restore();
+                            });
+                        });
+                    }
+                }]
             });
         }
 
@@ -3462,55 +3793,234 @@ function switchTab(tabId) {
             });
         }
 
-        function ejecutarConteo(tipo) {
-            const n = parseInt(document.getElementById('count-n').value);
-            const r = parseInt(document.getElementById('count-r').value);
-            const output = document.getElementById('conteo-result');
+        /* ══ COMBINATORIA — errores descriptivos + cards ══ */
+function ejecutarConteo(tipo) {
+    var nStr = document.getElementById('count-n').value.trim();
+    var rStr = document.getElementById('count-r').value.trim();
+    var n    = parseInt(nStr);
+    var r    = parseInt(rStr);
+    var errEl = document.getElementById('conteo-error');
 
-            if (isNaN(n) || n < 0) {
-                alert("n inválido.");
-                return;
-            }
+    // Limpiar estado previo
+    ['card-factorial','card-permutacion','card-combinacion'].forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) { el.textContent = '—'; el.style.color = 'var(--neon-blue)'; }
+    });
+    if (errEl) errEl.style.display = 'none';
 
-            if (tipo === 'factorial') {
-                output.innerText = math.factorial(n);
-                return;
-            }
+    function mostrarError(msg) {
+        if (errEl) { errEl.textContent = msg; errEl.style.display = 'block'; }
+    }
+    function setCard(id, valor) {
+        var el = document.getElementById(id);
+        if (!el) return;
+        // Limpiar notación científica innecesaria: mostrar entero limpio
+        var num = Number(valor);
+        var txt;
+        if (!isFinite(num))       { txt = '∞'; }
+        else if (num > 1e15)      { txt = num.toExponential(4); }
+        else                      { txt = num.toLocaleString('es-MX'); }
+        el.textContent = txt;
+        el.style.color = 'var(--neon-green)';
+    }
 
-            if (isNaN(r) || r < 0 || r > n) {
-                alert("r inválido.");
-                return;
-            }
+    /* ── Validar n ──────────────────────────────── */
+    if (nStr === '') {
+        mostrarError('⚠️ Campo vacío: Ingresa un valor para n antes de calcular.');
+        return;
+    }
+    if (isNaN(n) || !Number.isInteger(Number(nStr)) || n < 0) {
+        mostrarError('❌ Error en n: "' + nStr + '" no es válido. n debe ser un número entero no negativo (0, 1, 2…).');
+        return;
+    }
 
-            if (tipo === 'permutacion') {
-                output.innerText = math.permutations(n, r);
-            }
+    var pasoBox = document.getElementById('conteo-step-box');
+    if (pasoBox) {
+        pasoBox.style.display = 'none';
+        pasoBox.innerHTML = '';
+    }
 
-            if (tipo === 'combinacion') {
-                output.innerText = math.combinations(n, r);
-            }
+    /* ── Factorial ──────────────────────────────── */
+    if (tipo === 'factorial') {
+        if (n > 170) {
+            mostrarError('❌ Desbordamiento: ' + n + '! supera la capacidad numérica. Usa n ≤ 170.');
+            return;
+        }
+        var factRes = math.factorial(n);
+        setCard('card-factorial', factRes);
+        if (pasoBox) {
+            pasoBox.style.display = 'block';
+            pasoBox.innerHTML =
+                '<div class="pap-title">▶ Cálculo de Factorial n!</div>' +
+                '<div class="pap-line">• Fórmula: n! = 1 × 2 × 3 × ... × ' + n + '</div>' +
+                '<div class="pap-line">• Resultado: <strong>' + Number(factRes).toLocaleString('es-MX') + '</strong></div>';
+        }
+        return;
+    }
+
+    /* ── Validar r para nPr y nCr ───────────────── */
+    if (rStr === '') {
+        mostrarError('⚠️ Campo vacío: Ingresa un valor para r antes de calcular ' + (tipo === 'permutacion' ? 'nPr.' : 'nCr.'));
+        return;
+    }
+    if (isNaN(r) || !Number.isInteger(Number(rStr)) || r < 0) {
+        mostrarError('❌ Error en r: "' + rStr + '" no es válido. r debe ser un entero no negativo.');
+        return;
+    }
+    if (r > n) {
+        mostrarError('❌ Condición violada: r (' + r + ') no puede ser mayor que n (' + n + '). Se requiere r ≤ n.');
+        return;
+    }
+
+    var pasoBox = document.getElementById('conteo-step-box');
+    if (pasoBox) {
+        pasoBox.style.display = 'none';
+        pasoBox.innerHTML = '';
+    }
+
+    if (tipo === 'permutacion') {
+        var perm = math.permutations(n, r);
+        setCard('card-permutacion', perm);
+        if (pasoBox) {
+            pasoBox.style.display = 'block';
+            pasoBox.innerHTML =
+                '<div class="pap-title">▶ Cálculo de Permutación nPr</div>' +
+                '<div class="pap-line">• Fórmula: nPr = n! / (n - r)! = ' + n + '! / (' + n + ' - ' + r + ')! </div>' +
+                '<div class="pap-line">• n! = ' + math.factorial(n).toLocaleString('es-MX') + '</div>' +
+                '<div class="pap-line">• (n - r)! = ' + math.factorial(n - r).toLocaleString('es-MX') + '</div>' +
+                '<div class="pap-line">• Resultado nPr = <strong>' + Number(perm).toLocaleString('es-MX') + '</strong></div>';
+        }
+        return;
+    }
+    if (tipo === 'combinacion') {
+        var comb = math.combinations(n, r);
+        setCard('card-combinacion', comb);
+        if (pasoBox) {
+            pasoBox.style.display = 'block';
+            pasoBox.innerHTML =
+                '<div class="pap-title">▶ Cálculo de Combinación nCr</div>' +
+                '<div class="pap-line">• Fórmula: nCr = n! / (r! × (n - r)!)</div>' +
+                '<div class="pap-line">• n! = ' + math.factorial(n).toLocaleString('es-MX') + '</div>' +
+                '<div class="pap-line">• r! = ' + math.factorial(r).toLocaleString('es-MX') + '</div>' +
+                '<div class="pap-line">• (n - r)! = ' + math.factorial(n - r).toLocaleString('es-MX') + '</div>' +
+                '<div class="pap-line">• Resultado nCr = <strong>' + Number(comb).toLocaleString('es-MX') + '</strong></div>';
+        }
+        return;
+    }
+    if (tipo === 'factorial') {
+        // factorial already handled earlier
+        return;
+    }
+}
+
+        /* ══ TEOREMA DEL BINOMIO — corregido + paso a paso ═══ */
+function desarrollarBinomio() {
+    var nStr     = document.getElementById('binom-n').value.trim();
+    var n        = parseInt(nStr);
+    var output   = document.getElementById('binom-result');
+    var desarrollo = document.getElementById('binom-desarrollo');
+
+    // Reset
+    desarrollo.style.display = 'none';
+    desarrollo.innerHTML = '';
+
+    /* ── Validaciones descriptivas ─────────────── */
+    if (nStr === '') {
+        output.innerHTML = '<span style="color:#f59e0b;">⚠️ Ingresa la potencia n para expandir (a+b)ⁿ.</span>';
+        return;
+    }
+    if (isNaN(n)) {
+        output.innerHTML = '<span style="color:#ff3b30;">❌ Error: "' + nStr + '" no es un número. n debe ser un entero (ej: 3, 5, 10).</span>';
+        return;
+    }
+    if (n < 0) {
+        output.innerHTML = '<span style="color:#ff3b30;">❌ Error: n = ' + n + ' es negativo. El Teorema del Binomio requiere n ≥ 0.</span>';
+        return;
+    }
+    if (n > 15) {
+        output.innerHTML = '<span style="color:#f59e0b;">⚠️ n = ' + n + ' genera términos muy extensos. Usa n ≤ 15 para visualización correcta.</span>';
+        return;
+    }
+
+    /* ── Calcular coeficientes binomiales C(n,k) ── */
+    var coefs = [];
+    for (var k = 0; k <= n; k++) {
+        coefs.push(Number(math.combinations(n, k)));
+    }
+
+    /* ── Construir términos algebraicos ────────── */
+    function superscript(exp) {
+        var map = {'0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵',
+                   '6':'⁶','7':'⁷','8':'⁸','9':'⁹'};
+        return String(exp).split('').map(function(d){ return map[d]||d; }).join('');
+    }
+
+    var terminos = [];
+    var pasosHTML = '';
+
+    // Encabezado paso a paso
+    pasosHTML += '<div class="paso-formula">';
+    pasosHTML += '📐 (a+b)' + superscript(n) + ' = ';
+    pasosHTML += 'Σ[k=0→' + n + '] C(' + n + ',k) · a' + superscript(n) + '⁻ᵏ · bᵏ';
+    pasosHTML += '</div>';
+
+    for (var k = 0; k <= n; k++) {
+        var c    = coefs[k];
+        var expA = n - k;
+        var expB = k;
+
+        /* ── Construir representación del término ─ */
+        var termino = '';
+
+        // Coeficiente: omitir "1" si hay variables
+        if (c !== 1 || (expA === 0 && expB === 0)) {
+            termino += c;
         }
 
-        function desarrollarBinomio() {
-            const n = parseInt(document.getElementById('binom-n').value);
-            const output = document.getElementById('binom-result');
+        // Variable a
+        if (expA === 1) { termino += 'a'; }
+        else if (expA > 1) { termino += 'a' + superscript(expA); }
 
-            if (isNaN(n) || n < 0) {
-                alert("n debe ser positivo.");
-                return;
-            }
+        // Variable b
+        if (expB === 1) { termino += 'b'; }
+        else if (expB > 1) { termino += 'b' + superscript(expB); }
 
-            let coefs = [];
-            for (let r = 0; r <= n; r++) {
-                coefs.push(math.combinations(n, r));
-            }
-            output.innerText = 'Coeficientes (n=' + n + '): [ ' + coefs.join(', ') + ' ]';
-        }
+        if (termino === '') termino = '1'; // caso n=0
+        terminos.push(termino);
+
+        /* ── Línea del paso ─────────────────────── */
+        var lineaA = expA > 0 ? 'a' + superscript(expA) : '';
+        var lineaB = expB > 0 ? 'b' + superscript(expB) : '';
+        var partes = [lineaA, lineaB].filter(function(x){ return x !== ''; }).join('·');
+
+        pasosHTML += '<div class="paso-item">';
+        pasosHTML += '<span class="paso-k">k=' + k + ':</span> ';
+        pasosHTML += 'C(' + n + ',' + k + ') · ' + (partes || '1');
+        pasosHTML += ' = <strong>' + c + '</strong>';
+        if (partes) pasosHTML += ' · ' + partes;
+        pasosHTML += ' = <span class="paso-termino">' + termino + '</span>';
+        pasosHTML += '</div>';
+    }
+
+    /* ── Mostrar resultado en el output principal ─ */
+    var coefStr = '[ ' + coefs.join(' , ') + ' ]';
+    output.innerHTML =
+        '<div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:6px;">' +
+        'Triángulo de Pascal (n=' + n + '): <strong>' + coefStr + '</strong></div>' +
+        '<div style="font-size:1.05rem;font-weight:bold;color:var(--neon-blue);word-break:break-all;">' +
+        '(a+b)' + superscript(n) + ' = ' + terminos.join(' + ') + '</div>';
+
+    /* ── Mostrar desarrollo paso a paso ─────────── */
+    desarrollo.innerHTML = '<div style="font-size:0.78rem;color:var(--neon-blue);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;font-weight:bold;">▶ Desarrollo Término a Término</div>' + pasosHTML;
+    desarrollo.style.display = 'block';
+}
 
         function analizarEventos() {
             const pA = parseFloat(document.getElementById('prob-a').value);
             const pB = parseFloat(document.getElementById('prob-b').value);
             const pInter = parseFloat(document.getElementById('prob-inter').value);
+            const pasoBox = document.getElementById('probabilidad-step-box');
+            if (pasoBox) { pasoBox.style.display = 'none'; pasoBox.innerHTML = ''; }
 
             if (isNaN(pA) || isNaN(pB) || isNaN(pInter)) {
                 alert("Faltan probabilidades.");
@@ -3519,6 +4029,13 @@ function switchTab(tabId) {
 
             if (pB === 0) {
                 document.getElementById('prob-condicional').innerText = "Indefinido";
+                if (pasoBox) {
+                    pasoBox.style.display = 'block';
+                    pasoBox.innerHTML =
+                        '<div class="pap-title">▶ Cálculo de Probabilidad Condicional</div>' +
+                        '<div class="pap-line">• P(B) = 0, por lo que P(A|B) no puede calcularse.</div>' +
+                        '<div class="pap-line">• La probabilidad condicional es indefinida cuando el evento B tiene probabilidad cero.</div>';
+                }
                 return;
             }
 
@@ -3535,6 +4052,18 @@ function switchTab(tabId) {
             } else {
                 badge.innerText = "Dependientes";
                 badge.style.color = isLight ? "#dc2626" : "#ff3b30";
+            }
+
+            if (pasoBox) {
+                pasoBox.style.display = 'block';
+                pasoBox.innerHTML =
+                    '<div class="pap-title">▶ Cálculo de Probabilidad de Eventos</div>' +
+                    '<div class="pap-line">• P(A) = <strong>' + pA.toFixed(4) + '</strong></div>' +
+                    '<div class="pap-line">• P(B) = <strong>' + pB.toFixed(4) + '</strong></div>' +
+                    '<div class="pap-line">• P(A ∩ B) = <strong>' + pInter.toFixed(4) + '</strong></div>' +
+                    '<div class="pap-line">• P(A|B) = P(A ∩ B) / P(B) = ' + pInter.toFixed(4) + ' / ' + pB.toFixed(4) + ' = <strong>' + pCond.toFixed(4) + '</strong></div>' +
+                    '<div class="pap-line">• Comprobación de independencia: P(A)×P(B) = ' + (pA * pB).toFixed(4) + '</div>' +
+                    '<div class="pap-line">• Comparar con P(A ∩ B) = ' + pInter.toFixed(4) + ' → ' + (esIndep ? '<strong>Independientes</strong>' : '<strong>Dependientes</strong>') + '</div>';
             }
         }
 
@@ -4602,6 +5131,79 @@ function switchTab(tabId) {
         }
     );
 }());
+    /* ══════════════════════════════════════════════════
+ * SISTEMA DE AYUDA CONTEXTUAL
+ * ══════════════════════════════════════════════════ */
+var _ayudaContenidos = {
+    descriptiva: {
+        titulo: '📊 Estadística Descriptiva — Guía de uso',
+        html: `
+            <ul>
+                <li><strong>Ingreso de datos:</strong> Escribe números separados por comas (ej: <code>12, 45, 7, 23</code>) o carga un CSV.</li>
+                <li><strong>n:</strong> Tamaño de la muestra (cantidad de datos).</li>
+                <li><strong>Rango (R):</strong> R = Valor máximo − Valor mínimo.</li>
+                <li><strong>Intervalos (k):</strong> Se calcula con la regla de Sturges: k = 1 + 3.322·log₁₀(n).</li>
+                <li><strong>Amplitud (A):</strong> A = Rango / k.</li>
+                <li><strong>Medidas de posición:</strong> Cuartil (Q1–Q4), Decil (D1–D10), Percentil (P1–P100).</li>
+            </ul>
+            <div class="help-formula">R = X_max − X_min</div>
+            <div class="help-formula">k = 1 + 3.322 · log₁₀(n) — Regla de Sturges</div>
+            <div class="help-formula">s² = Σ(xᵢ − x̄)² / (n−1) — Varianza muestral</div>`
+    },
+    combinatoria: {
+        titulo: '🎲 Combinatoria y Conteo — Guía de uso',
+        html: `
+            <ul>
+                <li><strong>n</strong> = total de elementos del conjunto.</li>
+                <li><strong>r</strong> = elementos que se eligen (r ≤ n siempre).</li>
+                <li><strong>n! (Factorial):</strong> Solo usa el campo n. Solo se calcula n.</li>
+                <li><strong>nPr (Permutación):</strong> Orden importa. Usa n y r.</li>
+                <li><strong>nCr (Combinación):</strong> Orden no importa. Usa n y r.</li>
+            </ul>
+            <div class="help-formula">n! = n · (n−1) · (n−2) · ... · 1</div>
+            <div class="help-formula">nPr = n! / (n−r)!</div>
+            <div class="help-formula">nCr = n! / (r! · (n−r)!)</div>`
+    },
+    binomio: {
+        titulo: '🔢 Teorema del Binomio — Guía de uso',
+        html: `
+            <ul>
+                <li>Ingresa solo la potencia <strong>n</strong> (número entero entre 0 y 15).</li>
+                <li>El sistema expandirá <strong>(a+b)ⁿ</strong> mostrando cada término.</li>
+                <li>Cada término tiene la forma: <code>C(n,k) · aⁿ⁻ᵏ · bᵏ</code></li>
+                <li>Los coeficientes siguen el <strong>Triángulo de Pascal</strong>.</li>
+            </ul>
+            <div class="help-formula">(a+b)ⁿ = Σ[k=0→n] C(n,k) · aⁿ⁻ᵏ · bᵏ</div>
+            <div class="help-formula">Ejemplo n=3: a³ + 3a²b + 3ab² + b³</div>`
+    }
+};
+
+function abrirAyuda(seccion) {
+    var contenido = _ayudaContenidos[seccion];
+    if (!contenido) return;
+    document.getElementById('titan-help-content').innerHTML =
+        '<h4>' + contenido.titulo + '</h4>' + contenido.html;
+    document.getElementById('titan-help-modal').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+
+function cerrarAyuda() {
+    document.getElementById('titan-help-modal').style.display = 'none';
+    document.body.style.overflow = '';
+}
+
+document.getElementById('titan-help-modal').addEventListener('click', function(e) {
+    if (e.target === this) cerrarAyuda();
+});
     </script>
+    <!-- ══════════════════════════════════════════
+     MODAL DE AYUDA CONTEXTUAL — TITAN
+     ══════════════════════════════════════════ -->
+<div id="titan-help-modal" class="titan-help-overlay" style="display:none;">
+    <div class="titan-help-card">
+        <button class="titan-help-close" onclick="cerrarAyuda()">&#x2715;</button>
+        <div id="titan-help-content"></div>
+    </div>
+</div>
 </body>
 </html>
