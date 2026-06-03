@@ -728,11 +728,14 @@ if (document.readyState === 'loading') {
             display: flex;
             flex: 1;
             min-width: 300px;
-            flex-wrap: wrap;
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
         }
 
         .tab-btn {
-            flex: 1;
+            flex: 0 0 auto;
             padding: 14px 8px;
             background: none;
             border: none;
@@ -742,6 +745,7 @@ if (document.readyState === 'loading') {
             cursor: pointer;
             transition: all 0.3s ease;
             white-space: nowrap;
+            min-width: fit-content;
         }
 
         .tab-btn:hover {
@@ -785,8 +789,11 @@ if (document.readyState === 'loading') {
                 justify-content: center;
             }
             .tab-btn {
-                font-size: 0.72rem;
-                padding: 9px 3px;
+                font-size: 0.65rem;
+                padding: 8px 5px;
+            }
+            .tab-content-container {
+                padding: 15px 12px;
             }
         }
 
@@ -882,6 +889,26 @@ if (document.readyState === 'loading') {
             gap: 10px;
             margin: 20px 0;
         }
+        
+        @media (max-width: 768px) {
+            .results-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+        }
+        
+        @media (max-width: 500px) {
+            .results-grid {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+            .result-card h4 {
+                font-size: 0.65rem;
+            }
+            .result-card p {
+                font-size: 0.9rem;
+            }
+        }
 
         .result-card {
             background-color: var(--glass-card);
@@ -934,6 +961,18 @@ if (document.readyState === 'loading') {
             border-bottom: 1px solid var(--border-glow);
             color: var(--text-main);
             word-break: break-all;
+        }
+        
+        @media (max-width: 600px) {
+            table {
+                font-size: 0.65rem;
+            }
+            th {
+                padding: 8px 3px;
+            }
+            td {
+                padding: 8px 3px;
+            }
         }
 
         .prob-section,
@@ -1036,6 +1075,13 @@ if (document.readyState === 'loading') {
             width: 100%;
             max-width: 350px;
             margin: 0 auto;
+            position: relative;
+        }
+        
+        @media (max-width: 600px) {
+            .pie-wrapper {
+                max-width: 280px;
+            }
         }
 
         .history-panel {
@@ -1084,6 +1130,16 @@ if (document.readyState === 'loading') {
             width: 100%;
             max-width: 800px;
             height: 400px;
+        }
+        
+        @media (max-width: 600px) {
+            #plotCanvas {
+                height: 300px;
+            }
+            .chart-container-full {
+                padding: 10px;
+                margin-top: 10px;
+            }
         }
 
         .calc-screen {
@@ -1302,6 +1358,13 @@ if (document.readyState === 'loading') {
             width: 100%;
             max-width: 900px;
             height: 420px;
+        }
+        
+        @media (max-width: 600px) {
+            #scatterCanvas {
+                max-width: 100%;
+                height: 300px;
+            }
         }
 
         .light-theme .scatter-canvas-wrapper {
@@ -3619,6 +3682,7 @@ function switchTab(tabId) {
             }
             const ctx = document.getElementById('histogramChart').getContext('2d');
             const isLight = document.body.classList.contains('light-theme');
+            const isMobile = window.innerWidth < 600;
 
             const gridColor = isLight ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.05)';
             const barColor = isLight ? 'rgba(189, 44, 13, 0.4)' : 'rgba(66, 211, 242, 0.4)';
@@ -3635,16 +3699,21 @@ function switchTab(tabId) {
                         backgroundColor: barColor,
                         borderColor: borderColor,
                         borderWidth: 2,
-                        barPercentage: 1.0,
-                        categoryPercentage: 1.0
+                        barPercentage: 0.9,
+                        categoryPercentage: 0.95
                     }]
                 },
                 options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
                     plugins: {
                         legend: {
                             position: 'bottom',
                             labels: {
-                                color: textColor
+                                color: textColor,
+                                font: {
+                                    size: isMobile ? 10 : 12
+                                }
                             }
                         }
                     },
@@ -3655,7 +3724,10 @@ function switchTab(tabId) {
                                 color: gridColor
                             },
                             ticks: {
-                                color: textColor
+                                color: textColor,
+                                font: {
+                                    size: isMobile ? 10 : 12
+                                }
                             }
                         },
                         x: {
@@ -3665,11 +3737,11 @@ function switchTab(tabId) {
                             ticks: {
                                 color: textColor,
                                 font: {
-                                    size: 12
+                                    size: isMobile ? 9 : 12
                                 },
-                                autoSkip: false,
-                                maxRotation: 45,
-                                minRotation: 0
+                                autoSkip: isMobile ? true : false,
+                                maxRotation: isMobile ? 90 : 45,
+                                minRotation: isMobile ? 45 : 0
                             }
                         }
                     }
@@ -3684,10 +3756,10 @@ function switchTab(tabId) {
                                 var value = dataset.data[index];
                                 ctx.save();
                                 ctx.fillStyle = textColor;
-                                ctx.font = '12px Arial';
+                                ctx.font = (isMobile ? '10px' : '12px') + ' Arial';
                                 ctx.textAlign = 'center';
                                 ctx.textBaseline = 'bottom';
-                                ctx.fillText(value, bar.x, bar.y - 6);
+                                ctx.fillText(value, bar.x, bar.y - 5);
                                 ctx.restore();
                             });
                         });
@@ -3735,11 +3807,55 @@ function switchTab(tabId) {
                         legend: {
                             position: 'bottom',
                             labels: {
-                                color: textColor
+                                color: textColor,
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    var label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    var total = context.dataset.data.reduce(function(a, b) { return a + b; }, 0);
+                                    var valor = context.parsed || 0;
+                                    var porcentaje = ((valor / total) * 100).toFixed(1);
+                                    label += valor + ' (' + porcentaje + '%)';
+                                    return label;
+                                }
                             }
                         }
                     }
-                }
+                },
+                plugins: [{
+                    id: 'piePercentageLabels',
+                    afterDatasetsDraw: function(chart) {
+                        var ctx = chart.ctx;
+                        chart.data.datasets.forEach(function(dataset, datasetIndex) {
+                            var meta = chart.getDatasetMeta(datasetIndex);
+                            var total = dataset.data.reduce(function(a, b) { return a + b; }, 0);
+                            
+                            meta.data.forEach(function(datapoint, index) {
+                                var valor = dataset.data[index];
+                                var porcentaje = ((valor / total) * 100).toFixed(1);
+                                
+                                var x = datapoint.x;
+                                var y = datapoint.y;
+                                
+                                ctx.save();
+                                ctx.fillStyle = '#ffffff';
+                                ctx.font = 'bold 12px Arial';
+                                ctx.textAlign = 'center';
+                                ctx.textBaseline = 'middle';
+                                ctx.fillText(porcentaje + '%', x, y);
+                                ctx.restore();
+                            });
+                        });
+                    }
+                }]
             });
         }
 
